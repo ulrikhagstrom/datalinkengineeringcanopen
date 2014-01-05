@@ -1,0 +1,16 @@
+LIBRARY      canopenlib32_hw
+EXPORTS
+
+	DllMain
+	canPortLibraryInit
+	canPortOpen
+	canPortClose
+	canPortBitrateSet
+	canPortEcho
+	canPortGoBusOn
+	canPortGoBusOff
+	canPortWrite
+	canPortRead
+	
+   
+   
