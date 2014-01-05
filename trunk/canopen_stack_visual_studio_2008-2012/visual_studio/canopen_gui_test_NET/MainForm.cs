@@ -1,0 +1,1310 @@
+﻿/*             _____        _        _      _       _    
+              |  __ \      | |      | |    (_)     | |   
+              | |  | | __ _| |_ __ _| |     _ _ __ | | __
+              | |  | |/ _` | __/ _` | |    | | '_ \| |/ /
+              | |__| | (_| | || (_| | |____| | | | |   < 
+              |_____/ \__,_|\__\__,_|______|_|_| |_|_|\_\
+         ______             _                      _             
+        |  ____|           (_)                    (_)            
+        | |__   _ __   __ _ _ _ __   ___  ___ _ __ _ _ __   __ _ 
+        |  __| | '_ \ / _` | | '_ \ / _ \/ _ \ '__| | '_ \ / _` |
+        | |____| | | | (_| | | | | |  __/  __/ |  | | | | | (_| |
+        |______|_| |_|\__, |_|_| |_|\___|\___|_|  |_|_| |_|\__, |
+                       __/ |                                __/ |
+                      |___/                                |___/ 
+
+      Web: http://www.datalink.se E-mail: ulrik.hagstrom@datalink.se
+
+    *******************************************************************
+    *    CANopen API (C++/C#) distributed by Datalink Enginnering.    *
+    *             Copyright (C) 2009-2013 Ulrik Hagström.             *
+    *******************************************************************
+*/
+
+
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Text;
+using System.Windows.Forms;
+
+
+
+namespace CANopenDiagnostic
+{
+    public partial class MainForm : Form
+    {
+        private ClientSDO_NET client_SDO;
+        private ServerSDO_NET server_SDO;
+        private NMT_Master_NET nmt_Master;
+        private NMT_Slave_NET nmt_slave;
+        private CanMonitor_NET can_monitor;
+        private CanInterface_NET can_interface;
+
+        LogMessages log;
+        
+        public MainForm()
+        {
+            InitializeComponent();
+
+            MainForm.CheckForIllegalCrossThreadCalls = true;
+
+            //
+            log = new LogMessages();
+            log.Log += new LogMessages.LogHandler( consolePrint );
+
+            client_SDO = new ClientSDO_NET();
+            server_SDO = new ServerSDO_NET();
+            nmt_Master = new NMT_Master_NET();
+            nmt_slave = new NMT_Slave_NET();
+            can_monitor = new CanMonitor_NET();
+            can_interface = new CanInterface_NET();
+
+            System.Text.ASCIIEncoding encoding = new System.Text.ASCIIEncoding();
+            byte[] file = encoding.GetBytes("C:\\dev\\closed_rep\\trunk\\canopen_stack_and_tools\\visual_studio\\canopenDLL\\Debug\\canopen_lic.txt\0");
+            byte[] pass = encoding.GetBytes("Ulrik\0");
+
+
+            //can_interface.unlockCanopenLibrary(file, pass);
+
+            CANOPEN_LIB_ERROR.CanOpenStatus can_monitor_stat;
+
+            can_monitor_stat = can_monitor.registerCanReceiveCallback((Object)this, new CanReceiveDelegate(canReceiveCallback));
+            if (can_monitor_stat == CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
+            {
+                log.OnLog("Added callback OK!");
+            }
+            else
+            {
+                log.OnLog("Added callback ERROR!");
+            }
+
+
+
+            CANOPEN_LIB_ERROR.CanOpenStatus stat;
+            stat = nmt_Master.registerNodeStateCallback(new NMTOperationalStateDelegate(node_state_callback), (Object)this);
+            if (stat == CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
+            {
+                log.OnLog("Added callback OK!");
+            }
+            else
+            {
+                log.OnLog("Added callback ERROR!");
+            }
+
+
+        }
+
+        ~MainForm()
+        {
+
+            log.Log -= new LogMessages.LogHandler(consolePrint);
+
+            client_SDO.Dispose();
+            client_SDO = null;
+
+            server_SDO.Dispose();
+            server_SDO = null;
+
+            nmt_Master.Dispose();
+            nmt_Master = null;
+
+            nmt_slave.Dispose();
+            nmt_slave = null;
+        }
+
+        private delegate void consolePrintDelegate(string message);
+        public void consolePrint(string message)
+        {
+            if (InvokeRequired)
+            {
+                consolePrintDelegate d = new consolePrintDelegate(consolePrint);
+                BeginInvoke(d, new object[] { message });
+                return;
+            }
+            try
+            {
+                consoleTextBox.AppendText(message + "\n");
+                consoleTextBox.SelectionStart = consoleTextBox.TextLength;
+                consoleTextBox.ScrollToCaret();
+            }
+            catch 
+            {
+                ;
+            }
+        }
+
+        private delegate void canTracePrintDelegate(string message);
+        public void canTracePrint(string message)
+        {
+            if (InvokeRequired)
+            {
+                canTracePrintDelegate d = new canTracePrintDelegate(canTracePrint);
+                BeginInvoke(d, new object[] { message });
+                return;
+            }
+            try
+            {
+                rich_text_can_trace.AppendText(message + "\n");
+                if (rich_text_can_trace.TextLength < 10000)
+                {
+                    rich_text_can_trace.SelectionStart = rich_text_can_trace.TextLength;
+                    rich_text_can_trace.ScrollToCaret();
+                }
+                else
+                {
+                    rich_text_can_trace.Text = "CLEARED!\n";
+                }
+            }
+            catch
+            {
+                ;
+            }
+        }
+
+        private void btnConnect_Click(object sender, EventArgs e)
+        {
+            CANOPEN_LIB_ERROR.CanOpenStatus stat;
+            int can_bitrate;
+            int can_port;
+
+            can_bitrate = Convert.ToInt32(comboBitrateCAN.Text);
+            can_port = Convert.ToInt32(comboChannelCAN.Text);
+
+
+            stat = can_monitor.canHardwareConnect(can_port, can_bitrate);
+            if (stat != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
+            {
+                log.OnLog("Error connecting CAN Monitor to CAN hardware!");
+            }
+            else
+            {
+                log.OnLog("Successful connect CAN monitor to CAN hardware!");
+            }
+
+
+            stat = client_SDO.canHardwareConnect(can_port, can_bitrate);
+            if (stat != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
+            {
+                log.OnLog("Error connecting Client SDO to CAN hardware!");
+            }
+            else
+            {
+                client_SDO.connect((byte)this.numRemoteNode.Value);
+                log.OnLog("Successful connect Client SDO to CAN hardware!");
+            }
+
+
+            stat = nmt_Master.canHardwareConnect(can_port, can_bitrate);
+            if (stat != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
+            {
+                log.OnLog("Error connecting Network Master to CAN hardware!");
+            }
+            else
+            {
+                log.OnLog("Successful connect MNT Master to CAN hardware!");
+            }
+
+            
+        }
+
+        private void btnDisconnect_Click(object sender, EventArgs e)
+        {
+            ClientSDO_NET.CanOpenStatus stat;
+            stat = client_SDO.canHardwareDisconnect();
+            if (stat != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
+            {
+                log.OnLog("Error disconnecting Client SDO from CAN hardware");
+            }
+            else
+            {
+                log.OnLog("Successful disconnect Client SDO!");
+            }
+            stat = nmt_Master.canHardwareDisconnect();
+            if (stat != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
+            {
+                log.OnLog("Error disconnecting NMT Master from CAN hardware");
+            }
+            else
+            {
+                log.OnLog("Successful disconnect NMT Master!");
+            }
+
+            stat = can_monitor.canHardwareDisconnect();
+            if (stat == CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
+            {
+                log.OnLog("Sucess disconnecting CAN Monitor from CAN hardware!");
+            }
+            else
+            {
+                log.OnLog("Error disconnecting CAN monitor from CAN hardware!");
+            }
+        }
+
+        static CANOPEN_LIB_ERROR.CanOpenStatus canReceiveCallback(object obj, uint id, byte[] data, byte dlc, uint flags)
+        {
+            string temp_string;
+            MainForm form = (MainForm)obj;
+
+            temp_string = String.Format("0x{0:X3} {1}: ", id, dlc);
+            if ( (flags & CanMessageTypes.CAN_MSG_RTR_FLAG) != 0 )
+            {
+                temp_string += "RTR";
+            }
+            else
+            {
+                for (int i = 0; i < dlc; i++)
+                {
+                    temp_string += String.Format("{0:X2} ", data[i]);
+                }
+            }
+            form.canTracePrint(temp_string);
+            return CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK;
+        }
+
+
+        static NMT_Master_NET.CanOpenStatus node_state_callback(object any, byte node_id, byte state)
+        {
+            MainForm form = (MainForm)any;
+            form.consolePrint( String.Format("Node State result : node_id: {0}, state: {1}", node_id, state));
+            return NMT_Master_NET.CanOpenStatus.CANOPEN_OK;
+        }
+
+        private void btnStartNodeGuard_Click(object sender, EventArgs e)
+        {
+            CANOPEN_LIB_ERROR.CanOpenStatus stat;
+            stat = nmt_Master.nodeGuardPollStart((byte)this.numRemoteNode.Value, 3000);
+            if (stat != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
+            {
+                if (stat == CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_ERROR_HW_NOT_CONNECTED)
+                {
+                    log.OnLog("Hardware not connected!");
+                }
+                else
+                {
+                    log.OnLog(String.Format("Could not start nodeguarding for node {0}",
+                        this.numRemoteNode.Value.ToString()));
+                }
+
+            }
+            else
+            {
+                log.OnLog(String.Format("Nodeguard started successfully for node {0}",
+                    this.numRemoteNode.Value.ToString()));
+
+            }
+        }
+
+        private void btnStopNodeGuard_Click(object sender, EventArgs e)
+        {
+            CANOPEN_LIB_ERROR.CanOpenStatus stat;
+            stat = nmt_Master.nodeGuardPollStop((byte)this.numRemoteNode.Value);
+            if (stat != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
+            {
+                log.OnLog(String.Format("Could not stop nodeguarding for node {0}",
+                    this.numRemoteNode.Value.ToString()));
+
+            }
+            else
+            {
+                log.OnLog(String.Format("Nodeguard stopped successfully for node {0}",
+                    this.numRemoteNode.Value.ToString()));
+
+            }
+        }
+
+
+        private void btnStartHeartbeatMonitor_Click(object sender, EventArgs e)
+        {
+            CANOPEN_LIB_ERROR.CanOpenStatus stat;
+            stat = nmt_Master.heartbeatMonitorStart((byte)this.numRemoteNode.Value, 3000);
+            if (stat != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
+            {
+                log.OnLog(String.Format("Could not start heartbeat monitoring for node {0}",
+                    this.numRemoteNode.Value.ToString()));
+            }
+            else
+            {
+                log.OnLog(String.Format("heartbeat monitoring started successfully for node {0}",
+                    this.numRemoteNode.Value.ToString()));
+            }
+        }
+
+        private void btnStartNode_Click(object sender, EventArgs e)
+        {
+            CANOPEN_LIB_ERROR.CanOpenStatus stat;
+            stat = nmt_Master.nodeStart((byte)this.numRemoteNode.Value);
+            if (stat != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
+            {
+                if (stat == CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_ERROR_HW_NOT_CONNECTED)
+                {
+                    log.OnLog("Hardware not connected!");
+                }
+                else
+                {
+                    log.OnLog(String.Format("Could not send start node command to node {0}",
+                        this.numRemoteNode.Value.ToString()));
+                }
+            }
+            else
+            {
+                log.OnLog(String.Format("Start node command sent successfully to node {0}",
+                    this.numRemoteNode.Value.ToString()));
+
+            }
+        }
+
+        private void btnStopNode_Click(object sender, EventArgs e)
+        {
+            CANOPEN_LIB_ERROR.CanOpenStatus stat;
+            stat = nmt_Master.nodeStop((byte)this.numRemoteNode.Value);
+
+            if (stat != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
+            {
+                if (stat == CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_ERROR_HW_NOT_CONNECTED)
+                {
+                    log.OnLog("Hardware not connected!");
+                }
+                else
+                {
+                    log.OnLog(String.Format("Could not send stop node command to node {0}",
+                        this.numRemoteNode.Value.ToString()));
+                }
+            }
+            else
+            {
+                log.OnLog(String.Format("Stop node command sent successfully to node {0}",
+                    this.numRemoteNode.Value.ToString()));
+
+            }
+        }
+
+        private void btnEnterPreOperational_Click(object sender, EventArgs e)
+        {
+            CANOPEN_LIB_ERROR.CanOpenStatus stat;
+            stat = nmt_Master.nodePreoperational((byte)this.numRemoteNode.Value);
+            if (stat != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
+            {
+                if (stat == CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_ERROR_HW_NOT_CONNECTED)
+                {
+                    log.OnLog("Hardware not connected!");
+                }
+                else
+                {
+                    log.OnLog(String.Format("Could not send enter preoperational command to node {0}",
+                        this.numRemoteNode.Value.ToString()));
+                }
+
+            }
+            else
+            {
+                log.OnLog(String.Format("Enter preoperationalcommand sent successfully to node {0}",
+                    this.numRemoteNode.Value.ToString()));
+            }
+        }
+
+        private void btnResetComm_Click(object sender, EventArgs e)
+        {
+            NMT_Master_NET.CanOpenStatus stat;
+            stat = nmt_Master.nodeResetCommunication((byte)this.numRemoteNode.Value);
+            if (stat != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
+            {
+                if (stat == CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_ERROR_HW_NOT_CONNECTED)
+                {
+                    log.OnLog("Hardware not connected!");
+                }
+                else
+                {
+                    log.OnLog(String.Format("Could not send reset communication command to node {0}",
+                    this.numRemoteNode.Value.ToString()));
+                }
+            }
+            else
+            {
+                log.OnLog(String.Format("Reset communication command successfully sent to node {0}",
+                    this.numRemoteNode.Value.ToString()));
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            CANOPEN_LIB_ERROR.CanOpenStatus stat;
+            stat = nmt_Master.nodeReset((byte)this.numRemoteNode.Value);
+            if (stat != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
+            {
+                if (stat == CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_ERROR_HW_NOT_CONNECTED)
+                {
+                    log.OnLog("Hardware not connected!");
+                }
+                else
+                {
+                    log.OnLog(String.Format("Could not send reset node command to node {0}",
+                    this.numRemoteNode.Value.ToString()));
+                }
+
+            }
+            else
+            {
+                log.OnLog(String.Format("Reset node command successfully sent to node {0}",
+                    this.numRemoteNode.Value.ToString()));
+            }
+        }
+
+
+
+        private void readVisibleString(/*byte remotenode_id,*/ ushort object_index, byte sub_index, string parameterName, bool readable)
+        {
+            CANOPEN_LIB_ERROR.CanOpenStatus stat;
+            byte[] receive_buffer = new byte[100];
+            UInt32 error_code;
+            uint valid;
+
+
+            stat = client_SDO.objectRead(object_index, sub_index, receive_buffer, out valid, out error_code);
+            if (stat != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
+            {
+                if (stat == CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_ERROR_HW_NOT_CONNECTED)
+                {
+                    log.OnLog("CAN hardware not connected!");
+                }
+                else
+                {
+                    if (stat == CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_TIMEOUT)
+                    {
+                        log.OnLog(String.Format("Protocol read timeout from node {0}!",
+                            this.numRemoteNode.Value.ToString()));
+                    }
+                    else
+                    {
+                        log.OnLog(String.Format("Could not read from node {0}, CANopen error: 0x{1:x8}",
+                            this.numRemoteNode.Value.ToString(), error_code));
+                    }
+                }
+            }
+            else
+            {
+                printReadResult(object_index, sub_index, parameterName, receive_buffer, (ushort)valid, readable);
+            }
+        }
+
+        private void readUint32(byte remotenode_id, ushort object_index, byte sub_index, string parameterName)
+        {
+            CANOPEN_LIB_ERROR.CanOpenStatus stat;
+            uint value;
+            UInt32 error_code;
+
+            stat = client_SDO.connect(remotenode_id);
+            if (stat != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
+            {
+                log.OnLog(String.Format("Could not assign client SDO to comm with node {0}",
+                    remotenode_id.ToString()));
+            }
+
+            stat = client_SDO.objectRead(object_index, sub_index, out value, out error_code);
+            if (stat != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
+            {
+                if (stat == CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_ERROR_HW_NOT_CONNECTED)
+                {
+                    log.OnLog("CAN hardware not connected!");
+                }
+                else
+                {
+                    if (stat == CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_TIMEOUT)
+                    {
+                        log.OnLog(String.Format("Protocol read timeout from node {0}!",
+                            this.numRemoteNode.Value.ToString()));
+                    }
+                    else
+                    {
+                        log.OnLog(String.Format("Could not read from node {0}, CANopen error: 0x{1:x8}",
+                            this.numRemoteNode.Value.ToString(), error_code));
+                    }
+                }
+            }
+            else
+            {
+                printReadResult(object_index, sub_index, parameterName, value);
+            }
+
+        }
+
+        private void printReadResult(ushort object_index, byte sub_index, string parameterName, uint value)
+        {
+            string total_string = ""; ;
+            string temp_str = "";
+
+            temp_str = String.Format("{0}: [0x{1:x4}, 0x{2:x2}]:\n", parameterName, object_index, sub_index);
+            total_string += temp_str;
+            temp_str = "Hex: 0x";
+            temp_str += String.Format("{0:x8} ", value);
+            total_string += temp_str + "\n";
+            log.OnLog(total_string);
+        }
+       
+
+        private void printReadResult(ushort object_index, byte sub_index, string parameterName, byte[] data, ushort valid, bool readable)
+        {
+            string total_string = ""; ;
+            string temp_str = "";
+
+            temp_str = String.Format("{0}: [0x{1:x4}, 0x{2:x2}]:\n", parameterName, object_index, sub_index);
+            total_string += temp_str;
+
+            if (readable)
+            {
+                temp_str = "String: ";
+                for (int i = 0; i < valid; i++)
+                {
+                    temp_str += Convert.ToChar(data[i]);
+                }
+                total_string += temp_str;
+            }
+            log.OnLog(total_string);
+            total_string = "";
+            temp_str = "Hex: ";
+            for (int i = 0; i < valid; i++)
+            {
+                temp_str += String.Format("{0:x2} ", data[i]);
+            }
+            total_string += temp_str + "\n";
+            log.OnLog(total_string);
+        }
+
+        private void btnDeviceType_Click(object sender, EventArgs e)
+        {
+            readUint32((byte)this.numRemoteNode.Value, 0x1000, 0, "Device Type");
+        }
+
+        private void btnHardwareVersion_Click(object sender, EventArgs e)
+        {
+            readVisibleString( 0x1009, 0, "Hardware version", true);
+        }
+
+        private void btnSoftwareVersion_Click(object sender, EventArgs e)
+        {
+            readVisibleString( 0x100a, 0, "Software version", true);
+        }
+
+        private void btnDeviceName_Click(object sender, EventArgs e)
+        {
+            readVisibleString( 0x1008, 0, "Device Name", true);
+        }
+
+        private void btnErrorRegister_Click(object sender, EventArgs e)
+        {
+            readUint32((byte)this.numRemoteNode.Value, 0x1001, 0, "Error Register");
+
+        }
+
+        private void btnManfStatReg_Click(object sender, EventArgs e)
+        {
+            readUint32((byte)this.numRemoteNode.Value, 0x1002, 0, "Manufacturer status register");
+        }
+
+        private void btnReadPredefErrField_Click(object sender, EventArgs e)
+        {
+            CANOPEN_LIB_ERROR.CanOpenStatus stat;
+            uint registred_errors;
+            uint registred_error_code;
+            uint error_code;
+            // Read number of stored errors
+            stat = client_SDO.connect((byte)this.numRemoteNode.Value);
+            if (stat != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
+            {
+                log.OnLog(String.Format("Could not assign client SDO to comm with node {0}",
+                    this.numRemoteNode.Value.ToString()));
+            }
+
+            stat = client_SDO.objectRead(0x1003, 0, out registred_errors, out error_code);
+            if (stat != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
+            {
+                if (stat == CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_ERROR_HW_NOT_CONNECTED)
+                {
+                    log.OnLog("CAN hardware not connected!");
+                }
+                else
+                {
+                    if (stat == CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_TIMEOUT)
+                    {
+                        log.OnLog(String.Format("Protocol read timeout from node {0}!",
+                            this.numRemoteNode.Value.ToString()));
+                    }
+                    else
+                    {
+                        log.OnLog(String.Format("Could not read from node {0}, CANopen error: 0x{1:x8}",
+                            this.numRemoteNode.Value.ToString(), error_code));
+                    }
+
+                }
+            }
+            else
+            {
+                log.OnLog(String.Format("Found {0} registred errors", registred_errors));
+                for (int i = 0; i < registred_errors; i++)
+                {
+                    stat = client_SDO.objectRead(0x1003, (byte)(i + 1), out registred_error_code, out error_code);
+                    if (stat != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
+                    {
+                        log.OnLog(String.Format("Could not read from node {0}, CANopen error: 0x{1:x8}",
+                            this.numRemoteNode.Value.ToString(), error_code));
+                    }
+                    else
+                    {
+                        log.OnLog(String.Format("Stored error [{0}] : 0x{1:x8}", i, registred_error_code));
+                    }
+                }
+            }
+        }
+
+        private void btnClearErrors_Click(object sender, EventArgs e)
+        {
+            CANOPEN_LIB_ERROR.CanOpenStatus stat;
+            uint error_code;
+
+            stat = client_SDO.connect((byte)this.numRemoteNode.Value);
+            if (stat != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
+            {
+                log.OnLog(String.Format("Could not assign client SDO to comm with node {0}",
+                    this.numRemoteNode.Value.ToString()));
+            }
+
+            stat = client_SDO.objectWrite(0x1003, 0, (byte)0, out error_code);
+            if (stat != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
+            {
+                if (stat == CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_ERROR_HW_NOT_CONNECTED)
+                {
+                    log.OnLog("CAN hardware not connected!");
+                }
+                else
+                {
+                    if (stat == CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_TIMEOUT)
+                    {
+                        log.OnLog(String.Format("Protocol write timeout from node {0}!",
+                            this.numRemoteNode.Value.ToString()));
+                    }
+                    else
+                    {
+                        log.OnLog(String.Format("Could not write from node {0}, CANopen error: 0x{1:x8}",
+                            this.numRemoteNode.Value.ToString(), error_code));
+                    }
+                }
+            }
+            else
+            {
+                log.OnLog("Errors cleared!");
+            }
+
+        }
+
+        private void linkClick_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("IExplore", " http://www.canopen.nu");
+        }
+
+        private void numRemoteNode_ValueChanged(object sender, EventArgs e)
+        {
+            client_SDO.connect((byte)this.numRemoteNode.Value);
+        }
+
+        void printError(CANOPEN_LIB_ERROR.CanOpenStatus library_error_code, uint node_error_code)
+        {
+            if (library_error_code == CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_ERROR_HW_NOT_CONNECTED)
+            {
+                log.OnLog("CAN hardware not connected!");
+            }
+            else
+            {
+                if (library_error_code == CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_TIMEOUT)
+                {
+                    log.OnLog(String.Format("Protocol read timeout from node {0}!",
+                        this.numRemoteNode.Value.ToString()));
+                }
+                else
+                {
+                    log.OnLog(String.Format("Could not read from node {0}, CANopen error: 0x{1:x8}",
+                        this.numRemoteNode.Value.ToString(), node_error_code));
+                }
+
+            }
+        }
+
+        private void btnReadPDO_Click(object sender, EventArgs e)
+        {
+            CANOPEN_LIB_ERROR.CanOpenStatus stat;
+            uint pdo_data;
+            uint registred_error_code;
+            uint error_code;
+            // Read number of stored errors
+            stat = client_SDO.connect((byte)this.numRemoteNode.Value);
+            if (stat != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
+            {
+                log.OnLog(String.Format("Could not assign client SDO to comm with node {0}",
+                    this.numRemoteNode.Value.ToString()));
+            }
+
+            ushort object_dictionary_offset;
+            if (cbPdoRx.Checked)
+                object_dictionary_offset = 0x1400;
+            else
+                object_dictionary_offset = 0x1800;
+
+
+
+            ushort obj_idx = (ushort)(numUpDownPdo.Value - 1);
+            if (cbPdoRx.Checked)
+                obj_idx = (ushort)((ushort)(numUpDownPdo.Value - 1) + object_dictionary_offset);
+            else
+                obj_idx = (ushort)((ushort)(numUpDownPdo.Value - 1) + object_dictionary_offset);
+
+            // Read COBID
+            stat = client_SDO.objectRead(obj_idx, 1, out pdo_data, out error_code);
+            if (stat != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
+            {
+                printError(stat, error_code);
+            }
+            else
+            {
+                log.OnLog(String.Format("PDO COBID: {0:x8} ", pdo_data));
+            }
+
+            // Read Transmission type
+            stat = client_SDO.objectRead(obj_idx, 2, out pdo_data, out error_code);
+            if (stat != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
+            {
+                printError(stat, error_code);
+            }
+            else
+            {
+                log.OnLog(String.Format("PDO Transmission Type: {0:x8} ", pdo_data));
+            }
+
+            // Read Transmission type
+            stat = client_SDO.objectRead(obj_idx, 3, out pdo_data, out error_code);
+            if (stat != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
+            {
+                printError(stat, error_code);
+            }
+            else
+            {
+                log.OnLog(String.Format("PDO inhibit time: {0:x8} ", pdo_data));
+            }
+
+            // Event timer
+            stat = client_SDO.objectRead(obj_idx, 5, out pdo_data, out error_code);
+            if (stat != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
+            {
+                printError(stat, error_code);
+            }
+            else
+            {
+                log.OnLog(String.Format("PDO event timer: {0:x8} ", pdo_data));
+            }
+        
+        }
+
+        private void btnEnablePdo_Click(object sender, EventArgs e)
+        {
+            CANOPEN_LIB_ERROR.CanOpenStatus stat;
+            uint error_code;
+            // Read number of stored errors
+            stat = client_SDO.connect((byte)this.numRemoteNode.Value);
+            if (stat != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
+            {
+                log.OnLog(String.Format("Could not assign client SDO to comm with node {0}",
+                    this.numRemoteNode.Value.ToString()));
+            }
+
+            ushort object_dictionary_offset;
+            if (cbPdoRx.Checked)
+                object_dictionary_offset = 0x1400;
+            else
+                object_dictionary_offset = 0x1800;
+
+
+
+            ushort obj_idx = (ushort)(numUpDownPdo.Value - 1);
+            if (cbPdoRx.Checked)
+                obj_idx = (ushort)((ushort)(numUpDownPdo.Value - 1) + object_dictionary_offset);
+            else
+                obj_idx = (ushort)((ushort)(numUpDownPdo.Value - 1) + object_dictionary_offset);
+
+            if (cbPdoRx.Checked)
+                stat = client_SDO.objectWrite(obj_idx, 1, (uint)numRemoteNode.Value + 
+                    (uint)(0x200 + 0x100 * (numUpDownPdo.Value-1)), out error_code);
+            else
+                stat = client_SDO.objectWrite(obj_idx, 1, (uint)numRemoteNode.Value +
+                    (uint)(0x180 + 0x100 * (numUpDownPdo.Value - 1)), out error_code);
+
+
+
+            if (stat != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
+            {
+                if (stat == CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_ERROR_HW_NOT_CONNECTED)
+                {
+                    log.OnLog("CAN hardware not connected!");
+                }
+                else
+                {
+                    if (stat == CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_TIMEOUT)
+                    {
+                        log.OnLog(String.Format("Protocol write timeout from node {0}!",
+                            this.numRemoteNode.Value.ToString()));
+                    }
+                    else
+                    {
+                        log.OnLog(String.Format("Could not write from node {0}, CANopen error: 0x{1:x8}",
+                            this.numRemoteNode.Value.ToString(), error_code));
+                    }
+                }
+            }
+            else
+            {
+                log.OnLog("Transmit PDO enabled (with default COBID)");
+            }
+
+        }
+
+        private void btnSetEventTimer_Click(object sender, EventArgs e)
+        {
+            CANOPEN_LIB_ERROR.CanOpenStatus stat;
+            uint error_code;
+            // Read number of stored errors
+            stat = client_SDO.connect((byte)this.numRemoteNode.Value);
+            if (stat != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
+            {
+                log.OnLog(String.Format("Could not assign client SDO to comm with node {0}",
+                    this.numRemoteNode.Value.ToString()));
+            }
+
+            ushort object_dictionary_offset;
+            if (cbPdoRx.Checked)
+                object_dictionary_offset = 0x1400;
+            else
+                object_dictionary_offset = 0x1800;
+
+
+
+            ushort obj_idx = (ushort)(numUpDownPdo.Value - 1);
+            if (cbPdoRx.Checked)
+                obj_idx = (ushort)((ushort)(numUpDownPdo.Value - 1) + object_dictionary_offset);
+            else
+                obj_idx = (ushort)((ushort)(numUpDownPdo.Value - 1) + object_dictionary_offset);
+
+            stat = client_SDO.objectWrite( obj_idx, 5, (ushort)100, out error_code);
+            if (stat != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
+            {
+                if (stat == CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_ERROR_HW_NOT_CONNECTED)
+                {
+                    log.OnLog("CAN hardware not connected!");
+                }
+                else
+                {
+                    if (stat == CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_TIMEOUT)
+                    {
+                        log.OnLog(String.Format("Protocol write timeout from node {0}!",
+                            this.numRemoteNode.Value.ToString()));
+                    }
+                    else
+                    {
+                        log.OnLog(String.Format("Could not write from node {0}, CANopen error: 0x{1:x8}",
+                            this.numRemoteNode.Value.ToString(), error_code));
+                    }
+                }
+            }
+            else
+            {
+                log.OnLog("Event timer set!");
+            }
+
+        }
+
+        private void btnTransmType254_Click(object sender, EventArgs e)
+        {
+            CANOPEN_LIB_ERROR.CanOpenStatus stat;
+            uint error_code;
+            // Read number of stored errors
+            stat = client_SDO.connect((byte)this.numRemoteNode.Value);
+            if (stat != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
+            {
+                log.OnLog(String.Format("Could not assign client SDO to comm with node {0}",
+                    this.numRemoteNode.Value.ToString()));
+            }
+
+            ushort object_dictionary_offset;
+            if (cbPdoRx.Checked)
+                object_dictionary_offset = 0x1400;
+            else
+                object_dictionary_offset = 0x1800;
+
+
+
+            ushort obj_idx = (ushort)(numUpDownPdo.Value - 1);
+            if (cbPdoRx.Checked)
+                obj_idx = (ushort)((ushort)(numUpDownPdo.Value - 1) + object_dictionary_offset);
+            else
+                obj_idx = (ushort)((ushort)(numUpDownPdo.Value - 1) + object_dictionary_offset);
+
+            stat = client_SDO.objectWrite(obj_idx, 2, (byte)254, out error_code);
+            if (stat != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
+            {
+                if (stat == CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_ERROR_HW_NOT_CONNECTED)
+                {
+                    log.OnLog("CAN hardware not connected!");
+                }
+                else
+                {
+                    if (stat == CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_TIMEOUT)
+                    {
+                        log.OnLog(String.Format("Protocol write timeout from node {0}!",
+                            this.numRemoteNode.Value.ToString()));
+                    }
+                    else
+                    {
+                        log.OnLog(String.Format("Could not write from node {0}, CANopen error: 0x{1:x8}",
+                            this.numRemoteNode.Value.ToString(), error_code));
+                    }
+                }
+            }
+            else
+            {
+                log.OnLog("Transmission type 254 set!");
+            }
+
+        }
+
+        private void btnReadMappedObjects_Click(object sender, EventArgs e)
+        {
+            CANOPEN_LIB_ERROR.CanOpenStatus stat;
+            uint pdo_data;
+            uint registred_error_code;
+            uint error_code;
+            // Read number of stored errors
+            stat = client_SDO.connect((byte)this.numRemoteNode.Value);
+            if (stat != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
+            {
+                log.OnLog(String.Format("Could not assign client SDO to comm with node {0}",
+                    this.numRemoteNode.Value.ToString()));
+            }
+
+            ushort object_dictionary_offset;
+            if (cbPdoRx.Checked)
+                object_dictionary_offset = 0x1600;
+            else
+                object_dictionary_offset = 0x1a00;
+
+            ushort obj_idx = (ushort)(numUpDownPdo.Value - 1);
+            if (cbPdoRx.Checked)
+                obj_idx = (ushort)((ushort)(numUpDownPdo.Value - 1) + object_dictionary_offset);
+            else
+                obj_idx = (ushort)((ushort)(numUpDownPdo.Value - 1) + object_dictionary_offset);
+
+            // Read no mapped obejcts
+            stat = client_SDO.objectRead(obj_idx, 0, out pdo_data, out error_code);
+            if (stat != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
+            {
+                printError(stat, error_code);
+            }
+            else
+            {
+                log.OnLog(String.Format("Mapped objects: {0:x8} ", pdo_data));
+            }
+
+            for (byte i = 1; i < 8; i++)
+            {
+                stat = client_SDO.objectRead(obj_idx, i, out pdo_data, out error_code);
+                if (stat != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
+                {
+                    printError(stat, error_code);
+                }
+                else
+                {
+                    log.OnLog(String.Format("Default map object {0}: {1:x8} ", i, pdo_data));
+                }
+            }
+        
+        }
+
+        private void btnMap8bits_Click(object sender, EventArgs e)
+        {
+            CANOPEN_LIB_ERROR.CanOpenStatus stat;
+            uint error_code;
+            // Read number of stored errors
+            stat = client_SDO.connect((byte)this.numRemoteNode.Value);
+            if (stat != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
+            {
+                log.OnLog(String.Format("Could not assign client SDO to comm with node {0}",
+                    this.numRemoteNode.Value.ToString()));
+            }
+
+            ushort object_dictionary_offset;
+            if (cbPdoRx.Checked)
+                object_dictionary_offset = 0x1600;
+            else
+                object_dictionary_offset = 0x1a00;
+
+
+
+            ushort obj_idx = (ushort)(numUpDownPdo.Value - 1);
+            if (cbPdoRx.Checked)
+                obj_idx = (ushort)((ushort)(numUpDownPdo.Value - 1) + object_dictionary_offset);
+            else
+                obj_idx = (ushort)((ushort)(numUpDownPdo.Value - 1) + object_dictionary_offset);
+
+            stat = client_SDO.objectWrite(obj_idx, 0, 1, out error_code);
+            if (stat != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
+            {
+                if (stat == CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_ERROR_HW_NOT_CONNECTED)
+                {
+                    log.OnLog("CAN hardware not connected!");
+                }
+                else
+                {
+                    if (stat == CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_TIMEOUT)
+                    {
+                        log.OnLog(String.Format("Protocol write timeout from node {0}!",
+                            this.numRemoteNode.Value.ToString()));
+                    }
+                    else
+                    {
+                        log.OnLog(String.Format("Could not map 64 bits on node {0}, CANopen error: 0x{1:x8}",
+                            this.numRemoteNode.Value.ToString(), error_code));
+                    }
+                }
+            }
+            else
+            {
+                log.OnLog("8 bits mapped!");
+            }
+
+        }
+
+        private void btnWritePDO_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnMap32bits_Click(object sender, EventArgs e)
+        {
+            CANOPEN_LIB_ERROR.CanOpenStatus stat;
+            uint error_code;
+            // Read number of stored errors
+            stat = client_SDO.connect((byte)this.numRemoteNode.Value);
+            if (stat != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
+            {
+                log.OnLog(String.Format("Could not assign client SDO to comm with node {0}",
+                    this.numRemoteNode.Value.ToString()));
+            }
+
+            ushort object_dictionary_offset;
+            if (cbPdoRx.Checked)
+                object_dictionary_offset = 0x1600;
+            else
+                object_dictionary_offset = 0x1a00;
+
+
+
+            ushort obj_idx = (ushort)(numUpDownPdo.Value - 1);
+            if (cbPdoRx.Checked)
+                obj_idx = (ushort)((ushort)(numUpDownPdo.Value - 1) + object_dictionary_offset);
+            else
+                obj_idx = (ushort)((ushort)(numUpDownPdo.Value - 1) + object_dictionary_offset);
+
+            stat = client_SDO.objectWrite(obj_idx, 0, 4, out error_code);
+            if (stat != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
+            {
+                if (stat == CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_ERROR_HW_NOT_CONNECTED)
+                {
+                    log.OnLog("CAN hardware not connected!");
+                }
+                else
+                {
+                    if (stat == CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_TIMEOUT)
+                    {
+                        log.OnLog(String.Format("Protocol write timeout from node {0}!",
+                            this.numRemoteNode.Value.ToString()));
+                    }
+                    else
+                    {
+                        log.OnLog(String.Format("ould not map 64 bits on node {0}, CANopen error: 0x{1:x8}",
+                            this.numRemoteNode.Value.ToString(), error_code));
+                    }
+                }
+            }
+            else
+            {
+                log.OnLog("32 bits mapped!");
+            }
+
+
+        }
+
+        private void btnMap64bits_Click(object sender, EventArgs e)
+        {
+            CANOPEN_LIB_ERROR.CanOpenStatus stat;
+            uint error_code;
+            // Read number of stored errors
+            stat = client_SDO.connect((byte)this.numRemoteNode.Value);
+            if (stat != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
+            {
+                log.OnLog(String.Format("Could not assign client SDO to comm with node {0}",
+                    this.numRemoteNode.Value.ToString()));
+            }
+
+            ushort object_dictionary_offset;
+            if (cbPdoRx.Checked)
+                object_dictionary_offset = 0x1600;
+            else
+                object_dictionary_offset = 0x1a00;
+
+            ushort obj_idx = (ushort)(numUpDownPdo.Value - 1);
+            if (cbPdoRx.Checked)
+                obj_idx = (ushort)((ushort)(numUpDownPdo.Value - 1) + object_dictionary_offset);
+            else
+                obj_idx = (ushort)((ushort)(numUpDownPdo.Value - 1) + object_dictionary_offset);
+
+            stat = client_SDO.objectWrite(obj_idx, 0, 8, out error_code);
+            if (stat != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
+            {
+                if (stat == CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_ERROR_HW_NOT_CONNECTED)
+                {
+                    log.OnLog("CAN hardware not connected!");
+                }
+                else
+                {
+                    if (stat == CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_TIMEOUT)
+                    {
+                        log.OnLog(String.Format("Protocol write timeout from node {0}!",
+                            this.numRemoteNode.Value.ToString()));
+                    }
+                    else
+                    {
+                        log.OnLog(String.Format("Could not map 64 bits on node {0}, CANopen error: 0x{1:x8}",
+                            this.numRemoteNode.Value.ToString(), error_code));
+                    }
+                }
+            }
+            else
+            {
+                log.OnLog("32 bits mapped!");
+            }
+        }
+
+        private void btnRequestPdo_Click(object sender, EventArgs e)
+        {
+            byte[] data = new byte[10];
+
+            can_monitor.canWrite((uint)numRemoteNode.Value +
+                (uint)(0x180 + 0x100 * (numUpDownPdo.Value - 1)), data, 4, CanMessageTypes.CAN_MSG_RTR_FLAG);
+
+        }
+
+        private void btnConfigNodeGuard_Click(object sender, EventArgs e)
+        {
+            CANOPEN_LIB_ERROR.CanOpenStatus stat;
+            uint error_code;
+            // Read number of stored errors
+            stat = client_SDO.connect((byte)this.numRemoteNode.Value);
+            if (stat != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
+            {
+                log.OnLog(String.Format("Could not assign client SDO to comm with node {0}",
+                    this.numRemoteNode.Value.ToString()));
+            }
+
+
+            stat = client_SDO.objectWrite(0x100c, 0, (ushort)1000, out error_code);
+            if (stat != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
+            {
+                if (stat == CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_ERROR_HW_NOT_CONNECTED)
+                {
+                    log.OnLog("CAN hardware not connected!");
+                }
+                else
+                {
+                    if (stat == CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_TIMEOUT)
+                    {
+                        log.OnLog(String.Format("Protocol write timeout from node {0}!",
+                            this.numRemoteNode.Value.ToString()));
+                    }
+                    else
+                    {
+                        log.OnLog(String.Format("Could not write from node {0}, CANopen error: 0x{1:x8}",
+                            this.numRemoteNode.Value.ToString(), error_code));
+                    }
+                }
+            }
+            else
+            {
+                log.OnLog("Nodeguard configured!");
+            }
+
+            stat = client_SDO.objectWrite(0x100d, 0, (byte)3, out error_code);
+            if (stat != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
+            {
+                if (stat == CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_ERROR_HW_NOT_CONNECTED)
+                {
+                    log.OnLog("CAN hardware not connected!");
+                }
+                else
+                {
+                    if (stat == CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_TIMEOUT)
+                    {
+                        log.OnLog(String.Format("Protocol write timeout from node {0}!",
+                            this.numRemoteNode.Value.ToString()));
+                    }
+                    else
+                    {
+                        log.OnLog(String.Format("Could not write from node {0}, CANopen error: 0x{1:x8}",
+                            this.numRemoteNode.Value.ToString(), error_code));
+                    }
+                }
+            }
+            else
+            {
+                log.OnLog("Lifetime factor configured!");
+            }
+
+        }
+
+        private void btnConfHeartBeat_Click(object sender, EventArgs e)
+        {
+            CANOPEN_LIB_ERROR.CanOpenStatus stat;
+            uint error_code;
+            // Read number of stored errors
+            stat = client_SDO.connect((byte)this.numRemoteNode.Value);
+            if (stat != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
+            {
+                log.OnLog(String.Format("Could not assign client SDO to comm with node {0}",
+                    this.numRemoteNode.Value.ToString()));
+            }
+
+            stat = client_SDO.objectWrite(0x1017, 0, (ushort)1000, out error_code);
+            if (stat != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
+            {
+                if (stat == CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_ERROR_HW_NOT_CONNECTED)
+                {
+                    log.OnLog("CAN hardware not connected!");
+                }
+                else
+                {
+                    if (stat == CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_TIMEOUT)
+                    {
+                        log.OnLog(String.Format("Protocol write timeout from node {0}!",
+                            this.numRemoteNode.Value.ToString()));
+                    }
+                    else
+                    {
+                        log.OnLog(String.Format("Could not write from node {0}, CANopen error: 0x{1:x8}",
+                            this.numRemoteNode.Value.ToString(), error_code));
+                    }
+                }
+            }
+            else
+            {
+                log.OnLog("Heartbeat configured!");
+            }
+
+        }
+    }
+}

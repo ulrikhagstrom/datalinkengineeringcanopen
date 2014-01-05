@@ -1,0 +1,153 @@
+
+
+CANopen API for C++/C# LICENSE MODEL:
+====================================
+
+Copyright Ulrik Hagström, Västra Frölunda, Sweden, 2009-2011.
+
+LICENSE TERMS:
+
+"CANopen API for C++/C#" is made available under the terms of the following
+dual license:
+
+1. EVALUATION LICENSE
+
+This license grants you a limited, non-exclusive, nonassignable, nontransferable 
+license to make and use copies of the Product for the sole purpose of evaluating 
+the Product. This license offers the right to evaluate the Product for 
+development of computer programs in compiled, linked, executable form 
+(your "Application Programs")
+
+You are specifically prohibited from charging, or requesting donations, 
+for any distributed builds. You may modify and compile the Product source code, 
+if supplied, only for the purpose of evaluation and provided you do not delete 
+or remove any copyright notice. 
+    
+This program is distributed for evaluation purposes, but WITHOUT 
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
+or FITNESS FOR A PARTICULAR PURPOSE.
+
+2. COMMERCIAL LICENSE 
+
+In exchange for payment as described below, the licensee and/or the 
+company the licensee represent named below) may use "CANopen API for C++/C#" 
+in a closed-source application, in accordance with the terms of the 
+"CANopen API for C++/C# COMMERCIAL LICENSE". 
+
+"CANopen API for C++/C#" Commercial License also includes priority support, 
+as described below, via e-mail.
+
+This license also include access to "CAN-dispatcher Library" (can_dispatcher.lib)
+source code. The CAN-dispatcher Library source code is NON EXCLUSIVE and
+CAN NOT be resold or distributed in source code (or a modified 
+version of that library) to a third party. It can only be distributed in 
+it's binary (compiled/built/linked) form.
+
+
+HOW TO PURCHASE AN "CANopen API for C++/C#" COMMERCIAL LICENSE:
+
+The price of a commercial license is 200.- EUR.
+
+
+To purchase the license:
+
+1. Print and sign two copies of this document.
+
+2. Send both copies to:
+
+Ulrik Hagström
+DATALINK ENGINEERING
+
+Smyckegatan 4
+426 50 Västra Frölunda
+Sweden
+
+
+BE SURE TO INCLUDE AN EMAIL ADDRESS, as well as a postal address 
+and phone number.
+
+3. We will return one signed copy of your license to you promptly along 
+with details on payment.
+
+
+
+CANopen API for C++/C# COMMERCIAL LICENSE (NONEXCLUSIVE)
+========================================================
+
+GRANT OF RIGHTS
+
+The licensee named and the company this licensee represent below is granted 
+the right to utilize "CANopen API for C++/C#" in applications without 
+the need for a credit notice of any kind and without any requirement 
+to share modifications or source code created by the licensee. 
+"CANopen API for C++/C#"-derived code developed by the holder of this 
+license may be distributed freely in source code or binary form without 
+additional fees or royalties. This license may not be resold, but applications 
+developed in accordance with the terms of the license may be distributed
+freely subject to the limitations for the described above.
+
+
+WARRANTY
+
+The author of the product, Ulrik Hagström, has made reasonable checks with 
+regard to the correctness and usefulness of "CANopen API for C++/C#". 
+However, due to the inherently complex nature of computer software, 
+there is no warranty for "CANopen API for C++/C#" to the extent permitted 
+by applicable law. The product has not been validated by CAN in Automation.
+
+Except where otherwise stated in this document, Ulrik Hagström provides 
+CANopen API for C++/C# "as is" without warranty of any kind, either 
+expressed or implied, including but not limited to the implied warranties 
+of merchantability and fitness for a particular purpose. 
+The entire risk as to the quality and performance of "CANopen API for C++/C#" 
+lies with the licensee.
+
+It is assumed that licensee has evaluated the the free of charge source code
+package before order is being placed.
+
+
+SUPPORT
+
+The licensee will receive 2 weeks (with a maximum of 10 questions) of support 
+via email (support@datalink.se). Support consists of responses to queries 
+regarding the proper use of "CANopen API for C++/C#" within a reasonable time.
+
+
+If this license has not been signed by Ulrik Hagström on behalf of 
+DATALINK ENGINEERING, it is invalid.
+
+
+
+Licensee's Name:              ______________________________________
+
+
+Licensee's signature:         ______________________________________
+
+
+Licensee's COMPANY NAME:      ______________________________________
+
+
+Complete Mailing Address:     ______________________________________
+
+
+                              ______________________________________
+
+
+                              ______________________________________
+
+
+Phone Number:                 ______________________________________
+
+
+Email Address:                ______________________________________
+
+
+
+
+Signature (Ulrik Hagström):   ______________________________________
+
+
+Date (Ulrik Hagström):        ______________________________________
+
+
+
