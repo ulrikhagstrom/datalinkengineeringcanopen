@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="src\CanConnectionClass.cpp" />
+    <ClCompile Include="src\CanInterfaceClass.cpp" />
+    <ClCompile Include="src\CanMonitorClass.cpp" />
+    <ClCompile Include="src\CANopenLibHelper.cpp" />
+    <ClCompile Include="src\ClientSDOClass.cpp" />
+    <ClCompile Include="src\EmcyClientClass.cpp" />
+    <ClCompile Include="src\EmcyServerClass.cpp" />
+    <ClCompile Include="src\NMTMasterClass.cpp" />
+    <ClCompile Include="src\NMTSlaveClass.cpp" />
+    <ClCompile Include="src\ReceivePDOClass.cpp" />
+    <ClCompile Include="src\SDOClass.cpp" />
+    <ClCompile Include="src\ServerSDOClass.cpp" />
+    <ClCompile Include="src\SyncServerClass.cpp" />
+    <ClCompile Include="src\TimerClass.cpp" />
+    <ClCompile Include="src\TransmitPdoClass.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="inc\CanConnectionClass.h">
+      <Filter>INCLUDES</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\CanInterfaceClass.h">
+      <Filter>INCLUDES</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\CanMonitorClass.h">
+      <Filter>INCLUDES</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\CanOpenErrorCodes.h">
+      <Filter>INCLUDES</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\CanOpenDispatcher.h">
+      <Filter>INCLUDES</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\CanOpenLib_HW.h">
+      <Filter>INCLUDES</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\CanOpenLib_HW_dynload.h">
+      <Filter>INCLUDES</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\CANopenLibDefines.h">
+      <Filter>INCLUDES</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\CANopenLibHelper.h">
+      <Filter>INCLUDES</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\ClientSDOClass.h">
+      <Filter>INCLUDES</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\EmcyClientClass.h">
+      <Filter>INCLUDES</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\EmcyServerClass.h">
+      <Filter>INCLUDES</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\NMTMasterClass.h">
+      <Filter>INCLUDES</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\NMTSlaveClass.h">
+      <Filter>INCLUDES</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\ReceivePDOClass.h">
+      <Filter>INCLUDES</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>INCLUDES</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\SDOClass.h">
+      <Filter>INCLUDES</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\ServerSDOClass.h">
+      <Filter>INCLUDES</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\SyncServerClass.h">
+      <Filter>INCLUDES</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\TimerClass.h">
+      <Filter>INCLUDES</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\TransmitPdoClass.h">
+      <Filter>INCLUDES</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\CanOpenLib.h">
+      <Filter>INCLUDES</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\License.h">
+      <Filter>MISC</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="INCLUDES">
+      <UniqueIdentifier>{3d0fe8ef-400c-4e38-92d8-2080029b6306}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MISC">
+      <UniqueIdentifier>{3605fec5-4e55-43aa-a4ec-c457520f9b8c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt">
+      <Filter>MISC</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="canopen_resource.rc">
+      <Filter>MISC</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>
