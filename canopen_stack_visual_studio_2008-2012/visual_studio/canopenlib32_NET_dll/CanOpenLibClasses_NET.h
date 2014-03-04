@@ -540,7 +540,7 @@ public:
 	CanOpenStatus  nodeReadOperationalState(
 		  u8 node_id, 
 		  u32 maxMsTimeout, 
-      [System::Runtime::InteropServices::Out] NodeState %node_state);
+      [System::Runtime::InteropServices::Out] u8 %node_state);
 
   CanOpenStatus NMTOperationalStateWrapperCPP(void *obj, u8 node_id, u8 state);
 

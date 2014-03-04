@@ -1133,7 +1133,7 @@ NMT_Master_NET::CanOpenStatus NMT_Master_NET::registerNodeStateCallback( NMTOper
 NMT_Master_NET::CanOpenStatus  NMT_Master_NET::nodeReadOperationalState(
       u8 node_id, 
       u32 maxMsTimeout, 
-      [System::Runtime::InteropServices::Out] NodeState %node_state)
+      [System::Runtime::InteropServices::Out] u8 %node_state)
 {
   NMT_Master_NET::CanOpenStatus ret;
   NodeState tmp_NodeState;
