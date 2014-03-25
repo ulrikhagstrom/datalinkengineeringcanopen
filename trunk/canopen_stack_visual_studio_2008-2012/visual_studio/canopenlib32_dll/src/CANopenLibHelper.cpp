@@ -166,9 +166,9 @@ void DebugLogToFile(char *string)
   FILE *out;  
 
   if((out = fopen("canopenlib_logfile.txt", "a")) == NULL){  
-	  MessageBox(NULL, 
-		  "Can not open 'c:\canopenlib_logfile.txt' for writing!",
-		  "CAN NOT OPEN LOGFILE", MB_OK); 
+      MessageBox(NULL, 
+          "Can not open 'c:\canopenlib_logfile.txt' for writing!",
+          "CAN NOT OPEN LOGFILE", MB_OK); 
   }  
 
   fprintf(out, "%s", string);  
@@ -185,9 +185,9 @@ canOpenStatus DebugExitErrorValueLogToFile(canOpenStatus ret)
   FILE *out;  
 
   if((out = fopen("canopenlib_logfile.txt", "a")) == NULL){  
-	  MessageBox(NULL, 
-		  "Can not open 'c:\canopenlib_logfile.txt' for writing!",
-		  "CAN NOT OPEN LOGFILE", MB_OK); 
+      MessageBox(NULL, 
+          "Can not open 'c:\canopenlib_logfile.txt' for writing!",
+          "CAN NOT OPEN LOGFILE", MB_OK); 
   }  
 
   fprintf(out, "Exit with code: %d\n", ret);  

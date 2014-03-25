@@ -146,11 +146,11 @@ canOpenStatus  NMTSlave :: transferHelper(void)
 //------------------------------------------------------------------------
 canOpenStatus NMTSlave :: writeMessage(long id, void* msg, unsigned int dlc, unsigned int flags)
 {
-	canOpenStatus ret = CANOPEN_ERROR;
+    canOpenStatus ret = CANOPEN_ERROR;
 
-	ret = this->can_interface->canWrite(id, msg, dlc, flags);
+    ret = this->can_interface->canWrite(id, msg, dlc, flags);
 
-	return ret;
+    return ret;
 }
 
 //------------------------------------------------------------------------

@@ -42,7 +42,7 @@ ClientSDO :: ClientSDO()
 //------------------------------------------------------------------------
 ClientSDO :: ~ClientSDO()
 {
-	DebugLogToFile("~ClientSDO() entered\n");
+    DebugLogToFile("~ClientSDO() entered\n");
   canHardwareDisconnect();
 }
 

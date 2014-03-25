@@ -652,7 +652,7 @@ canOpenStatus   ServerSDO :: hndlInitDlReq(void)
         //          this->application_sub_index, ATTEMPT_TO_WRITE_A_READ_ONLY_OBJ);
         //  this->writeToCanBus();
         //}
-		else
+        else
         {
           // Write object properties where missing.
           u32 err = 0;
