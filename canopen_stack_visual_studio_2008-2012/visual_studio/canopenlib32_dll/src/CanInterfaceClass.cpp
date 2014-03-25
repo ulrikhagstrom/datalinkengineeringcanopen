@@ -391,26 +391,26 @@ canOpenStatus CanInterface :: canGoBusOff(void)
 canOpenStatus CanInterface :: canLibraryInit(void)
 {
     /*
-	*	Load proper CANLIB.DLL
-	*/
-	hCanLib = LoadLibrary(TEXT("canopenlib32_hw.dll"));
+    *	Load proper CANLIB.DLL
+    */
+    hCanLib = LoadLibrary(TEXT("canopenlib32_hw.dll"));
   if (hCanLib == NULL)
   {
     MessageBox(NULL, "CAN hardware layer DLL (canopenlib32_hw.dll) was not found!","Missing file!", MB_OK);
     return CANOPEN_ERROR_DRIVER;
   }
-	/*
-	*	Connect to the functions in the DLL.
-	*/
+    /*
+    *	Connect to the functions in the DLL.
+    */
   canPortLibraryInit = (canPortLibraryInitFP) GetProcAddress(hCanLib, "canPortLibraryInit");
-	canPortOpen = (canPortOpenFP)GetProcAddress(hCanLib, "canPortOpen");
-	canPortClose = (canPortCloseFP)GetProcAddress(hCanLib, "canPortClose");
+    canPortOpen = (canPortOpenFP)GetProcAddress(hCanLib, "canPortOpen");
+    canPortClose = (canPortCloseFP)GetProcAddress(hCanLib, "canPortClose");
   canPortBitrateSet = (canPortBitrateSetFP) GetProcAddress(hCanLib, "canPortBitrateSet");
-	canPortEcho = (canPortEchoFP)GetProcAddress(hCanLib, "canPortEcho");
-	canPortGoBusOn = (canPortGoBusOnFP)GetProcAddress(hCanLib, "canPortGoBusOn");
+    canPortEcho = (canPortEchoFP)GetProcAddress(hCanLib, "canPortEcho");
+    canPortGoBusOn = (canPortGoBusOnFP)GetProcAddress(hCanLib, "canPortGoBusOn");
   canPortGoBusOff = (canPortGoBusOffFP) GetProcAddress(hCanLib, "canPortGoBusOff");
-	canPortWrite = (canPortWriteFP)GetProcAddress(hCanLib, "canPortWrite");
-	canPortRead = (canPortReadFP)GetProcAddress(hCanLib, "canPortRead");
+    canPortWrite = (canPortWriteFP)GetProcAddress(hCanLib, "canPortWrite");
+    canPortRead = (canPortReadFP)GetProcAddress(hCanLib, "canPortRead");
   canPortGetSerialNumber  = (canPortGetSerialNumberFP)GetProcAddress(hCanLib, "canPortGetSerialNumber");
 
   return ::canPortLibraryInit();
