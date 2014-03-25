@@ -76,18 +76,18 @@ public:
         CANOPEN_CAN_LAYER_FAILED               = -100,
         CANOPEN_ERROR_CAN_LAYER                = -101,
         CANOPEN_ERROR_CAN_LAYER_OVRFLOW        = -102,
-    CANOPEN_ERROR_HW_CONNECTED             = -103,
-    CANOPEN_ERROR_HW_NOT_CONNECTED         = -104,
-    CANOPEN_ERROR_HW_UNDEFINED             = -105,
-    CANOPEN_ERROR_DRIVER                   = -106,
-    CANOPEN_OUT_OF_CAN_INTERFACES          = -107,
-    CANOPEN_UNSUPPORTED_BITRATE            = -108,
-    CANOPEN_ERROR_NO_MESSAGE               = -109,
-    CANOPEN_ERROR_NOT_IMPLEMENTED          = -110,
-    CANOPEN_ERROR_FILE_NOT_FOUND           = -111,
-    CANOPEN_ERROR_NOT_EDS_DCF_CONFIGURED   = -112,
-    CANOPEN_ASYNC_TRANSFER                 = -113,
-    CANOPEN_ERROR_ASYNC_TRANSFER_ENABLED   = -114,
+        CANOPEN_ERROR_HW_CONNECTED             = -103,
+        CANOPEN_ERROR_HW_NOT_CONNECTED         = -104,
+        CANOPEN_ERROR_HW_UNDEFINED             = -105,
+        CANOPEN_ERROR_DRIVER                   = -106,
+        CANOPEN_OUT_OF_CAN_INTERFACES          = -107,
+        CANOPEN_UNSUPPORTED_BITRATE            = -108,
+        CANOPEN_ERROR_NO_MESSAGE               = -109,
+        CANOPEN_ERROR_NOT_IMPLEMENTED          = -110,
+        CANOPEN_ERROR_FILE_NOT_FOUND           = -111,
+        CANOPEN_ERROR_NOT_EDS_DCF_CONFIGURED   = -112,
+        CANOPEN_ASYNC_TRANSFER                 = -113,
+        CANOPEN_ERROR_ASYNC_TRANSFER_ENABLED   = -114,
         CANOPEN_ERROR                          = -255 
     };
 };
@@ -177,34 +177,34 @@ private:
     ServerSDO *cpp_ServerSDO;
     [UnmanagedFunctionPointer(CallingConvention::Cdecl)]
     delegate canOpenStatus ServerWriteDelegate(void *context, u16 object_index, u8 sub_index, u8 *buf, u32 valid, u32 *coErrorCode);
-  ServerWriteDelegate ^srvWriteDelegate;
+    ServerWriteDelegate ^srvWriteDelegate;
     [UnmanagedFunctionPointer(CallingConvention::Cdecl)]
     delegate canOpenStatus ServerReadDelegate(void *context, u16 object_index, u8 sub_index, u8 *buf, u32 *valid, u32 buffer_size, u32 *coerror_code);
-  ServerReadDelegate ^srvReadDelegate;
+    ServerReadDelegate ^srvReadDelegate;
     [UnmanagedFunctionPointer(CallingConvention::Cdecl)]
     delegate canOpenStatus ServerGetAttrDelegate(void *p, u16 object_index, u8 sub_index, u16 *flags);
-  ServerGetAttrDelegate ^srvGetAttrDelegate;
+    ServerGetAttrDelegate ^srvGetAttrDelegate;
 
     SrvReadDelegate^ readObjectDelegate;
-  System::Object^ readObjectDelgateObject;
+    System::Object^ readObjectDelgateObject;
 
     SrvWriteDelegate^ writeObjectDelegate;
-  System::Object^ writeObjectDelegateObject;
+    System::Object^ writeObjectDelegateObject;
 
     SrvGetAttrDelegate^ attribObjectDelegate;
-  System::Object^ attribObjectDelegateObject;
+    System::Object^ attribObjectDelegateObject;
 
 public:
     ServerSDO_NET();
-  ~ServerSDO_NET();
+    ~ServerSDO_NET();
     CanOpenStatus  canHardwareConnect(int port, int bitrate);
     CanOpenStatus  canHardwareDisconnect(void);
 
-  CanOpenStatus  nodeSetId(u8 node_id);
+    CanOpenStatus  nodeSetId(u8 node_id);
 
-  CanOpenStatus registerObjectReadCallback(SrvReadDelegate^ readDelegate, System::Object^ obj); 
-  CanOpenStatus registerObjectWriteCallback(SrvWriteDelegate^ writeDelegate, System::Object^ obj); 
-  CanOpenStatus registerObjectGetAttributesCallback(SrvGetAttrDelegate^ getAttrDelegate, System::Object^ obj); 
+    CanOpenStatus registerObjectReadCallback(SrvReadDelegate^ readDelegate, System::Object^ obj); 
+    CanOpenStatus registerObjectWriteCallback(SrvWriteDelegate^ writeDelegate, System::Object^ obj); 
+    CanOpenStatus registerObjectGetAttributesCallback(SrvGetAttrDelegate^ getAttrDelegate, System::Object^ obj); 
 
 private:
     canOpenStatus serverRead(void *p, u16 object_index, u8 sub_index, u8 *buf, u32 *valid, u32 buffer_size, u32 *coerror_code);
@@ -238,8 +238,8 @@ public ref class CanInterface_NET : CANOPEN_LIB_ERROR
 {
 public:
     CanInterface_NET();
-  ~CanInterface_NET();
-  //CanOpenStatus unlockCanopenLibrary( array<Byte>^ license_file, array<Byte>^ unlock_code );
+    ~CanInterface_NET();
+    //CanOpenStatus unlockCanopenLibrary( array<Byte>^ license_file, array<Byte>^ unlock_code );
 };
 
 
@@ -249,21 +249,21 @@ public ref class CanMonitor_NET : CANOPEN_LIB_ERROR
 private:
     CanMonitor *cpp_CanMonitor;
     [UnmanagedFunctionPointer(CallingConvention::Cdecl)]
-  delegate canOpenStatus CanReceiveDelegate_CPP(void *context, u32 id, u8 *data, u8 dlc, u32 flags);
-  CanReceiveDelegate_CPP ^can_receive_delegate_CPP;
+    delegate canOpenStatus CanReceiveDelegate_CPP(void *context, u32 id, u8 *data, u8 dlc, u32 flags);
+    CanReceiveDelegate_CPP ^can_receive_delegate_CPP;
 
     CanReceiveDelegate^ can_receive_delegate;  //C#
-  System::Object^ can_receive_delegate_object; //C#
+    System::Object^ can_receive_delegate_object; //C#
 
 public:
     CanMonitor_NET();
-  ~CanMonitor_NET();
+    ~CanMonitor_NET();
 
-  CanOpenStatus    canHardwareConnect(int port, int bitrate);
-  CanOpenStatus    canHardwareDisconnect(void);
+    CanOpenStatus    canHardwareConnect(int port, int bitrate);
+    CanOpenStatus    canHardwareDisconnect(void);
 
-  CanOpenStatus    registerCanReceiveCallback( System::Object^ obj, CanReceiveDelegate^ can_receive_delegate );
-  CanOpenStatus    canWrite( u32 id,  array<Byte>^ data, u8 dlc, u32 flags);
+    CanOpenStatus    registerCanReceiveCallback( System::Object^ obj, CanReceiveDelegate^ can_receive_delegate );
+    CanOpenStatus    canWrite( u32 id,  array<Byte>^ data, u8 dlc, u32 flags);
 
 private:
     canOpenStatus canReceiveCPP(void * context, u32 id, u8 *data, u8 dlc, u32 flags );
@@ -275,26 +275,26 @@ private:
 public ref class ReceivePDO_NET : CANOPEN_LIB_ERROR
 {
 private:
-  ReceivePDO *cpp_ReceivePDO;
+    ReceivePDO *cpp_ReceivePDO;
     [UnmanagedFunctionPointer(CallingConvention::Cdecl)]
-  delegate canOpenStatus ReceivePdoDelegate_CPP(void *context, u32 cobid, u8* data, u8 len);
-  ReceivePdoDelegate_CPP ^receive_pdo_delegate_CPP;
+    delegate canOpenStatus ReceivePdoDelegate_CPP(void *context, u32 cobid, u8* data, u8 len);
+    ReceivePdoDelegate_CPP ^receive_pdo_delegate_CPP;
 
     ReceivePdoDelegate^ receive_pdo_delegate;  //C#
-  System::Object^ receive_pdo_delegate_object; //C#
+    System::Object^ receive_pdo_delegate_object; //C#
 
 public:
-  ReceivePDO_NET();
-  ~ReceivePDO_NET();
+    ReceivePDO_NET();
+    ~ReceivePDO_NET();
 
-  CanOpenStatus    canHardwareConnect(int port, int bitrate);
-  CanOpenStatus    canHardwareDisconnect(void);
+    CanOpenStatus    canHardwareConnect(int port, int bitrate);
+    CanOpenStatus    canHardwareDisconnect(void);
 
-  CanOpenStatus    registerReceivePdoMessageCallBack( System::Object^ obj, ReceivePdoDelegate^ can_receive_delegate );
-  CanOpenStatus    setCobid(u32 cobid);
+    CanOpenStatus    registerReceivePdoMessageCallBack( System::Object^ obj, ReceivePdoDelegate^ can_receive_delegate );
+    CanOpenStatus    setCobid(u32 cobid);
 
 private:
-  canOpenStatus    receivePdoCPP(void * context, u32 id, u8 *data, u8 dlc);
+    canOpenStatus    receivePdoCPP(void * context, u32 id, u8 *data, u8 dlc);
 };
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -302,26 +302,26 @@ private:
 public ref class SyncServer_NET : CANOPEN_LIB_ERROR
 {
 private:
-  SyncServer *cpp_SyncServer;
+    SyncServer *cpp_SyncServer;
     [UnmanagedFunctionPointer(CallingConvention::Cdecl)]
-  delegate canOpenStatus SyncServerDelegate_CPP(void *context);
-  SyncServerDelegate_CPP ^sync_server_delegate_CPP;
+    delegate canOpenStatus SyncServerDelegate_CPP(void *context);
+    SyncServerDelegate_CPP ^sync_server_delegate_CPP;
 
     SyncServerDelegate^ sync_server_delegate;  //C#
-  System::Object^ sync_server_delegate_object; //C#
+    System::Object^ sync_server_delegate_object; //C#
 
 public:
-  SyncServer_NET();
-  ~SyncServer_NET();
+    SyncServer_NET();
+    ~SyncServer_NET();
 
-  CanOpenStatus    canHardwareConnect(int port, int bitrate);
-  CanOpenStatus    canHardwareDisconnect(void);
+    CanOpenStatus    canHardwareConnect(int port, int bitrate);
+    CanOpenStatus    canHardwareDisconnect(void);
 
-  CanOpenStatus    registerSyncMessageCallBack( System::Object^ obj, SyncServerDelegate^ can_receive_delegate );
-  CanOpenStatus    setCobid(u32 cobid);
+    CanOpenStatus    registerSyncMessageCallBack( System::Object^ obj, SyncServerDelegate^ can_receive_delegate );
+    CanOpenStatus    setCobid(u32 cobid);
 
 private:
-  canOpenStatus    syncServerCallbackCPP(void * context);
+    canOpenStatus    syncServerCallbackCPP(void * context);
 };
 
 
@@ -331,25 +331,25 @@ private:
 public ref class EmcyServer_NET : CANOPEN_LIB_ERROR
 {
 private:
-  EmcyServer *cpp_EmcyServer;
+    EmcyServer *cpp_EmcyServer;
     [UnmanagedFunctionPointer(CallingConvention::Cdecl)]
-  delegate canOpenStatus EmcyServerDelegate_CPP(void *context, u8 nodeId, u16 emcyErrorCode, u8 errorRegister, u8 *manufacturerSpecificErrorField);
-  EmcyServerDelegate_CPP ^emcy_server_delegate_CPP;
+    delegate canOpenStatus EmcyServerDelegate_CPP(void *context, u8 nodeId, u16 emcyErrorCode, u8 errorRegister, u8 *manufacturerSpecificErrorField);
+    EmcyServerDelegate_CPP ^emcy_server_delegate_CPP;
 
     EmcyServerDelegate^ emcy_server_delegate;  //C#
-  System::Object^ emcy_server_delegate_object; //C#
+    System::Object^ emcy_server_delegate_object; //C#
 
 public:
-  EmcyServer_NET();
-  ~EmcyServer_NET();
+    EmcyServer_NET();
+    ~EmcyServer_NET();
 
-  CanOpenStatus    canHardwareConnect(int port, int bitrate);
-  CanOpenStatus    canHardwareDisconnect(void);
+    CanOpenStatus    canHardwareConnect(int port, int bitrate);
+    CanOpenStatus    canHardwareDisconnect(void);
 
-  CanOpenStatus    registerEmcyServerMessageCallBack( System::Object^ obj, EmcyServerDelegate^ can_receive_delegate );
+    CanOpenStatus    registerEmcyServerMessageCallBack( System::Object^ obj, EmcyServerDelegate^ can_receive_delegate );
 
 private:
-  canOpenStatus emcyServerCallbackCPP(void *context, u8 nodeId, u16 emcyErrorCode, u8 errorRegister, u8 *manufacturerSpecificErrorField);
+    canOpenStatus emcyServerCallbackCPP(void *context, u8 nodeId, u16 emcyErrorCode, u8 errorRegister, u8 *manufacturerSpecificErrorField);
 };
 
 
@@ -359,18 +359,18 @@ private:
 public ref class TransmitPDO_NET : CANOPEN_LIB_ERROR
 {
 private:
-  TransmitPDO *cpp_TransmitPDO;
+    TransmitPDO *cpp_TransmitPDO;
 
 public:
-  TransmitPDO_NET();
-  ~TransmitPDO_NET();
+    TransmitPDO_NET();
+    ~TransmitPDO_NET();
 
-  CanOpenStatus    canHardwareConnect(int port, int bitrate);
-  CanOpenStatus    canHardwareDisconnect(void);
+    CanOpenStatus    canHardwareConnect(int port, int bitrate);
+    CanOpenStatus    canHardwareDisconnect(void);
 
-  CanOpenStatus    setup(u32 id, array<Byte>^ data, u8 dlc);
-  CanOpenStatus    transmit(void);
-  CanOpenStatus    periodicTransmission(bool value);
+    CanOpenStatus    setup(u32 id, array<Byte>^ data, u8 dlc);
+    CanOpenStatus    transmit(void);
+    CanOpenStatus    periodicTransmission(bool value);
 };
 
 
@@ -379,18 +379,18 @@ public:
 public ref class EmcyClient_NET : CANOPEN_LIB_ERROR
 {
 private:
-  EmcyClient *cpp_EmcyClient;
+    EmcyClient *cpp_EmcyClient;
 
 public:
-  EmcyClient_NET();
-  ~EmcyClient_NET();
+    EmcyClient_NET();
+    ~EmcyClient_NET();
 
-  CanOpenStatus    canHardwareConnect(int port, int bitrate);
-  CanOpenStatus    canHardwareDisconnect(void);
+    CanOpenStatus    canHardwareConnect(int port, int bitrate);
+    CanOpenStatus    canHardwareDisconnect(void);
 
-  CanOpenStatus    nodeSetId( u8 node_id );
-  CanOpenStatus    sendEmcyMessage( u8 nodeId, u16 emcy_error_code, u8 error_register, array<Byte>^ manufSpecificErrorField );
-  CanOpenStatus    sendEmcyMessage( u16 emcy_error_code, u8 error_register, array<Byte>^ manufSpecificErrorField );
+    CanOpenStatus    nodeSetId( u8 node_id );
+    CanOpenStatus    sendEmcyMessage( u8 nodeId, u16 emcy_error_code, u8 error_register, array<Byte>^ manufSpecificErrorField );
+    CanOpenStatus    sendEmcyMessage( u16 emcy_error_code, u8 error_register, array<Byte>^ manufSpecificErrorField );
 };
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -404,23 +404,23 @@ public:
     ~ClientSDO_NET();
 
 
-  CanOpenStatus  connect(u8 node_id);
+    CanOpenStatus  connect(u8 node_id);
 
     CanOpenStatus  connect(COBID cobid_tx, COBID cobid_rx);
 
     CanOpenStatus  canHardwareConnect(int port, int bitrate);
-  CanOpenStatus  canHardwareDisconnect(void);
+    CanOpenStatus  canHardwareDisconnect(void);
 
-  CanOpenStatus registerObjectReadResultCallback(CliReadResultDelegate^ readDelegate, System::Object^ obj); 
-  CanOpenStatus registerObjectWriteResultCallback(CliWriteResultDelegate^ writeDelegate, System::Object^ obj); 
-  CanOpenStatus unregisterObjectReadWriteResultCallbacks(void);
+    CanOpenStatus registerObjectReadResultCallback(CliReadResultDelegate^ readDelegate, System::Object^ obj); 
+    CanOpenStatus registerObjectWriteResultCallback(CliWriteResultDelegate^ writeDelegate, System::Object^ obj); 
+    CanOpenStatus unregisterObjectReadWriteResultCallbacks(void);
 
-  void          setWriteObjectTimeout(u32 timeout);
-  void          setReadObjectTimeout(u32 timeout);
-  void          setNodeResponseTimeout(u32 timeout);
+    void          setWriteObjectTimeout(u32 timeout);
+    void          setReadObjectTimeout(u32 timeout);
+    void          setNodeResponseTimeout(u32 timeout);
   
-  bool isObjectWriteResultCallbackEnabled(void);
-  bool isObjectReadResultCallbackEnabled(void);
+    bool isObjectWriteResultCallbackEnabled(void);
+    bool isObjectReadResultCallbackEnabled(void);
 
     CanOpenStatus  objectRead(u16 object_index, 
                                 u8 sub_index, 
@@ -428,7 +428,7 @@ public:
                                 [System::Runtime::InteropServices::Out] u32 %valid,
                                 [System::Runtime::InteropServices::Out] CanOpenErrorCode %coErrorCode);
 
-  CanOpenStatus  objectRead(u16 object_index, u8 sub_index, 
+    CanOpenStatus  objectRead(u16 object_index, u8 sub_index, 
                                 [System::Runtime::InteropServices::Out] u8 %val, 
                                 [System::Runtime::InteropServices::Out] CanOpenErrorCode %coErrorCode);
 
@@ -445,13 +445,13 @@ public:
                                 [System::Runtime::InteropServices::Out] CanOpenErrorCode %coErrorCode);
 #endif
 
-  CanOpenStatus  objectWrite(u16 object_index, 
+    CanOpenStatus  objectWrite(u16 object_index, 
                                 u8 sub_index, 
                                 array<Byte>^ buf, //u8 *buf, 
                                 u32 valid, 
                                 [System::Runtime::InteropServices::Out] CanOpenErrorCode %coErrorCode);
 
-  CanOpenStatus  objectWriteBlock(u16 object_index, 
+    CanOpenStatus  objectWriteBlock(u16 object_index, 
                                 u8 sub_index, 
                                 u16 crc, 
                                 array<Byte>^ buf, 
@@ -480,30 +480,30 @@ public:
 #endif
 private:
     ClientSDO *cpp_ClientSDO;
-  u8 *temp_data_buffer;
-  array<Byte>^ applicationsBuffer; 
+    u8 *temp_data_buffer;
+    array<Byte>^ applicationsBuffer; 
         
   //typedef void (*CliWriteFuncPtr)(void *context, canOpenStatus status, u16 object_index, 
   //  u8 sub_index, u32 co_error_code); 
 
     [UnmanagedFunctionPointer(CallingConvention::Cdecl)]
-  delegate void ClientWriteResultDelegate(void *context, canOpenStatus status, u8 node_id, u16 object_index, u8 sub_index, u32 co_error_code);
-  ClientWriteResultDelegate ^cliWriteResultDelegate;
+    delegate void ClientWriteResultDelegate(void *context, canOpenStatus status, u8 node_id, u16 object_index, u8 sub_index, u32 co_error_code);
+    ClientWriteResultDelegate ^cliWriteResultDelegate;
     
-  CliWriteResultDelegate^ writeObjectResultDelegate;
-  System::Object^ writeObjectResultDelegateObject;
+    CliWriteResultDelegate^ writeObjectResultDelegate;
+    System::Object^ writeObjectResultDelegateObject;
 
-  //typedef void (*CliReadFuncPtr)(void *context, canOpenStatus status, u16 object_index, 
-  //  u8 sub_index, u8 *buffer, u32 valid, u32 co_error_code);
+    //typedef void (*CliReadFuncPtr)(void *context, canOpenStatus status, u16 object_index, 
+    //  u8 sub_index, u8 *buffer, u32 valid, u32 co_error_code);
 
-  [UnmanagedFunctionPointer(CallingConvention::Cdecl)]
+    [UnmanagedFunctionPointer(CallingConvention::Cdecl)]
     delegate void ClientReadResultDelegate(void *context, canOpenStatus status, u8 node_id, u16 object_index, u8 sub_index, u8 *buffer, u32 valid, u32 co_error_code);
-  ClientReadResultDelegate ^cliReadResultDelegate;
+    ClientReadResultDelegate ^cliReadResultDelegate;
   
-  CliReadResultDelegate^ readObjectResultDelegate;
-  System::Object^ readObjectResultDelgateObject;
+    CliReadResultDelegate^ readObjectResultDelegate;
+    System::Object^ readObjectResultDelgateObject;
 
-  void clientReadResultWrapperCallback(void *context, canOpenStatus status, u8 node_id, u16 object_index, u8 sub_index, u8 *buffer, u32 valid, u32 co_error_code);
+    void clientReadResultWrapperCallback(void *context, canOpenStatus status, u8 node_id, u16 object_index, u8 sub_index, u8 *buffer, u32 valid, u32 co_error_code);
     void clientWriteResultWrapperCallback(void *context, canOpenStatus status, u8 node_id, u16 object_index, u8 sub_index, u32 co_error_code);
 };
 
@@ -517,11 +517,11 @@ public ref class NMT_Master_NET : CANOPEN_LIB_ERROR
 {
 public:
 
-  NMT_Master_NET();
-  ~NMT_Master_NET();
+    NMT_Master_NET();
+    ~NMT_Master_NET();
 
     CanOpenStatus  canHardwareConnect(int port, int btr);
-  CanOpenStatus  canHardwareDisconnect(void);
+    CanOpenStatus  canHardwareDisconnect(void);
 
     CanOpenStatus  nodeStart(u8 node_id);
     CanOpenStatus  nodeStop(u8 node_id);
@@ -529,30 +529,30 @@ public:
     CanOpenStatus  nodeReset(u8 node_id);
     CanOpenStatus  nodeResetCommunication(u8 node_id);
 
-  CanOpenStatus  nodeGuardPollStart(u8 node_id, u32 node_life_time_ms);
+    CanOpenStatus  nodeGuardPollStart(u8 node_id, u32 node_life_time_ms);
     CanOpenStatus  nodeGuardPollStop(u8 node_id);
 
-  CanOpenStatus  heartbeatMonitorStart(u8 node_id, u32 heartbeat_consumer_time_ms);
+    CanOpenStatus  heartbeatMonitorStart(u8 node_id, u32 heartbeat_consumer_time_ms);
     CanOpenStatus  heartbeatMonitorStop(u8 node_id);
 
-  CanOpenStatus  registerNodeStateCallback(NMTOperationalStateDelegate^ opStateDelegate, System::Object^ obj);
+    CanOpenStatus  registerNodeStateCallback(NMTOperationalStateDelegate^ opStateDelegate, System::Object^ obj);
 
     CanOpenStatus  nodeReadOperationalState(
           u8 node_id, 
           u32 maxMsTimeout, 
       [System::Runtime::InteropServices::Out] u8 %node_state);
 
-  CanOpenStatus NMTOperationalStateWrapperCPP(void *obj, u8 node_id, u8 state);
+    CanOpenStatus NMTOperationalStateWrapperCPP(void *obj, u8 node_id, u8 state);
 
 private:
     NMTMaster *cpp_NMTMaster;
-  NMTOperationalStateDelegate^ nmtOperationalStateDelegate_CS;
-  System::Object^ nmtOperationalStateDelegateObject;
+    NMTOperationalStateDelegate^ nmtOperationalStateDelegate_CS;
+    System::Object^ nmtOperationalStateDelegateObject;
 
-  [UnmanagedFunctionPointer(CallingConvention::Cdecl)]
+    [UnmanagedFunctionPointer(CallingConvention::Cdecl)]
     delegate CanOpenStatus NMTOperationalStateDelegate_CPP(void *obj, u8 node_id, u8 state);
 
-  NMTOperationalStateDelegate_CPP ^nmtOperationalStateDelegateCPP;
+    NMTOperationalStateDelegate_CPP ^nmtOperationalStateDelegateCPP;
 };
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -563,28 +563,28 @@ public ref class NMT_Slave_NET : CANOPEN_LIB_ERROR
 {
 public:
 
-  NMT_Slave_NET();
-  ~NMT_Slave_NET();
+    NMT_Slave_NET();
+    ~NMT_Slave_NET();
 
     CanOpenStatus  canHardwareConnect(int port, int btr);
-  CanOpenStatus  canHardwareDisconnect(void);
+    CanOpenStatus  canHardwareDisconnect(void);
 
-  CanOpenStatus  nodeSetId(u8 node_id);
-  CanOpenStatus  nodeSetState(u8 node_state);
-  CanOpenStatus  writeMessage(u32 id, array<Byte>^, u8 dlc, u32 flags);
-  CanOpenStatus  registerLocalNodeStateChangeCallback(NMTLocalNodeOperationalStateDelegate^ localOperationalStateDelegate, System::Object^ obj);
+    CanOpenStatus  nodeSetId(u8 node_id);
+    CanOpenStatus  nodeSetState(u8 node_state);
+    CanOpenStatus  writeMessage(u32 id, array<Byte>^, u8 dlc, u32 flags);
+    CanOpenStatus  registerLocalNodeStateChangeCallback(NMTLocalNodeOperationalStateDelegate^ localOperationalStateDelegate, System::Object^ obj);
 
 private:
     NMTSlave *cpp_NMTSlave;
 
-  NMTLocalNodeOperationalStateDelegate^ nmtLocalNodeOperationalStateDelegate_CS;
-  System::Object^ nmtLocalNodeOperationalStateDelegateObject;
+    NMTLocalNodeOperationalStateDelegate^ nmtLocalNodeOperationalStateDelegate_CS;
+    System::Object^ nmtLocalNodeOperationalStateDelegateObject;
 
-  [UnmanagedFunctionPointer(CallingConvention::Cdecl)]
+    [UnmanagedFunctionPointer(CallingConvention::Cdecl)]
     delegate CanOpenStatus NMTLocalNodeOperationalStateDelegate_CPP(void *obj, u8 state);
-  NMTLocalNodeOperationalStateDelegate_CPP ^nmtLocalNodeOperationalStateDelegatCPP ;
+    NMTLocalNodeOperationalStateDelegate_CPP ^nmtLocalNodeOperationalStateDelegatCPP ;
 
-  CanOpenStatus NMTLocalNodeOperationalStateWrapperCPP(void *obj, u8 state);
+    CanOpenStatus NMTLocalNodeOperationalStateWrapperCPP(void *obj, u8 state);
 };
 
 #endif
