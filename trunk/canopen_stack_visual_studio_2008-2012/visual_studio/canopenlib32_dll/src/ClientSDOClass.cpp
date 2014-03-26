@@ -1381,9 +1381,10 @@ canOpenStatus  ClientSDO :: clientSDOStateMachine(void)
 
   // Need to implement timeout control since synchronization not done
   // if callbacks are configured.
-  if (isTransferTimeout() == TRUE && 
-    this->is_transfer_stopped_or_finished == FALSE &&
-    this->state != UNACTIVE)
+  if (this->isTransferTimeout() == TRUE && 
+      this->is_transfer_stopped_or_finished == FALSE &&
+      this->state != UNACTIVE &&
+      (this->object_write_callback != NULL || this->object_read_callback != NULL))
   {
     this->transfer_result = CANOPEN_TIMEOUT;
     if (this->transfer_direction == WRITE_SESSION &&
@@ -1408,7 +1409,7 @@ canOpenStatus  ClientSDO :: clientSDOStateMachine(void)
         0,
         0);
     }
-    this->state = UNACTIVE;    
+    this->state = UNACTIVE;
     this->is_transfer_stopped_or_finished = TRUE;
   }
   return ret;
@@ -1627,13 +1628,13 @@ canOpenStatus   ClientSDO :: synchronize(unsigned long timeout, Direction direct
   }
   
   while ( ((direction == WRITE_SESSION && object_write_callback == NULL) || // Do not sync if callback configured.
-          (direction == READ_SESSION && object_read_callback == NULL)) &&  // Do not sync if callback configured.
+           (direction == READ_SESSION && object_read_callback == NULL)) &&  // Do not sync if callback configured.
           this->is_transfer_stopped_or_finished == FALSE && 
           transfer_timeout == FALSE && 
           remote_aborted == FALSE) 
   {
 
-    if (isTransferTimeout())
+    if (this->isTransferTimeout())
     {
       DebugLogToFile("synchronize timeout\n");
       this->transfer_result = CANOPEN_TIMEOUT; 
@@ -1649,12 +1650,14 @@ canOpenStatus   ClientSDO :: synchronize(unsigned long timeout, Direction direct
     *(this->application_canopen_error_code) = remote_node_error_code;
     Sleep(1);
   }
-  if (((direction == WRITE_SESSION && object_write_callback == NULL) || // Do not sync if callback configured.
-       (direction == READ_SESSION && object_read_callback == NULL)) == FALSE)
+
+  if ((direction == WRITE_SESSION && object_write_callback != NULL) || // Do not sync if callback configured.
+      (direction == READ_SESSION && object_read_callback != NULL))
   {
     DebugLogToFile("synchronize CANOPEN_ASYNC_TRANSFER\n");
     this->transfer_result = CANOPEN_ASYNC_TRANSFER;
   }
+
   DebugLogToFile("synchronize(unsigned long timeout, Direction direction) exit\n");
   return DebugExitErrorValueLogToFile(this->transfer_result);
 }
