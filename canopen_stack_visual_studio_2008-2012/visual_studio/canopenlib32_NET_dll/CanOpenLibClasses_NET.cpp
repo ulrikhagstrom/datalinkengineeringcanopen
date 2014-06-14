@@ -340,7 +340,13 @@ TransmitPDO_NET::CanOpenStatus TransmitPDO_NET::canHardwareDisconnect(void)
 
 TransmitPDO_NET::CanOpenStatus TransmitPDO_NET::setup(u32 id,  array<Byte>^ data, u8 dlc)
 {
-  u8 *data_cpp = new u8[dlc];
+  if (cpp_TransmitPDO == nullptr)
+    return (TransmitPDO_NET::CanOpenStatus::CANOPEN_INTERNAL_STATE_ERROR);
+
+  u8 *data_cpp = new u8[8];
+
+  if (dlc < 0 || dlc > 8)
+    return CanMonitor_NET::CanOpenStatus::CANOPEN_ARG_ERROR;
 
   for (int j = 0; j < dlc; j++)
     data_cpp[j] = data[j]; 
@@ -354,7 +360,10 @@ TransmitPDO_NET::CanOpenStatus TransmitPDO_NET::setup(u32 id,  array<Byte>^ data
   
 TransmitPDO_NET::CanOpenStatus TransmitPDO_NET::transmit(void)
 {
-  return (TransmitPDO_NET::CanOpenStatus)cpp_TransmitPDO->transmitPdo();
+  if (cpp_TransmitPDO != nullptr)
+    return (TransmitPDO_NET::CanOpenStatus)cpp_TransmitPDO->transmitPdo();
+  else
+    return (TransmitPDO_NET::CanOpenStatus::CANOPEN_INTERNAL_STATE_ERROR);
 }
 
 
