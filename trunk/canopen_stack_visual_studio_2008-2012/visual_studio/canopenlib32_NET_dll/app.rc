@@ -78,7 +78,7 @@ BEGIN
     BEGIN
         BLOCK "041d04b0"
         BEGIN
-            VALUE "FileDescription", "SVN: 15, 2013/12/30 21:01:54"
+            VALUE "FileDescription", "SVN: 15, 2014/06/14 21:35:39"
             VALUE "FileVersion", "1, 0, 0, 15"
             VALUE "InternalName", "canopenlib32_NET.dll"
             VALUE "LegalCopyright", "Copyright Ulrik Hagström 2013"

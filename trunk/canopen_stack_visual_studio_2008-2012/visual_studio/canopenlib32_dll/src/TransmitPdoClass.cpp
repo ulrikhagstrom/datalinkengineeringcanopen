@@ -71,7 +71,7 @@ void TransmitPDO :: timerCallbackHandler(void *transmit_pdo_context)
 canOpenStatus  TransmitPDO :: setData(COBID cobid, u8* data, u8 len)
 {
   canOpenStatus ret = CANOPEN_ERROR;
-  if (len > 8)
+  if (len > 8 || len < 0)
   {
     ret = CANOPEN_ARG_ERROR;
   }
