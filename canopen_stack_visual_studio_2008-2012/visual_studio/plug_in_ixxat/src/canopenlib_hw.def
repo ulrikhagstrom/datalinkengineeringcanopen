@@ -11,6 +11,6 @@ EXPORTS
 	canPortGoBusOff
 	canPortWrite
 	canPortRead
-	
+	canPortGetSerialNumber
    
    

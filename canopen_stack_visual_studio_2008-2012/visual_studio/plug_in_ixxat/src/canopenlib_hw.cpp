@@ -228,23 +228,35 @@ CANOPENLIB_HW_API   canOpenStatus    __stdcall canPortOpen( int port, canPortHan
 }
 
 //------------------------------------------------------------------------
-//
+// Close the last hardware connect
+//  CanConnection::canHardwareDisconnect->
+//  CanInterface::canClosePort->
+//  CanInterface::removeCanInterface-> if last port_user (connection)
+//  canopenlib_hw::canPortClose
 //------------------------------------------------------------------------
 
 CANOPENLIB_HW_API   canOpenStatus    __stdcall canPortClose( canPortHandle handle )
 {
   canOpenStatus ret = CANOPEN_ERROR_HW_NOT_CONNECTED;
-  if (0 < handle)
+  if (handle >= 0 && handle < MAX_CAN_DEVICES)
   {
 	  EnterCriticalSection( &can_port_data_devices[ handle ].usb_handle_cs );
 	  //TCanMsg can_frame;
 	  ret = CANOPEN_ERROR_CAN_LAYER ;
 
 	  HRESULT hResult; // error code
-	  HANDLE hDevice = can_port_data_devices[(int)handle].hDevice;       // device handle
-
-	  hResult = vciDeviceClose(hDevice);
-
+	  if (can_port_data_devices[handle].can_bus_on)
+	  {
+		  hResult = canPortGoBusOff(handle);
+	  }
+	  else
+	  {
+		  HANDLE hDevice = can_port_data_devices[(int)handle].hDevice;       // device handle
+		  if (hDevice != NULL)
+		  {
+			  hResult = vciDeviceClose(hDevice);
+		  }
+	  }
 	  if (hResult == VCI_OK)
 	  {
 		ret = CANOPEN_OK;
@@ -414,6 +426,7 @@ CANOPENLIB_HW_API   canOpenStatus    __stdcall canPortGoBusOn( canPortHandle han
     {
       hResult = canControlStart(hCanCtl, TRUE);
     }
+	can_port_data_devices[handle].can_bus_on = TRUE;
   }
   else
   {
@@ -434,18 +447,44 @@ CANOPENLIB_HW_API   canOpenStatus    __stdcall canPortGoBusOn( canPortHandle han
 //
 //------------------------------------------------------------------------
 
-CANOPENLIB_HW_API   canOpenStatus    __stdcall canPortGoBusOff( canPortHandle handle )
+CANOPENLIB_HW_API   canOpenStatus    __stdcall canPortGoBusOff(canPortHandle handle)
 {
-  //EnterCriticalSection( &can_port_data_devices[ handle ].usb_handle_cs );
-  
-  canOpenStatus canopen_res = CANOPEN_ERROR;
+	//EnterCriticalSection( &can_port_data_devices[ handle ].usb_handle_cs );
+	HRESULT hResult;
 
-  canControlReset(can_port_data_devices[handle].hCanCtl);
-  canChannelClose(can_port_data_devices[handle].hCanChn);
-  canControlClose(can_port_data_devices[handle].hCanCtl);
-  vciDeviceClose(can_port_data_devices[handle].hDevice);
-  canopen_res = CANOPEN_OK;
-  return canopen_res;
+	canOpenStatus canopen_res = CANOPEN_OK;
+
+	//
+	// stop the CAN controller
+	//
+	hResult = canControlStart(can_port_data_devices[handle].hCanCtl, FALSE);
+	if (hResult != VCI_OK)
+	{
+		canopen_res = CANOPEN_ERROR;
+	}
+
+	hResult = canControlReset(can_port_data_devices[handle].hCanCtl);
+	if (hResult != VCI_OK)
+	{
+		canopen_res = CANOPEN_ERROR;
+	}
+	hResult = canChannelClose(can_port_data_devices[handle].hCanChn);
+	if (hResult != VCI_OK)
+	{
+		canopen_res = CANOPEN_ERROR;
+	}
+	hResult = canControlClose(can_port_data_devices[handle].hCanCtl);
+	if (hResult != VCI_OK)
+	{
+		canopen_res = CANOPEN_ERROR;
+	}
+	hResult = vciDeviceClose(can_port_data_devices[handle].hDevice);
+	if (hResult != VCI_OK)
+	{
+		canopen_res = CANOPEN_ERROR;
+	}
+	can_port_data_devices[handle].can_bus_on = FALSE;
+	return canopen_res;
 }
 
 //------------------------------------------------------------------------
