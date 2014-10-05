@@ -16,6 +16,8 @@
     <ClCompile Include="src\SyncServerClass.cpp" />
     <ClCompile Include="src\TimerClass.cpp" />
     <ClCompile Include="src\TransmitPdoClass.cpp" />
+    <ClCompile Include="src\LSSMasterClass.cpp" />
+    <ClCompile Include="src\LSSSlaveClass.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inc\CanConnectionClass.h">
@@ -86,6 +88,12 @@
     </ClInclude>
     <ClInclude Include="inc\License.h">
       <Filter>MISC</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\LSSMasterClass.h">
+      <Filter>INCLUDES</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\LSSSlaveClass.h">
+      <Filter>INCLUDES</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
