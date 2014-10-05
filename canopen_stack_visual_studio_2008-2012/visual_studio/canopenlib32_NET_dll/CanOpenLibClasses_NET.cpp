@@ -1253,3 +1253,183 @@ NMT_Slave_NET :: CanOpenStatus NMT_Slave_NET :: NMTLocalNodeOperationalStateWrap
   else 
     return NMT_Slave_NET::CanOpenStatus::CANOPEN_OK;
 }
+
+// **************************
+// LSS Master
+// **************************
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+LSS_Master_NET::LSS_Master_NET()
+{
+  this->cpp_LSSMaster = new LSSMaster();
+}
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+LSS_Master_NET::~LSS_Master_NET()
+{
+  delete this->cpp_LSSMaster;
+  this->cpp_LSSMaster = NULL;
+}
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+LSS_Master_NET :: CanOpenStatus  LSS_Master_NET :: canHardwareConnect(int port, int btr)
+{
+  NMT_Slave_NET::CanOpenStatus ret;
+  ret = (NMT_Slave_NET::CanOpenStatus)this->cpp_LSSMaster->canHardwareConnect( port, btr );
+  return ret;
+}
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+LSS_Master_NET :: CanOpenStatus  LSS_Master_NET :: canHardwareDisconnect(void)
+{
+  LSS_Master_NET::CanOpenStatus ret;
+  ret = (LSS_Master_NET::CanOpenStatus)this->cpp_LSSMaster->canHardwareDisconnect();
+  return ret;
+}
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+LSS_Master_NET :: CanOpenStatus  LSS_Master_NET :: switchModeGlobal(u8 mode)
+{
+  LSS_Master_NET::CanOpenStatus ret;
+  ret = (LSS_Master_NET::CanOpenStatus)this->cpp_LSSMaster->switchModeGlobal(mode);
+  return ret;
+}
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+LSS_Master_NET :: CanOpenStatus  LSS_Master_NET :: switchModeSelectiveVendorId(u32 vendorId, [System::Runtime::InteropServices::Out] u8 %mode)
+{
+  LSS_Master_NET::CanOpenStatus ret;
+  u8 cpp_mode;
+  ret = (LSS_Master_NET::CanOpenStatus)this->cpp_LSSMaster->switchModeSelectiveVendorId(vendorId, &cpp_mode);
+  mode = cpp_mode;
+  return ret;
+}
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+LSS_Master_NET :: CanOpenStatus  LSS_Master_NET :: switchModeSelectiveProductCode(u32 productCode, [System::Runtime::InteropServices::Out] u8 %mode)
+{
+  LSS_Master_NET::CanOpenStatus ret;
+  u8 cpp_mode;
+  ret = (LSS_Master_NET::CanOpenStatus)this->cpp_LSSMaster->switchModeSelectiveProductCode(productCode, &cpp_mode);
+  mode = cpp_mode;
+  return ret;
+}
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+LSS_Master_NET :: CanOpenStatus  LSS_Master_NET :: switchModeSelectiveRevisionNumber(u32 revisionNumber, [System::Runtime::InteropServices::Out] u8 %mode)
+{
+  LSS_Master_NET::CanOpenStatus ret;
+  u8 cpp_mode;
+  ret = (LSS_Master_NET::CanOpenStatus)this->cpp_LSSMaster->switchModeSelectiveRevisionNumber(revisionNumber, &cpp_mode);
+  mode = cpp_mode;
+  return ret;
+}
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+LSS_Master_NET :: CanOpenStatus  LSS_Master_NET :: switchModeSelectiveSerialNumber(u32 serialNumber, [System::Runtime::InteropServices::Out] u8 %mode)
+{
+  LSS_Master_NET::CanOpenStatus ret;
+  u8 cpp_mode;
+  ret = (LSS_Master_NET::CanOpenStatus)this->cpp_LSSMaster->switchModeSelectiveSerialNumber(serialNumber, &cpp_mode);
+  mode = cpp_mode;
+  return ret;
+}
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+LSS_Master_NET :: CanOpenStatus  LSS_Master_NET :: configureNodeId(u8 nodeId, [System::Runtime::InteropServices::Out] u8 %errorCode, [System::Runtime::InteropServices::Out] u8 %specificErrorCode)
+{
+  LSS_Master_NET::CanOpenStatus ret;
+  u8 cpp_error_code;
+  u8 cpp_specific_error_code;
+  ret = (LSS_Master_NET::CanOpenStatus)this->cpp_LSSMaster->configureNodeId(nodeId, &cpp_error_code, &cpp_specific_error_code);
+  errorCode = cpp_error_code;
+  specificErrorCode = cpp_specific_error_code;
+  return ret;
+}
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+LSS_Master_NET :: CanOpenStatus  LSS_Master_NET :: configureBitTimingParamteres(u8 tableSelector, u8 tableIndex, [System::Runtime::InteropServices::Out] u8 %errorCode, [System::Runtime::InteropServices::Out] u8 %specificErrorCode)
+{
+  LSS_Master_NET::CanOpenStatus ret;
+  u8 cpp_error_code;
+  u8 cpp_specific_error_code;
+  ret = (LSS_Master_NET::CanOpenStatus)this->cpp_LSSMaster->configureBitTimingParamteres(tableSelector, tableIndex, &cpp_error_code, &cpp_specific_error_code);
+  errorCode = cpp_error_code;
+  specificErrorCode = cpp_specific_error_code;
+  return ret;
+}
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+LSS_Master_NET :: CanOpenStatus  LSS_Master_NET :: activateBitTimingParameters(u16 switchDelay, [System::Runtime::InteropServices::Out] u8 %errorCode, [System::Runtime::InteropServices::Out] u8 %specificErrorCode)
+{
+  LSS_Master_NET::CanOpenStatus ret;
+  u8 cpp_error_code;
+  u8 cpp_specific_error_code;
+  ret = (LSS_Master_NET::CanOpenStatus)this->cpp_LSSMaster->activateBitTimingParameters(switchDelay, &cpp_error_code, &cpp_specific_error_code);
+  errorCode = cpp_error_code;
+  specificErrorCode = cpp_specific_error_code;
+  return ret;
+}
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+LSS_Master_NET :: CanOpenStatus  LSS_Master_NET :: storeConfiguration([System::Runtime::InteropServices::Out] u8 %errorCode, [System::Runtime::InteropServices::Out] u8 %specificErrorCode)
+{
+  LSS_Master_NET::CanOpenStatus ret;
+  u8 cpp_error_code;
+  u8 cpp_specific_error_code;
+  ret = (LSS_Master_NET::CanOpenStatus)this->cpp_LSSMaster->storeConfiguration(&cpp_error_code, &cpp_specific_error_code);
+  errorCode = cpp_error_code;
+  specificErrorCode = cpp_specific_error_code;
+  return ret;
+}
+
+// **************************
+// LSS Slave
+// **************************
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+LSS_Slave_NET::LSS_Slave_NET()
+{
+  this->cpp_LSSSlave = new LSSSlave();
+}
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+LSS_Slave_NET::~LSS_Slave_NET()
+{
+  delete this->cpp_LSSSlave;
+  this->cpp_LSSSlave = NULL;
+}
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+LSS_Slave_NET :: CanOpenStatus  LSS_Slave_NET :: canHardwareConnect(int port, int btr)
+{
+  LSS_Slave_NET::CanOpenStatus ret;
+  ret = (LSS_Slave_NET::CanOpenStatus)this->cpp_LSSSlave->canHardwareConnect( port, btr );
+  return ret;
+}
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+LSS_Slave_NET :: CanOpenStatus  LSS_Slave_NET :: canHardwareDisconnect(void)
+{
+  LSS_Slave_NET::CanOpenStatus ret;
+  ret = (LSS_Slave_NET::CanOpenStatus)this->cpp_LSSSlave->canHardwareDisconnect();
+  return ret;
+}
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+void  LSS_Slave_NET :: setDeviceParameters(u32 vendorId, u32 productCode, u32 revisionNumber, u32 serialNumber)
+{
+  return this->cpp_LSSSlave->setDeviceParameters(vendorId, productCode, revisionNumber, serialNumber);
+}

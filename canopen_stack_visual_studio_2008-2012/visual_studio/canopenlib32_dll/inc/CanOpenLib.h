@@ -40,5 +40,7 @@
 #include "SyncServerClass.h"
 #include "ReceivePDOClass.h"
 #include "TransmitPdoClass.h"
+#include "LSSMasterClass.h"
+#include "LSSSlaveClass.h"
 
 #endif

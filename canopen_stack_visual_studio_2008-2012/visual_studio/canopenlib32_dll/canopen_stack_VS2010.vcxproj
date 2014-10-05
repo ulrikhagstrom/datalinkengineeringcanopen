@@ -181,6 +181,8 @@
     <ClCompile Include="src\ClientSDOClass.cpp" />
     <ClCompile Include="src\EmcyClientClass.cpp" />
     <ClCompile Include="src\EmcyServerClass.cpp" />
+    <ClCompile Include="src\LSSMasterClass.cpp" />
+    <ClCompile Include="src\LSSSlaveClass.cpp" />
     <ClCompile Include="src\NMTMasterClass.cpp" />
     <ClCompile Include="src\NMTSlaveClass.cpp" />
     <ClCompile Include="src\ReceivePDOClass.cpp" />
@@ -204,6 +206,8 @@
     <ClInclude Include="inc\EmcyClientClass.h" />
     <ClInclude Include="inc\EmcyServerClass.h" />
     <ClInclude Include="inc\License.h" />
+    <ClInclude Include="inc\LSSMasterClass.h" />
+    <ClInclude Include="inc\LSSSlaveClass.h" />
     <ClInclude Include="inc\NMTMasterClass.h" />
     <ClInclude Include="inc\NMTSlaveClass.h" />
     <ClInclude Include="inc\ReceivePDOClass.h" />

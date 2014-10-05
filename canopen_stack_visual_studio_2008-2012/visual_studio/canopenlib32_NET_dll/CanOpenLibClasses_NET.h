@@ -52,6 +52,8 @@ using namespace System::Runtime::InteropServices;
 #include "EmcyClientClass.h"
 #include "EmcyServerClass.h"
 #include "SyncServerClass.h"
+#include "LSSMasterClass.h"
+#include "LSSSlaveClass.h"
 
 public ref class CANOPEN_LIB_ERROR
 {
@@ -585,6 +587,50 @@ private:
     NMTLocalNodeOperationalStateDelegate_CPP ^nmtLocalNodeOperationalStateDelegatCPP ;
 
     CanOpenStatus NMTLocalNodeOperationalStateWrapperCPP(void *obj, u8 state);
+};
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+public ref class LSS_Master_NET : CANOPEN_LIB_ERROR
+{
+public:
+
+    LSS_Master_NET();
+    ~LSS_Master_NET();
+
+    CanOpenStatus  canHardwareConnect(int port, int btr);
+    CanOpenStatus  canHardwareDisconnect(void);
+	CanOpenStatus  switchModeGlobal(u8 mode);
+	CanOpenStatus  switchModeSelectiveVendorId(u32 vendorId, [System::Runtime::InteropServices::Out] u8 %mode);
+	CanOpenStatus  switchModeSelectiveProductCode(u32 productCode, [System::Runtime::InteropServices::Out] u8 %mode);
+	CanOpenStatus  switchModeSelectiveRevisionNumber(u32 revisionNumber, [System::Runtime::InteropServices::Out] u8 %mode);
+	CanOpenStatus  switchModeSelectiveSerialNumber(u32 serialNumber, [System::Runtime::InteropServices::Out] u8 %mode);
+	CanOpenStatus  configureNodeId(u8 nodeId, [System::Runtime::InteropServices::Out] u8 %errorCode, [System::Runtime::InteropServices::Out] u8 %specificErrorCode);
+	CanOpenStatus  configureBitTimingParamteres(u8 tableSelector, u8 tableIndex, [System::Runtime::InteropServices::Out] u8 %errorCode, [System::Runtime::InteropServices::Out] u8 %specificErrorCode);
+	CanOpenStatus  activateBitTimingParameters(u16 switchDelay, [System::Runtime::InteropServices::Out] u8 %errorCode, [System::Runtime::InteropServices::Out] u8 %specificErrorCode);
+	CanOpenStatus  storeConfiguration([System::Runtime::InteropServices::Out] u8 %errorCode, [System::Runtime::InteropServices::Out] u8 %specificErrorCode);
+
+private:
+    LSSMaster *cpp_LSSMaster;
+
+};
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+public ref class LSS_Slave_NET : CANOPEN_LIB_ERROR
+{
+public:
+
+    LSS_Slave_NET();
+    ~LSS_Slave_NET();
+
+    CanOpenStatus  canHardwareConnect(int port, int btr);
+    CanOpenStatus  canHardwareDisconnect(void);
+	void  setDeviceParameters(u32 vendorId, u32 productCode, u32 revisionNumber, u32 serialNumber);
+
+private:
+    LSSSlave *cpp_LSSSlave;
+
 };
 
 #endif
