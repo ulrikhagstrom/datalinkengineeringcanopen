@@ -180,7 +180,73 @@ int main (void) {
   printf("\n* THE SAME CAN-BUS RUNNING ON 500kbit!)                 *");
   printf("\n*********************************************************");
 
-  getch();
+  //getch();
+
+  LSSMaster *lss_master = new LSSMaster();
+
+  if (lss_master->canHardwareConnect(0, 500000) != CANOPEN_OK)
+  {
+	  return 0;
+  }
+
+  LSSSlave *lss_slave = new LSSSlave();
+
+  if (lss_slave->canHardwareConnect(1, 500000) != CANOPEN_OK)
+  {
+	  return 0;
+  }
+
+  lss_slave->setDeviceParameters(0x1234, 0x2345, 0x3456, 0x4567);
+
+  if (lss_master->switchModeGlobal(0) != CANOPEN_OK)
+  {
+	  return 0;
+  }
+
+  u8 slaveMode;
+
+  if (lss_master->switchModeSelectiveVendorId(0x1234, &slaveMode) != CANOPEN_OK)
+  {
+	  return 0;
+  }
+
+
+  if (lss_master->switchModeSelectiveProductCode(0x2345, &slaveMode) != CANOPEN_OK)
+  {
+	  return 0;
+  }
+
+
+  if (lss_master->switchModeSelectiveRevisionNumber(0x3456, &slaveMode) != CANOPEN_OK)
+  {
+	  return 0;
+  }
+
+
+  if (lss_master->switchModeSelectiveSerialNumber(0x4567, &slaveMode) != CANOPEN_OK)
+  {
+	  return 0;
+  }
+
+  u8 errorCode = 0xff;
+  u8 specError = 0xff;
+
+  if (lss_master->configureNodeId(5, &errorCode, &specError) != CANOPEN_OK)
+  {
+	  return 0;
+  }
+
+
+
+
+  Sleep(500);
+
+  Sleep(2000);
+
+  Sleep(10000);
+
+
+
 
 
 #if 0

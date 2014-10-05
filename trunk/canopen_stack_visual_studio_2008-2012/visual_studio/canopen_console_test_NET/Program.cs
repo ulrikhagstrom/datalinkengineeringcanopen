@@ -46,6 +46,86 @@ namespace canopen_demo_kvaser
             uint uint_temp_val;
             ushort ushort_temp_val;
 
+            LSS_Slave_NET lss_slave = new LSS_Slave_NET();
+
+            LSS_Master_NET lss_master = new LSS_Master_NET();
+
+            if (lss_slave.canHardwareConnect(0, 250000) != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
+            {
+                Console.WriteLine("Could not connect to CAN-adapter 1");
+                Console.ReadLine();
+            }
+
+            if (lss_master.canHardwareConnect(1, 250000) != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
+            {
+                Console.WriteLine("Could not connect to CAN-adapter 2");
+                Console.ReadLine();
+            }
+
+            lss_slave.setDeviceParameters(0x1234, 0x2345, 0x3456, 0x4567);
+
+            if (lss_master.switchModeGlobal(0) != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
+            {
+                Console.WriteLine("switchModeGlobal failed");
+                Console.ReadLine();
+            }
+
+            byte slaveMode;
+
+            if (lss_master.switchModeSelectiveVendorId(0x1234, out slaveMode) != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
+            {
+                Console.WriteLine("switchModeGlobal failed");
+                Console.ReadLine();
+            }
+
+
+            if (lss_master.switchModeSelectiveProductCode(0x2345, out slaveMode) != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
+            {
+                Console.WriteLine("switchModeSelectiveProductCode failed");
+                Console.ReadLine();
+            }
+
+
+            if (lss_master.switchModeSelectiveRevisionNumber(0x3456, out slaveMode) != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
+            {
+                Console.WriteLine("switchModeSelectiveRevisionNumber failed");
+                Console.ReadLine();
+            }
+
+
+            if (lss_master.switchModeSelectiveSerialNumber(0x4567, out slaveMode) != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
+            {
+                Console.WriteLine("switchModeSelectiveSerialNumber failed");
+                Console.ReadLine();
+            }
+
+            byte errorCode = 0xff;
+            byte specError = 0xff;
+
+            if (lss_master.configureNodeId(5, out errorCode, out specError) != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
+            {
+                Console.WriteLine("switchModeSelectiveSerialNumber failed");
+                Console.ReadLine();
+            }
+
+            if (lss_master.configureBitTimingParamteres(5, 7, out errorCode, out specError) != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
+            {
+                Console.WriteLine("configureBitTimingParamteres failed");
+                Console.ReadLine();
+            }
+
+            if (lss_master.activateBitTimingParameters(25, out errorCode, out specError) != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
+            {
+                Console.WriteLine("activateBitTimingParameters failed");
+                Console.ReadLine();
+            }
+
+            if (lss_master.storeConfiguration(out errorCode, out specError) != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
+            {
+                Console.WriteLine("storeConfiguration failed");
+                Console.ReadLine();
+            }
+
             SDO_NET.CanOpenStatus stat;
 
             test = new byte[10];
