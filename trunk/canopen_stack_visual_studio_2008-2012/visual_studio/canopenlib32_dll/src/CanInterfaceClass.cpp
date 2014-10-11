@@ -393,7 +393,11 @@ canOpenStatus CanInterface :: canLibraryInit(void)
     /*
     *	Load proper CANLIB.DLL
     */
+#ifdef WIN64
+    hCanLib = LoadLibrary(TEXT("canopenlib64_hw.dll"));
+#else
     hCanLib = LoadLibrary(TEXT("canopenlib32_hw.dll"));
+#endif
   if (hCanLib == NULL)
   {
     MessageBox(NULL, "CAN hardware layer DLL (canopenlib32_hw.dll) was not found!","Missing file!", MB_OK);
@@ -463,10 +467,7 @@ void CanInterface :: startDispatcherThread(void)
 {
   DWORD tid;
   if( !this->is_can_dispatcher_thread_running ) 
-  {
-    sleepNoMessageFromCanInterface(-1); // Preformance configuration of dispatcher. -1 means call Sleep(..) not done at all.
-    sleepProcessedCanInterface(0);      // and 0...x means Sleep(x).
-
+  { 
     this->can_frame_dispatcher_thread_handle = CreateThread(NULL
         , 0
         , &CanInterface::canFrameDispatcherThread
