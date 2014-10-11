@@ -67,7 +67,7 @@ public:
 protected:
 
 private:
-  LSSReqestFunPtr						local_node_lss_callback;
+  LSSReqestFunPtr                       local_node_lss_callback;
   void                                  *local_lss_callback_context;
 
   LSSConfigureNodeId                    local_node_lss_configure_node_id_callback;
