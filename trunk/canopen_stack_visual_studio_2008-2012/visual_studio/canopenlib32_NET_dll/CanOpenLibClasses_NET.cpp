@@ -34,26 +34,6 @@ CanInterface_NET::~CanInterface_NET()
   ;
 }
 
-//CanInterface_NET::CanOpenStatus CanInterface_NET::unlockCanopenLibrary( array<Byte>^ license_file, array<Byte>^ unlock_code )
-//{
-//  CanInterface_NET::CanOpenStatus ret;
-//  u8 *temp_license_file = new u8[license_file->Length];
-//  u8 *temp_unlock_code = new u8[unlock_code->Length];
-//
-//  for (int j = 0; j < license_file->Length; j++)
-//    temp_license_file[j] = license_file[j]; 
-//
-//  for (int j = 0; j < unlock_code->Length; j++)
-//    temp_unlock_code[j] = unlock_code[j]; 
-//
-//  ret = (CanInterface_NET::CanOpenStatus) CanInterface::unlockCanopenLibrary( (char*)temp_license_file, (char*)temp_unlock_code);
-//  delete[] temp_license_file;
-//  delete[] temp_unlock_code;
-//  return ret;
-//}
-
-
-
 ServerSDO_NET::ServerSDO_NET()
 {
   typedef canOpenStatus (*SrvReadFuncPtr)(void *context, u16 object_index, u8 sub_index, u8 *buf, u32 *valid, u32 buffer_size, u32 *coerror_code); //Read from srv's application.
@@ -62,37 +42,20 @@ ServerSDO_NET::ServerSDO_NET()
 
   this->cpp_ServerSDO = new ServerSDO();
 
-  //ServerWriteDelegate ^srvWriteDelegate =  gcnew ServerWriteDelegate( this, &ServerSDO_NET::serverWrite );
   srvWriteDelegate =  gcnew ServerWriteDelegate( this, &ServerSDO_NET::serverWrite );
   IntPtr pSrvWriteDelegate = Marshal::GetFunctionPointerForDelegate(srvWriteDelegate);
   void *pf = pSrvWriteDelegate.ToPointer();
   this->cpp_ServerSDO->registerObjectWriteCallback((SrvWriteFuncPtr)pf, 0);
 
-  //ServerReadDelegate ^srvReadDelegate =  gcnew ServerReadDelegate( this, &ServerSDO_NET::serverRead );
   srvReadDelegate =  gcnew ServerReadDelegate( this, &ServerSDO_NET::serverRead );
   IntPtr pSrvReadDelegate = Marshal::GetFunctionPointerForDelegate(srvReadDelegate);
   pf = pSrvReadDelegate.ToPointer();
   this->cpp_ServerSDO->registerObjectReadCallback((SrvReadFuncPtr)pf, 0);
 
-  /*
-  ServerGetAttrDelegate ^srvGetAttrDelegate =  gcnew ServerGetAttrDelegate( serverGetAttribut );
-  IntPtr pSrvGetAttrDelegate = Marshal::GetFunctionPointerForDelegate(srvGetAttrDelegate);
-  pf = pSrvGetAttrDelegate.ToPointer();
-  this->cpp_ServerSDO->registerObjectGetAttributesCallback((SrvGetAttrFuncPtr)pf, 0);
-  */
-
-  //ServerGetAttrDelegate ^srvGetAttrDelegate =  gcnew ServerGetAttrDelegate( this, &ServerSDO_NET::serverGetAttribut );
   srvGetAttrDelegate =  gcnew ServerGetAttrDelegate( this, &ServerSDO_NET::serverGetAttribut );
   IntPtr pSrvGetAttrDelegate = Marshal::GetFunctionPointerForDelegate(srvGetAttrDelegate);
   pf = pSrvGetAttrDelegate.ToPointer();
   this->cpp_ServerSDO->registerObjectGetAttributesCallback((SrvGetAttrFuncPtr)pf, 0);
-
-/*
-  ServerGetAttrDelegate ^srvGetAttrDelegate =  gcnew ServerGetAttrDelegate( serverGetAttribut );
-  IntPtr pSrvGetAttrDelegate = Marshal::GetFunctionPointerForDelegate(srvGetAttrDelegate);
-  pf = pSrvGetAttrDelegate.ToPointer();
-  this->cpp_ServerSDO->registerObjectGetAttributesCallback((SrvGetAttrFuncPtr)pf, 0);
-*/
 }
 
 ServerSDO_NET::~ServerSDO_NET()
@@ -817,7 +780,6 @@ ClientSDO_NET::CanOpenStatus  ClientSDO_NET::objectWriteBlock(u16 object_index,
     ret = ClientSDO_NET::CanOpenStatus::CANOPEN_ERROR; // Busy
   }
   return ret;
-
 }
 
 ClientSDO_NET::CanOpenStatus  ClientSDO_NET::objectWrite(u16 object_index, 
@@ -918,7 +880,14 @@ ClientSDO_NET::CanOpenStatus  ClientSDO_NET::canHardwareDisconnect(void)
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-void ClientSDO_NET :: clientReadResultWrapperCallback(void *context, canOpenStatus status, u8 node_id, u16 object_index, u8 sub_index, u8 *buffer, u32 valid, u32 co_error_code)
+void ClientSDO_NET :: clientReadResultWrapperCallback(void *context,
+                                                      canOpenStatus status,
+                                                      u8 node_id,
+                                                      u16 object_index,
+                                                      u8 sub_index,
+                                                      u8 *buffer,
+                                                      u32 valid,
+                                                      u32 co_error_code)
 {
   for (u32 i = 0; i < valid; i++)
   {
@@ -927,20 +896,30 @@ void ClientSDO_NET :: clientReadResultWrapperCallback(void *context, canOpenStat
 
   if (this->readObjectResultDelegate != nullptr)
   {
-    this->readObjectResultDelegate( this->readObjectResultDelgateObject, (CanOpenStatus)status, node_id, object_index, sub_index, this->applicationsBuffer, valid, co_error_code );
+    this->readObjectResultDelegate(this->readObjectResultDelgateObject,
+                                   (CanOpenStatus)status,
+                                   node_id, object_index,
+                                   sub_index,
+                                   this->applicationsBuffer,
+                                   valid,
+                                   co_error_code );
   }
-  
+
   if (this->temp_data_buffer != NULL)
   {
     delete[] this->temp_data_buffer;
     this->temp_data_buffer = NULL;
   }
-  
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-void ClientSDO_NET :: clientWriteResultWrapperCallback(void *context, canOpenStatus status, u8 node_id, u16 object_index, u8 sub_index, u32 co_error_code)
+void ClientSDO_NET :: clientWriteResultWrapperCallback(void *context,
+                                                       canOpenStatus status,
+                                                       u8 node_id,
+                                                       u16 object_index,
+                                                       u8 sub_index,
+                                                       u32 co_error_code)
 {
   if (this->writeObjectResultDelegate != nullptr)
   {
@@ -959,7 +938,9 @@ void ClientSDO_NET :: clientWriteResultWrapperCallback(void *context, canOpenSta
 // Network Mangement Master
 // **************************
 
-NMT_Master_NET::CanOpenStatus NMT_Master_NET::NMTOperationalStateWrapperCPP(void *obj, u8 node_id, u8 state)
+NMT_Master_NET::CanOpenStatus NMT_Master_NET::NMTOperationalStateWrapperCPP(void *obj,
+                                                                            u8 node_id,
+                                                                            u8 state)
 {
   // Convert and call the C# callback
   if ( this->nmtOperationalStateDelegate_CS != nullptr )
@@ -981,8 +962,9 @@ NMT_Master_NET::NMT_Master_NET()
   this->nmtOperationalStateDelegateObject = nullptr;
 
   // Wrap the C++ callback
-  nmtOperationalStateDelegateCPP =  gcnew NMTOperationalStateDelegate_CPP( this, &NMT_Master_NET::NMTOperationalStateWrapperCPP );
-  IntPtr pNMTOperationalStateWrapper = Marshal::GetFunctionPointerForDelegate( nmtOperationalStateDelegateCPP );
+  nmtOperationalStateDelegateCPP =  gcnew NMTOperationalStateDelegate_CPP(this,
+    &NMT_Master_NET::NMTOperationalStateWrapperCPP );
+  IntPtr pNMTOperationalStateWrapper = Marshal::GetFunctionPointerForDelegate(nmtOperationalStateDelegateCPP);
   void *pf = pNMTOperationalStateWrapper.ToPointer();
   this->cpp_NMTMaster->registerRemoteNodeStateCallback((NMTOperationalStateFunPtr)pf, 0);
 }
@@ -1079,11 +1061,13 @@ NMT_Master_NET::CanOpenStatus  NMT_Master_NET::nodeResetCommunication(u8 node_id
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-NMT_Master_NET::CanOpenStatus  NMT_Master_NET::nodeGuardPollStart(u8 node_id, u32 node_life_time_ms)
+NMT_Master_NET::CanOpenStatus  NMT_Master_NET::nodeGuardPollStart(u8 node_id,
+                                                                  u32 node_life_time_ms)
 {
   NMT_Master_NET::CanOpenStatus ret;
 
-  ret = (NMT_Master_NET::CanOpenStatus)this->cpp_NMTMaster->nodeGuardPollStart(node_id, node_life_time_ms);
+  ret = (NMT_Master_NET::CanOpenStatus)this->cpp_NMTMaster->nodeGuardPollStart(node_id,
+    node_life_time_ms);
 
   return ret;
 
@@ -1127,7 +1111,8 @@ NMT_Master_NET::CanOpenStatus  NMT_Master_NET::heartbeatMonitorStop(u8 node_id)
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-NMT_Master_NET::CanOpenStatus NMT_Master_NET::registerNodeStateCallback( NMTOperationalStateDelegate^ opStateDelegate, System::Object^ obj)
+NMT_Master_NET::CanOpenStatus NMT_Master_NET::registerNodeStateCallback(NMTOperationalStateDelegate^ opStateDelegate,
+                                                                        System::Object^ obj)
 {
   NMT_Master_NET::CanOpenStatus ret;
   this->nmtOperationalStateDelegateObject = obj;
@@ -1139,15 +1124,16 @@ NMT_Master_NET::CanOpenStatus NMT_Master_NET::registerNodeStateCallback( NMTOper
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-NMT_Master_NET::CanOpenStatus  NMT_Master_NET::nodeReadOperationalState(
-      u8 node_id, 
-      u32 maxMsTimeout, 
-      [System::Runtime::InteropServices::Out] u8 %node_state)
+NMT_Master_NET::CanOpenStatus  NMT_Master_NET::nodeReadOperationalState(u8 node_id, 
+                                                                        u32 maxMsTimeout,
+                                                                        [System::Runtime::InteropServices::Out] u8 %node_state)
 {
   NMT_Master_NET::CanOpenStatus ret;
   NodeState tmp_NodeState;
 
-  ret =(NMT_Master_NET::CanOpenStatus)this->cpp_NMTMaster->nodeReadOperationalState(node_id, maxMsTimeout, &tmp_NodeState);
+  ret =(NMT_Master_NET::CanOpenStatus)this->cpp_NMTMaster->nodeReadOperationalState(node_id,
+    maxMsTimeout,
+    &tmp_NodeState);
 
   node_state = (NodeState)tmp_NodeState;
   return ret;
@@ -1166,9 +1152,8 @@ NMT_Slave_NET::NMT_Slave_NET()
 
   this->nmtLocalNodeOperationalStateDelegate_CS = nullptr;
 
-  // Wrap the C++ callback
-  //NMTLocalNodeOperationalStateDelegate_CPP ^nmtLocalNodeOperationalStateDelegatCPP =  gcnew NMTLocalNodeOperationalStateDelegate_CPP( this, &NMT_Slave_NET::NMTLocalNodeOperationalStateWrapperCPP );
-  nmtLocalNodeOperationalStateDelegatCPP =  gcnew NMTLocalNodeOperationalStateDelegate_CPP( this, &NMT_Slave_NET::NMTLocalNodeOperationalStateWrapperCPP );
+  nmtLocalNodeOperationalStateDelegatCPP =  gcnew NMTLocalNodeOperationalStateDelegate_CPP(this,
+    &NMT_Slave_NET::NMTLocalNodeOperationalStateWrapperCPP );
   IntPtr pNMTLocalNodeOperationalStateWrapper = Marshal::GetFunctionPointerForDelegate(nmtLocalNodeOperationalStateDelegatCPP);
   void *pf = pNMTLocalNodeOperationalStateWrapper.ToPointer();
   this->cpp_NMTSlave->registerLocalNodeStateChangeCallback((NMTLocalNodeOperationalStateFunPtr)pf, 0);
@@ -1225,9 +1210,14 @@ NMT_Slave_NET :: CanOpenStatus  NMT_Slave_NET :: writeMessage(u32 id, array<Byte
   u8 *msg_cpp = new u8[dlc];
 
   for (int j = 0; j < dlc; j++)
+  {
     msg_cpp[j] = msg[j];
-  
-  NMT_Slave_NET::CanOpenStatus ret  = (NMT_Slave_NET::CanOpenStatus)this->cpp_NMTSlave->writeMessage(id, msg_cpp, dlc, flags);
+  }
+
+  NMT_Slave_NET::CanOpenStatus ret  = (NMT_Slave_NET::CanOpenStatus)this->cpp_NMTSlave->writeMessage(id,
+    msg_cpp,
+    dlc,
+    flags);
 
   delete[] msg_cpp;
   return ret;
@@ -1235,7 +1225,9 @@ NMT_Slave_NET :: CanOpenStatus  NMT_Slave_NET :: writeMessage(u32 id, array<Byte
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-NMT_Slave_NET :: CanOpenStatus  NMT_Slave_NET :: registerLocalNodeStateChangeCallback(NMTLocalNodeOperationalStateDelegate^ localOperationalStateDelegate, System::Object^ obj)
+NMT_Slave_NET :: CanOpenStatus  NMT_Slave_NET :: registerLocalNodeStateChangeCallback(
+  NMTLocalNodeOperationalStateDelegate^ localOperationalStateDelegate,
+  System::Object^ obj)
 {
   NMT_Slave_NET::CanOpenStatus ret = NMT_Slave_NET::CanOpenStatus::CANOPEN_OK;
   this->nmtLocalNodeOperationalStateDelegateObject = obj;
@@ -1249,7 +1241,8 @@ NMT_Slave_NET :: CanOpenStatus NMT_Slave_NET :: NMTLocalNodeOperationalStateWrap
 {
   // Convert and call the C# callback
   if (nmtLocalNodeOperationalStateDelegate_CS != nullptr)
-    return (NMT_Slave_NET::CanOpenStatus)this->nmtLocalNodeOperationalStateDelegate_CS(this->nmtLocalNodeOperationalStateDelegateObject , state); //nmtOperationalStateDelegate_CS(this->nmtOperationalStateDelegateObject, node_id, state);
+    return (NMT_Slave_NET::CanOpenStatus)this->nmtLocalNodeOperationalStateDelegate_CS(
+    this->nmtLocalNodeOperationalStateDelegateObject , state);
   else 
     return NMT_Slave_NET::CanOpenStatus::CANOPEN_OK;
 }
@@ -1302,7 +1295,8 @@ LSS_Master_NET :: CanOpenStatus  LSS_Master_NET :: switchModeGlobal(u8 mode)
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-LSS_Master_NET :: CanOpenStatus  LSS_Master_NET :: switchModeSelectiveVendorId(u32 vendorId, [System::Runtime::InteropServices::Out] u8 %mode)
+LSS_Master_NET :: CanOpenStatus  LSS_Master_NET :: switchModeSelectiveVendorId(u32 vendorId,
+                                                                               [System::Runtime::InteropServices::Out] u8 %mode)
 {
   LSS_Master_NET::CanOpenStatus ret;
   u8 cpp_mode;
@@ -1313,7 +1307,8 @@ LSS_Master_NET :: CanOpenStatus  LSS_Master_NET :: switchModeSelectiveVendorId(u
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-LSS_Master_NET :: CanOpenStatus  LSS_Master_NET :: switchModeSelectiveProductCode(u32 productCode, [System::Runtime::InteropServices::Out] u8 %mode)
+LSS_Master_NET :: CanOpenStatus  LSS_Master_NET :: switchModeSelectiveProductCode(u32 productCode,
+                                                                                  [System::Runtime::InteropServices::Out] u8 %mode)
 {
   LSS_Master_NET::CanOpenStatus ret;
   u8 cpp_mode;
@@ -1323,17 +1318,20 @@ LSS_Master_NET :: CanOpenStatus  LSS_Master_NET :: switchModeSelectiveProductCod
 }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-LSS_Master_NET :: CanOpenStatus  LSS_Master_NET :: switchModeSelectiveRevisionNumber(u32 revisionNumber, [System::Runtime::InteropServices::Out] u8 %mode)
+LSS_Master_NET :: CanOpenStatus  LSS_Master_NET :: switchModeSelectiveRevisionNumber(u32 revisionNumber,
+                                                                                     [System::Runtime::InteropServices::Out] u8 %mode)
 {
   LSS_Master_NET::CanOpenStatus ret;
   u8 cpp_mode;
-  ret = (LSS_Master_NET::CanOpenStatus)this->cpp_LSSMaster->switchModeSelectiveRevisionNumber(revisionNumber, &cpp_mode);
+  ret = (LSS_Master_NET::CanOpenStatus)this->cpp_LSSMaster->switchModeSelectiveRevisionNumber(revisionNumber,
+    &cpp_mode);
   mode = cpp_mode;
   return ret;
 }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-LSS_Master_NET :: CanOpenStatus  LSS_Master_NET :: switchModeSelectiveSerialNumber(u32 serialNumber, [System::Runtime::InteropServices::Out] u8 %mode)
+LSS_Master_NET :: CanOpenStatus  LSS_Master_NET :: switchModeSelectiveSerialNumber(u32 serialNumber,
+                                                                                   [System::Runtime::InteropServices::Out] u8 %mode)
 {
   LSS_Master_NET::CanOpenStatus ret;
   u8 cpp_mode;
@@ -1343,43 +1341,58 @@ LSS_Master_NET :: CanOpenStatus  LSS_Master_NET :: switchModeSelectiveSerialNumb
 }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-LSS_Master_NET :: CanOpenStatus  LSS_Master_NET :: configureNodeId(u8 nodeId, [System::Runtime::InteropServices::Out] u8 %errorCode, [System::Runtime::InteropServices::Out] u8 %specificErrorCode)
+LSS_Master_NET :: CanOpenStatus  LSS_Master_NET :: configureNodeId(u8 nodeId,
+                                                                   [System::Runtime::InteropServices::Out] u8 %errorCode,
+                                                                   [System::Runtime::InteropServices::Out] u8 %specificErrorCode)
 {
   LSS_Master_NET::CanOpenStatus ret;
   u8 cpp_error_code;
   u8 cpp_specific_error_code;
-  ret = (LSS_Master_NET::CanOpenStatus)this->cpp_LSSMaster->configureNodeId(nodeId, &cpp_error_code, &cpp_specific_error_code);
+  ret = (LSS_Master_NET::CanOpenStatus)this->cpp_LSSMaster->configureNodeId(nodeId,
+    &cpp_error_code,
+    &cpp_specific_error_code);
   errorCode = cpp_error_code;
   specificErrorCode = cpp_specific_error_code;
   return ret;
 }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-LSS_Master_NET :: CanOpenStatus  LSS_Master_NET :: configureBitTimingParamteres(u8 tableSelector, u8 tableIndex, [System::Runtime::InteropServices::Out] u8 %errorCode, [System::Runtime::InteropServices::Out] u8 %specificErrorCode)
+LSS_Master_NET :: CanOpenStatus  LSS_Master_NET :: configureBitTimingParamteres(u8 tableSelector,
+                                                                                u8 tableIndex,
+                                                                                [System::Runtime::InteropServices::Out] u8 %errorCode,
+                                                                                [System::Runtime::InteropServices::Out] u8 %specificErrorCode)
 {
   LSS_Master_NET::CanOpenStatus ret;
   u8 cpp_error_code;
   u8 cpp_specific_error_code;
-  ret = (LSS_Master_NET::CanOpenStatus)this->cpp_LSSMaster->configureBitTimingParamteres(tableSelector, tableIndex, &cpp_error_code, &cpp_specific_error_code);
+  ret = (LSS_Master_NET::CanOpenStatus)this->cpp_LSSMaster->configureBitTimingParamteres(tableSelector,
+    tableIndex,
+    &cpp_error_code,
+    &cpp_specific_error_code);
   errorCode = cpp_error_code;
   specificErrorCode = cpp_specific_error_code;
   return ret;
 }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-LSS_Master_NET :: CanOpenStatus  LSS_Master_NET :: activateBitTimingParameters(u16 switchDelay, [System::Runtime::InteropServices::Out] u8 %errorCode, [System::Runtime::InteropServices::Out] u8 %specificErrorCode)
+LSS_Master_NET :: CanOpenStatus  LSS_Master_NET :: activateBitTimingParameters(u16 switchDelay,
+                                                                               [System::Runtime::InteropServices::Out] u8 %errorCode,
+                                                                               [System::Runtime::InteropServices::Out] u8 %specificErrorCode)
 {
   LSS_Master_NET::CanOpenStatus ret;
   u8 cpp_error_code;
   u8 cpp_specific_error_code;
-  ret = (LSS_Master_NET::CanOpenStatus)this->cpp_LSSMaster->activateBitTimingParameters(switchDelay, &cpp_error_code, &cpp_specific_error_code);
+  ret = (LSS_Master_NET::CanOpenStatus)this->cpp_LSSMaster->activateBitTimingParameters(switchDelay,
+    &cpp_error_code,
+    &cpp_specific_error_code);
   errorCode = cpp_error_code;
   specificErrorCode = cpp_specific_error_code;
   return ret;
 }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-LSS_Master_NET :: CanOpenStatus  LSS_Master_NET :: storeConfiguration([System::Runtime::InteropServices::Out] u8 %errorCode, [System::Runtime::InteropServices::Out] u8 %specificErrorCode)
+LSS_Master_NET :: CanOpenStatus  LSS_Master_NET :: storeConfiguration([System::Runtime::InteropServices::Out] u8 %errorCode,
+                                                                      [System::Runtime::InteropServices::Out] u8 %specificErrorCode)
 {
   LSS_Master_NET::CanOpenStatus ret;
   u8 cpp_error_code;
