@@ -42,14 +42,14 @@
     <_ProjectFileVersion>11.0.50727.1</_ProjectFileVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>..\canopen_cpp_DLL\Debug\</OutDir>
-    <IntDir>$(Configuration)\</IntDir>
+    <OutDir>..\bin\Debug\</OutDir>
+    <IntDir>..\bin\Debug\</IntDir>
     <LinkIncremental>true</LinkIncremental>
     <TargetName>canopenlib32_hw</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>..\canopen_cpp_DLL\Release\</OutDir>
-    <IntDir>$(Configuration)\</IntDir>
+    <OutDir>..\bin\Release\</OutDir>
+    <IntDir>..\bin\Release\</IntDir>
     <LinkIncremental>false</LinkIncremental>
     <TargetName>canopenlib32_hw</TargetName>
   </PropertyGroup>

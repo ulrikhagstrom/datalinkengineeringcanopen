@@ -70,30 +70,28 @@ namespace canopen_demo_kvaser
                 Console.ReadLine();
             }
 
-            byte slaveMode;
-
-            if (lss_master.switchModeSelectiveVendorId(0x1234, out slaveMode) != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
+            if (lss_master.switchModeSelectiveVendorId(0x1234) != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
             {
                 Console.WriteLine("switchModeGlobal failed");
                 Console.ReadLine();
             }
 
 
-            if (lss_master.switchModeSelectiveProductCode(0x2345, out slaveMode) != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
+            if (lss_master.switchModeSelectiveProductCode(0x2345) != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
             {
                 Console.WriteLine("switchModeSelectiveProductCode failed");
                 Console.ReadLine();
             }
 
 
-            if (lss_master.switchModeSelectiveRevisionNumber(0x3456, out slaveMode) != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
+            if (lss_master.switchModeSelectiveRevisionNumber(0x3456) != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
             {
                 Console.WriteLine("switchModeSelectiveRevisionNumber failed");
                 Console.ReadLine();
             }
 
 
-            if (lss_master.switchModeSelectiveSerialNumber(0x4567, out slaveMode) != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
+            if (lss_master.switchModeSelectiveSerialNumber(0x4567) != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
             {
                 Console.WriteLine("switchModeSelectiveSerialNumber failed");
                 Console.ReadLine();
@@ -114,11 +112,12 @@ namespace canopen_demo_kvaser
                 Console.ReadLine();
             }
 
-            if (lss_master.activateBitTimingParameters(25, out errorCode, out specError) != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
+            if (lss_master.activateBitTimingParameters(25) != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
             {
                 Console.WriteLine("activateBitTimingParameters failed");
                 Console.ReadLine();
             }
+            Thread.Sleep(25+25); // The activate call does not wait, leaving devices 25ms to stop and 25ms time to start with new rate
 
             if (lss_master.storeConfiguration(out errorCode, out specError) != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
             {

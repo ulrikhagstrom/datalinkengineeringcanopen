@@ -1295,48 +1295,35 @@ LSS_Master_NET :: CanOpenStatus  LSS_Master_NET :: switchModeGlobal(u8 mode)
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-LSS_Master_NET :: CanOpenStatus  LSS_Master_NET :: switchModeSelectiveVendorId(u32 vendorId,
-                                                                               [System::Runtime::InteropServices::Out] u8 %mode)
+LSS_Master_NET :: CanOpenStatus  LSS_Master_NET :: switchModeSelectiveVendorId(u32 vendorId)
 {
   LSS_Master_NET::CanOpenStatus ret;
-  u8 cpp_mode;
-  ret = (LSS_Master_NET::CanOpenStatus)this->cpp_LSSMaster->switchModeSelectiveVendorId(vendorId, &cpp_mode);
-  mode = cpp_mode;
+  ret = (LSS_Master_NET::CanOpenStatus)this->cpp_LSSMaster->switchModeSelectiveVendorId(vendorId);
   return ret;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-LSS_Master_NET :: CanOpenStatus  LSS_Master_NET :: switchModeSelectiveProductCode(u32 productCode,
-                                                                                  [System::Runtime::InteropServices::Out] u8 %mode)
+LSS_Master_NET :: CanOpenStatus  LSS_Master_NET :: switchModeSelectiveProductCode(u32 productCode)
 {
   LSS_Master_NET::CanOpenStatus ret;
-  u8 cpp_mode;
-  ret = (LSS_Master_NET::CanOpenStatus)this->cpp_LSSMaster->switchModeSelectiveProductCode(productCode, &cpp_mode);
-  mode = cpp_mode;
+  ret = (LSS_Master_NET::CanOpenStatus)this->cpp_LSSMaster->switchModeSelectiveProductCode(productCode);
   return ret;
 }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-LSS_Master_NET :: CanOpenStatus  LSS_Master_NET :: switchModeSelectiveRevisionNumber(u32 revisionNumber,
-                                                                                     [System::Runtime::InteropServices::Out] u8 %mode)
+LSS_Master_NET :: CanOpenStatus  LSS_Master_NET :: switchModeSelectiveRevisionNumber(u32 revisionNumber)
 {
   LSS_Master_NET::CanOpenStatus ret;
-  u8 cpp_mode;
-  ret = (LSS_Master_NET::CanOpenStatus)this->cpp_LSSMaster->switchModeSelectiveRevisionNumber(revisionNumber,
-    &cpp_mode);
-  mode = cpp_mode;
+  ret = (LSS_Master_NET::CanOpenStatus)this->cpp_LSSMaster->switchModeSelectiveRevisionNumber(revisionNumber);
   return ret;
 }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-LSS_Master_NET :: CanOpenStatus  LSS_Master_NET :: switchModeSelectiveSerialNumber(u32 serialNumber,
-                                                                                   [System::Runtime::InteropServices::Out] u8 %mode)
+LSS_Master_NET :: CanOpenStatus  LSS_Master_NET :: switchModeSelectiveSerialNumber(u32 serialNumber)
 {
   LSS_Master_NET::CanOpenStatus ret;
-  u8 cpp_mode;
-  ret = (LSS_Master_NET::CanOpenStatus)this->cpp_LSSMaster->switchModeSelectiveSerialNumber(serialNumber, &cpp_mode);
-  mode = cpp_mode;
+  ret = (LSS_Master_NET::CanOpenStatus)this->cpp_LSSMaster->switchModeSelectiveSerialNumber(serialNumber);
   return ret;
 }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1375,18 +1362,10 @@ LSS_Master_NET :: CanOpenStatus  LSS_Master_NET :: configureBitTimingParamteres(
 }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-LSS_Master_NET :: CanOpenStatus  LSS_Master_NET :: activateBitTimingParameters(u16 switchDelay,
-                                                                               [System::Runtime::InteropServices::Out] u8 %errorCode,
-                                                                               [System::Runtime::InteropServices::Out] u8 %specificErrorCode)
+LSS_Master_NET :: CanOpenStatus  LSS_Master_NET :: activateBitTimingParameters(u16 switchDelay)
 {
   LSS_Master_NET::CanOpenStatus ret;
-  u8 cpp_error_code;
-  u8 cpp_specific_error_code;
-  ret = (LSS_Master_NET::CanOpenStatus)this->cpp_LSSMaster->activateBitTimingParameters(switchDelay,
-    &cpp_error_code,
-    &cpp_specific_error_code);
-  errorCode = cpp_error_code;
-  specificErrorCode = cpp_specific_error_code;
+  ret = (LSS_Master_NET::CanOpenStatus)this->cpp_LSSMaster->activateBitTimingParameters(switchDelay);
   return ret;
 }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

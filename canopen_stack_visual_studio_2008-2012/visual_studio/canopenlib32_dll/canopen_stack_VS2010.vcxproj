@@ -200,23 +200,25 @@
     <ClInclude Include="inc\CanOpenErrorCodes.h" />
     <ClInclude Include="inc\CanOpenLib.h" />
     <ClInclude Include="inc\CanOpenLib_HW.h" />
+    <ClInclude Include="inc\CanOpenLib_HW_dynload.h" />
     <ClInclude Include="inc\CANopenLibDefines.h" />
     <ClInclude Include="inc\CANopenLibHelper.h" />
     <ClInclude Include="inc\ClientSDOClass.h" />
     <ClInclude Include="inc\EmcyClientClass.h" />
     <ClInclude Include="inc\EmcyServerClass.h" />
     <ClInclude Include="inc\License.h" />
+    <ClInclude Include="inc\LSSDefines.h" />
     <ClInclude Include="inc\LSSMasterClass.h" />
     <ClInclude Include="inc\LSSSlaveClass.h" />
     <ClInclude Include="inc\NMTMasterClass.h" />
     <ClInclude Include="inc\NMTSlaveClass.h" />
     <ClInclude Include="inc\ReceivePDOClass.h" />
-    <ClInclude Include="inc\SyncServerClass.h" />
-    <ClInclude Include="inc\TransmitPdoClass.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="inc\SDOClass.h" />
     <ClInclude Include="inc\ServerSDOClass.h" />
+    <ClInclude Include="inc\SyncServerClass.h" />
     <ClInclude Include="inc\TimerClass.h" />
+    <ClInclude Include="inc\TransmitPdoClass.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="canopen_resource.rc" />

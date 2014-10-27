@@ -28,13 +28,30 @@
 #include "CanInterfaceClass.h"
 #include "TimerClass.h"
 #include "CanConnectionClass.h"
+#include "LSSDefines.h"
 
 
 typedef void (*LSSReqestFunPtr)(void *context, u8 state );
 typedef void (*LSSConfigureNodeId) (void *context, u8 nodeId, u8* errorCode, u8* specError);
 typedef void (*LSSConfigureBitTimingParamters) (void *context, u8 tableDelector, u8 tableIndex, u8* errorCode, u8* specError);
-typedef void (*LSSActivateBitTimingParameters) (void *context, u16 switchDelay, u8* errorCode, u8* specError);
+typedef void (*LSSActivateBitTimingParameters) (void *context, u16 switchDelay);
 typedef void (*LSSStoreConfiguration) (void *context, u8* errorCode, u8* specError);
+
+#define   LSS_CMD_SWITCH_STATE_GLOBAL 0x04
+#define   LSS_CMD_SWITCH_SELECTIVE_VENDOR 64
+#define   LSS_CMD_SWITCH_SELECTIVE_PRODUCT 65
+#define   LSS_CMD_SWITCH_SELECTIVE_REVISION 66
+#define   LSS_CMD_SWITCH_SELECTIVE_SERIAL 67
+#define   LSS_CMD_SWITCH_SELECTIVE_CONFIRMATION 68
+
+#define   LSS_CMD_CONFIGURE_NODE_ID 17
+#define   LSS_CMD_CONFIGURE_TIMING_PARAMETERS 19
+#define   LSS_CMD_ACTIVATE_TIMING_PARAMETERS 21
+#define   LSS_CMD_STORE_CONFIGURATION 23
+
+#define   LSS_MODE_WAITING_STATE 0
+#define   LSS_MODE_CONFIGURATION_STATE 1
+
 
 //
 //  LSS Slave.
@@ -83,6 +100,18 @@ private:
   void                                  *local_node_lss_store_configuration_context;
 
   u8                                    lss_mode;
+  u8                                    lss_selective_state;
+  
+  u8                                    bitRateTableSelector;
+  u8                                    bitRateTableIndex;
+  u8                                    bitRateError;
+  u32                                   bitRate;
+  u8                                    activeNodeId;
+  
+  u8                                    pendingBitRateTableSelector;
+  u8                                    pendingBitRateTableIndex;
+  u32                                   pendingBitRate;
+  u8                                    pendingNodeId;
 
   u32                                   vendor_id;
   u32                                   product_code;
