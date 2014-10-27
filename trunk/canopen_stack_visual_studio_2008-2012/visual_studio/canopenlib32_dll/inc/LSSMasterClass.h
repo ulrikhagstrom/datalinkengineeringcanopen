@@ -28,7 +28,7 @@
 #include "CanInterfaceClass.h"
 #include "TimerClass.h"
 #include "CanConnectionClass.h"
-
+#include "LSSDefines.h"
 
 const int COBID_TX_LSS_MASTER = 0x7e5;
 
@@ -42,13 +42,13 @@ class LSSMaster : public CanConnection
     CANOPENDLL_API ~LSSMaster(void);
     CANOPENDLL_API canOpenStatus  canHardwareConnect(u8 port, u32 btr);
     CANOPENDLL_API canOpenStatus  switchModeGlobal(u8 mode);
-    CANOPENDLL_API canOpenStatus  switchModeSelectiveVendorId(u32 vendorId, u8 *mode);
-    CANOPENDLL_API canOpenStatus  switchModeSelectiveProductCode(u32 productCode, u8 *mode);
-    CANOPENDLL_API canOpenStatus  switchModeSelectiveRevisionNumber(u32 revisionNumber, u8 *mode);
-    CANOPENDLL_API canOpenStatus  switchModeSelectiveSerialNumber(u32 serialNumber, u8 *mode);
+    CANOPENDLL_API canOpenStatus  switchModeSelectiveVendorId(u32 vendorId);
+    CANOPENDLL_API canOpenStatus  switchModeSelectiveProductCode(u32 productCode);
+    CANOPENDLL_API canOpenStatus  switchModeSelectiveRevisionNumber(u32 revisionNumber);
+    CANOPENDLL_API canOpenStatus  switchModeSelectiveSerialNumber(u32 serialNumber);
     CANOPENDLL_API canOpenStatus  configureNodeId(u8 nodeId, u8 *errorCode, u8 *specificErrorCode);
     CANOPENDLL_API canOpenStatus  configureBitTimingParamteres(u8 tableSelector, u8 tableIndex, u8 *errorCode, u8 *specificErrorCode);
-    CANOPENDLL_API canOpenStatus  activateBitTimingParameters(u16 switchDelay, u8 *errorCode, u8 *specificErrorCode);
+    CANOPENDLL_API canOpenStatus  activateBitTimingParameters(u16 switchDelay);
     CANOPENDLL_API canOpenStatus  storeConfiguration(u8 *errorCode, u8 *specificErrorCode);
 
   protected:
@@ -56,7 +56,7 @@ class LSSMaster : public CanConnection
   private:
     CANOPENDLL_API canOpenStatus switchModeSelectiveGeneric(u8 cs, u32 param);
     CANOPENDLL_API canOpenStatus configureGenericSyncResponse(u8 cs, u8 param1, u8 param2, u8 *errorCode, u8 *specificError);
-    CANOPENDLL_API canOpenStatus switchModeSelectiveSyncResponse(u8 cs, u32 parameter, u8 *mode);
+    CANOPENDLL_API canOpenStatus switchModeSelectiveSyncResponse(u8 cs, u32 parameter);
     TimeClass *timer;
     static canOpenStatus canFrameConsumerW(
       void *lss_master_object, 
@@ -82,7 +82,6 @@ class LSSMaster : public CanConnection
 
     bool              wait_lss_mode;
     bool              wait_configure;
-    u8                response_mode;
     u8                configure_error_code;
     u8                configure_specific_error;
 };

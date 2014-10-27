@@ -271,17 +271,35 @@ CanInterface* CanInterface :: getCanInterface( int port)
 //------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------
-canOpenStatus CanInterface :: removeCanInterface(void)
+canOpenStatus CanInterface::removeCanInterface(void)
 {
+  canOpenStatus ret = CANOPEN_OK;
   this->port_users--;
   if (port_users == 0)
   {
     // No users left, free the resources.
-    ::canPortClose( this->canHandle ); 
-    canInterfaceSingleton[ this->port_index ] = NULL;
+    //canOpenStatus retGoBufOff = CANOPEN_OK;
+    //if (this->can_port_bus_on)
+    //{
+    //  retGoBufOff = ::canPortGoBusOff(this->canHandle);
+    //}
+    //if (retGoBufOff != CANOPEN_OK)
+    //{
+    //  ret = retGoBufOff;
+    //}
+    canOpenStatus retPortClose = CANOPEN_OK;
+    if (this->can_port_opened)
+    {
+      retPortClose = ::canPortClose(this->canHandle);
+    }
+    if (retPortClose != CANOPEN_OK)
+    {
+      ret = retPortClose;
+    }
+    canInterfaceSingleton[this->port_index] = NULL;
     delete this; // Will call the destructor.
-  } 
-  return CANOPEN_OK;
+  }
+  return ret;
 }
 
 //------------------------------------------------------------------------
@@ -406,18 +424,32 @@ canOpenStatus CanInterface :: canLibraryInit(void)
     /*
     *	Connect to the functions in the DLL.
     */
-  canPortLibraryInit = (canPortLibraryInitFP) GetProcAddress(hCanLib, "canPortLibraryInit");
-    canPortOpen = (canPortOpenFP)GetProcAddress(hCanLib, "canPortOpen");
-    canPortClose = (canPortCloseFP)GetProcAddress(hCanLib, "canPortClose");
-  canPortBitrateSet = (canPortBitrateSetFP) GetProcAddress(hCanLib, "canPortBitrateSet");
-    canPortEcho = (canPortEchoFP)GetProcAddress(hCanLib, "canPortEcho");
-    canPortGoBusOn = (canPortGoBusOnFP)GetProcAddress(hCanLib, "canPortGoBusOn");
-  canPortGoBusOff = (canPortGoBusOffFP) GetProcAddress(hCanLib, "canPortGoBusOff");
-    canPortWrite = (canPortWriteFP)GetProcAddress(hCanLib, "canPortWrite");
-    canPortRead = (canPortReadFP)GetProcAddress(hCanLib, "canPortRead");
-  canPortGetSerialNumber  = (canPortGetSerialNumberFP)GetProcAddress(hCanLib, "canPortGetSerialNumber");
+  canPortLibraryInit = (canPortLibraryInitFP)GetProcAddress(hCanLib, "canPortLibraryInit");
+  canPortOpen = (canPortOpenFP)GetProcAddress(hCanLib, "canPortOpen");
+  canPortClose = (canPortCloseFP)GetProcAddress(hCanLib, "canPortClose");
+  canPortBitrateSet = (canPortBitrateSetFP)GetProcAddress(hCanLib, "canPortBitrateSet");
+  canPortEcho = (canPortEchoFP)GetProcAddress(hCanLib, "canPortEcho");
+  canPortGoBusOn = (canPortGoBusOnFP)GetProcAddress(hCanLib, "canPortGoBusOn");
+  canPortGoBusOff = (canPortGoBusOffFP)GetProcAddress(hCanLib, "canPortGoBusOff");
+  canPortWrite = (canPortWriteFP)GetProcAddress(hCanLib, "canPortWrite");
+  canPortRead = (canPortReadFP)GetProcAddress(hCanLib, "canPortRead");
+  canPortGetSerialNumber = (canPortGetSerialNumberFP)GetProcAddress(hCanLib, "canPortGetSerialNumber");
 
-  return ::canPortLibraryInit();
+  if (canPortLibraryInit == NULL
+    || canPortOpen == NULL
+    || canPortClose == NULL
+    || canPortBitrateSet == NULL
+    || canPortEcho == NULL
+    || canPortGoBusOn == NULL
+    || canPortGoBusOff == NULL
+    || canPortWrite == NULL
+    || canPortRead == NULL
+    || canPortGetSerialNumber == NULL)
+  {
+    return CANOPEN_ERROR_CAN_LAYER;
+  }
+
+	return ::canPortLibraryInit();
 }
 
 //------------------------------------------------------------------------

@@ -198,6 +198,7 @@
     <ClInclude Include="inc\EmcyClientClass.h" />
     <ClInclude Include="inc\EmcyServerClass.h" />
     <ClInclude Include="inc\License.h" />
+    <ClInclude Include="inc\LSSDefines.h" />
     <ClInclude Include="inc\LSSMasterClass.h" />
     <ClInclude Include="inc\LSSSlaveClass.h" />
     <ClInclude Include="inc\NMTMasterClass.h" />

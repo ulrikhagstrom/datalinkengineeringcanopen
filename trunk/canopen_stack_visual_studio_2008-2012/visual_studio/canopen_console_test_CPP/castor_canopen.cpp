@@ -203,27 +203,25 @@ int main (void) {
 	  return 0;
   }
 
-  u8 slaveMode;
-
-  if (lss_master->switchModeSelectiveVendorId(0x1234, &slaveMode) != CANOPEN_OK)
+  if (lss_master->switchModeSelectiveVendorId(0x1234) != CANOPEN_OK)
   {
 	  return 0;
   }
 
 
-  if (lss_master->switchModeSelectiveProductCode(0x2345, &slaveMode) != CANOPEN_OK)
+  if (lss_master->switchModeSelectiveProductCode(0x2345) != CANOPEN_OK)
   {
 	  return 0;
   }
 
 
-  if (lss_master->switchModeSelectiveRevisionNumber(0x3456, &slaveMode) != CANOPEN_OK)
+  if (lss_master->switchModeSelectiveRevisionNumber(0x3456) != CANOPEN_OK)
   {
 	  return 0;
   }
 
 
-  if (lss_master->switchModeSelectiveSerialNumber(0x4567, &slaveMode) != CANOPEN_OK)
+  if (lss_master->switchModeSelectiveSerialNumber(0x4567) != CANOPEN_OK)
   {
 	  return 0;
   }

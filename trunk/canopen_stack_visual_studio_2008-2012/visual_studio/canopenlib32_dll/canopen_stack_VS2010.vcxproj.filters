@@ -29,16 +29,16 @@
     <ClInclude Include="inc\CanMonitorClass.h">
       <Filter>INCLUDES</Filter>
     </ClInclude>
-    <ClInclude Include="inc\CanOpenDispatcher.h">
-      <Filter>INCLUDES</Filter>
-    </ClInclude>
     <ClInclude Include="inc\CanOpenErrorCodes.h">
       <Filter>INCLUDES</Filter>
     </ClInclude>
-    <ClInclude Include="inc\CanOpenLib.h">
+    <ClInclude Include="inc\CanOpenDispatcher.h">
       <Filter>INCLUDES</Filter>
     </ClInclude>
     <ClInclude Include="inc\CanOpenLib_HW.h">
+      <Filter>INCLUDES</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\CanOpenLib_HW_dynload.h">
       <Filter>INCLUDES</Filter>
     </ClInclude>
     <ClInclude Include="inc\CANopenLibDefines.h">
@@ -56,9 +56,6 @@
     <ClInclude Include="inc\EmcyServerClass.h">
       <Filter>INCLUDES</Filter>
     </ClInclude>
-    <ClInclude Include="inc\License.h">
-      <Filter>INCLUDES</Filter>
-    </ClInclude>
     <ClInclude Include="inc\NMTMasterClass.h">
       <Filter>INCLUDES</Filter>
     </ClInclude>
@@ -66,6 +63,9 @@
       <Filter>INCLUDES</Filter>
     </ClInclude>
     <ClInclude Include="inc\ReceivePDOClass.h">
+      <Filter>INCLUDES</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
       <Filter>INCLUDES</Filter>
     </ClInclude>
     <ClInclude Include="inc\SDOClass.h">
@@ -83,13 +83,19 @@
     <ClInclude Include="inc\TransmitPdoClass.h">
       <Filter>INCLUDES</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h">
+    <ClInclude Include="inc\CanOpenLib.h">
       <Filter>INCLUDES</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\License.h">
+      <Filter>MISC</Filter>
     </ClInclude>
     <ClInclude Include="inc\LSSMasterClass.h">
       <Filter>INCLUDES</Filter>
     </ClInclude>
     <ClInclude Include="inc\LSSSlaveClass.h">
+      <Filter>INCLUDES</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\LSSDefines.h">
       <Filter>INCLUDES</Filter>
     </ClInclude>
   </ItemGroup>
@@ -102,13 +108,13 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="canopen_resource.rc">
-      <Filter>MISC</Filter>
-    </ResourceCompile>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="ReadMe.txt">
       <Filter>MISC</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="canopen_resource.rc">
+      <Filter>MISC</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

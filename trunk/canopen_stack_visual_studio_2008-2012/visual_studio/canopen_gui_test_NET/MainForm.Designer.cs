@@ -50,6 +50,8 @@
             this.btnStopNode = new System.Windows.Forms.Button();
             this.btnStartNode = new System.Windows.Forms.Button();
             this.grperror_control = new System.Windows.Forms.GroupBox();
+            this.btnConfHeartBeat = new System.Windows.Forms.Button();
+            this.btnConfigNodeGuard = new System.Windows.Forms.Button();
             this.btnStopHeartbeatMonitor = new System.Windows.Forms.Button();
             this.btnStartHeartbeatMonitor = new System.Windows.Forms.Button();
             this.btnStopNodeGuard = new System.Windows.Forms.Button();
@@ -65,8 +67,6 @@
             this.btnHardwareVersion = new System.Windows.Forms.Button();
             this.btnDeviceType = new System.Windows.Forms.Button();
             this.btnDeviceName = new System.Windows.Forms.Button();
-            this.tab_can_trace = new System.Windows.Forms.TabPage();
-            this.rich_text_can_trace = new System.Windows.Forms.RichTextBox();
             this.tabPDO = new System.Windows.Forms.TabPage();
             this.btnRequestPdo = new System.Windows.Forms.Button();
             this.btnMap64bits = new System.Windows.Forms.Button();
@@ -80,13 +80,13 @@
             this.btnReadPDO = new System.Windows.Forms.Button();
             this.lblPDO = new System.Windows.Forms.Label();
             this.numUpDownPdo = new System.Windows.Forms.NumericUpDown();
+            this.tab_can_trace = new System.Windows.Forms.TabPage();
+            this.rich_text_can_trace = new System.Windows.Forms.RichTextBox();
             this.numRemoteNode = new System.Windows.Forms.NumericUpDown();
             this.consoleTextBox = new System.Windows.Forms.RichTextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.linkClick = new System.Windows.Forms.LinkLabel();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
-            this.btnConfigNodeGuard = new System.Windows.Forms.Button();
-            this.btnConfHeartBeat = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabSettings.SuspendLayout();
             this.grpHardwareSetup.SuspendLayout();
@@ -96,9 +96,9 @@
             this.tabReadDeviceParam.SuspendLayout();
             this.grpErrorInformation.SuspendLayout();
             this.grpDeviceParams.SuspendLayout();
-            this.tab_can_trace.SuspendLayout();
             this.tabPDO.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numUpDownPdo)).BeginInit();
+            this.tab_can_trace.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numRemoteNode)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.SuspendLayout();
@@ -107,15 +107,15 @@
             // 
             this.statusStrip1.Location = new System.Drawing.Point(0, 366);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(243, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(382, 22);
             this.statusStrip1.TabIndex = 0;
             this.statusStrip1.Text = "statusStrip1";
             // 
             // tabControl1
             // 
-            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl1.Controls.Add(this.tabSettings);
             this.tabControl1.Controls.Add(this.tabNMT);
             this.tabControl1.Controls.Add(this.tabReadDeviceParam);
@@ -125,7 +125,7 @@
             this.tabControl1.Multiline = true;
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(242, 244);
+            this.tabControl1.Size = new System.Drawing.Size(381, 244);
             this.tabControl1.TabIndex = 1;
             // 
             // tabSettings
@@ -137,7 +137,7 @@
             this.tabSettings.Location = new System.Drawing.Point(4, 22);
             this.tabSettings.Name = "tabSettings";
             this.tabSettings.Padding = new System.Windows.Forms.Padding(3);
-            this.tabSettings.Size = new System.Drawing.Size(234, 218);
+            this.tabSettings.Size = new System.Drawing.Size(373, 218);
             this.tabSettings.TabIndex = 0;
             this.tabSettings.Text = "CAN";
             this.tabSettings.UseVisualStyleBackColor = true;
@@ -257,7 +257,7 @@
             this.tabNMT.Controls.Add(this.grperror_control);
             this.tabNMT.Location = new System.Drawing.Point(4, 22);
             this.tabNMT.Name = "tabNMT";
-            this.tabNMT.Size = new System.Drawing.Size(234, 218);
+            this.tabNMT.Size = new System.Drawing.Size(373, 218);
             this.tabNMT.TabIndex = 2;
             this.tabNMT.Text = "NMT";
             this.tabNMT.UseVisualStyleBackColor = true;
@@ -341,6 +341,26 @@
             this.grperror_control.TabStop = false;
             this.grperror_control.Text = "Error Control";
             // 
+            // btnConfHeartBeat
+            // 
+            this.btnConfHeartBeat.Location = new System.Drawing.Point(124, 80);
+            this.btnConfHeartBeat.Name = "btnConfHeartBeat";
+            this.btnConfHeartBeat.Size = new System.Drawing.Size(100, 23);
+            this.btnConfHeartBeat.TabIndex = 6;
+            this.btnConfHeartBeat.Text = "Conf. Heartbeat";
+            this.btnConfHeartBeat.UseVisualStyleBackColor = true;
+            this.btnConfHeartBeat.Click += new System.EventHandler(this.btnConfHeartBeat_Click);
+            // 
+            // btnConfigNodeGuard
+            // 
+            this.btnConfigNodeGuard.Location = new System.Drawing.Point(7, 80);
+            this.btnConfigNodeGuard.Name = "btnConfigNodeGuard";
+            this.btnConfigNodeGuard.Size = new System.Drawing.Size(106, 23);
+            this.btnConfigNodeGuard.TabIndex = 5;
+            this.btnConfigNodeGuard.Text = "Conf. Nodeguard";
+            this.btnConfigNodeGuard.UseVisualStyleBackColor = true;
+            this.btnConfigNodeGuard.Click += new System.EventHandler(this.btnConfigNodeGuard_Click);
+            // 
             // btnStopHeartbeatMonitor
             // 
             this.btnStopHeartbeatMonitor.Location = new System.Drawing.Point(122, 43);
@@ -387,7 +407,7 @@
             this.tabReadDeviceParam.Location = new System.Drawing.Point(4, 22);
             this.tabReadDeviceParam.Name = "tabReadDeviceParam";
             this.tabReadDeviceParam.Padding = new System.Windows.Forms.Padding(3);
-            this.tabReadDeviceParam.Size = new System.Drawing.Size(234, 218);
+            this.tabReadDeviceParam.Size = new System.Drawing.Size(373, 218);
             this.tabReadDeviceParam.TabIndex = 1;
             this.tabReadDeviceParam.Text = "Device";
             this.tabReadDeviceParam.UseVisualStyleBackColor = true;
@@ -498,28 +518,6 @@
             this.btnDeviceName.UseVisualStyleBackColor = true;
             this.btnDeviceName.Click += new System.EventHandler(this.btnDeviceName_Click);
             // 
-            // tab_can_trace
-            // 
-            this.tab_can_trace.Controls.Add(this.rich_text_can_trace);
-            this.tab_can_trace.Location = new System.Drawing.Point(4, 22);
-            this.tab_can_trace.Name = "tab_can_trace";
-            this.tab_can_trace.Padding = new System.Windows.Forms.Padding(3);
-            this.tab_can_trace.Size = new System.Drawing.Size(234, 218);
-            this.tab_can_trace.TabIndex = 3;
-            this.tab_can_trace.Text = "CAN trace";
-            this.tab_can_trace.UseVisualStyleBackColor = true;
-            // 
-            // rich_text_can_trace
-            // 
-            this.rich_text_can_trace.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.rich_text_can_trace.Location = new System.Drawing.Point(3, 3);
-            this.rich_text_can_trace.Name = "rich_text_can_trace";
-            this.rich_text_can_trace.Size = new System.Drawing.Size(228, 212);
-            this.rich_text_can_trace.TabIndex = 1;
-            this.rich_text_can_trace.Text = "";
-            // 
             // tabPDO
             // 
             this.tabPDO.Controls.Add(this.btnRequestPdo);
@@ -537,7 +535,7 @@
             this.tabPDO.Location = new System.Drawing.Point(4, 22);
             this.tabPDO.Name = "tabPDO";
             this.tabPDO.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPDO.Size = new System.Drawing.Size(234, 218);
+            this.tabPDO.Size = new System.Drawing.Size(373, 218);
             this.tabPDO.TabIndex = 4;
             this.tabPDO.Text = "PDO";
             this.tabPDO.UseVisualStyleBackColor = true;
@@ -673,6 +671,28 @@
             0,
             0});
             // 
+            // tab_can_trace
+            // 
+            this.tab_can_trace.Controls.Add(this.rich_text_can_trace);
+            this.tab_can_trace.Location = new System.Drawing.Point(4, 22);
+            this.tab_can_trace.Name = "tab_can_trace";
+            this.tab_can_trace.Padding = new System.Windows.Forms.Padding(3);
+            this.tab_can_trace.Size = new System.Drawing.Size(373, 218);
+            this.tab_can_trace.TabIndex = 3;
+            this.tab_can_trace.Text = "CAN trace";
+            this.tab_can_trace.UseVisualStyleBackColor = true;
+            // 
+            // rich_text_can_trace
+            // 
+            this.rich_text_can_trace.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.rich_text_can_trace.Location = new System.Drawing.Point(3, 3);
+            this.rich_text_can_trace.Name = "rich_text_can_trace";
+            this.rich_text_can_trace.Size = new System.Drawing.Size(367, 212);
+            this.rich_text_can_trace.TabIndex = 1;
+            this.rich_text_can_trace.Text = "";
+            // 
             // numRemoteNode
             // 
             this.numRemoteNode.Location = new System.Drawing.Point(184, 245);
@@ -694,12 +714,12 @@
             // 
             // consoleTextBox
             // 
-            this.consoleTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.consoleTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.consoleTextBox.Location = new System.Drawing.Point(0, 266);
             this.consoleTextBox.Name = "consoleTextBox";
-            this.consoleTextBox.Size = new System.Drawing.Size(242, 101);
+            this.consoleTextBox.Size = new System.Drawing.Size(381, 101);
             this.consoleTextBox.TabIndex = 0;
             this.consoleTextBox.Text = "";
             // 
@@ -727,31 +747,11 @@
             // 
             this.errorProvider1.ContainerControl = this;
             // 
-            // btnConfigNodeGuard
-            // 
-            this.btnConfigNodeGuard.Location = new System.Drawing.Point(7, 80);
-            this.btnConfigNodeGuard.Name = "btnConfigNodeGuard";
-            this.btnConfigNodeGuard.Size = new System.Drawing.Size(106, 23);
-            this.btnConfigNodeGuard.TabIndex = 5;
-            this.btnConfigNodeGuard.Text = "Conf. Nodeguard";
-            this.btnConfigNodeGuard.UseVisualStyleBackColor = true;
-            this.btnConfigNodeGuard.Click += new System.EventHandler(this.btnConfigNodeGuard_Click);
-            // 
-            // btnConfHeartBeat
-            // 
-            this.btnConfHeartBeat.Location = new System.Drawing.Point(124, 80);
-            this.btnConfHeartBeat.Name = "btnConfHeartBeat";
-            this.btnConfHeartBeat.Size = new System.Drawing.Size(100, 23);
-            this.btnConfHeartBeat.TabIndex = 6;
-            this.btnConfHeartBeat.Text = "Conf. Heartbeat";
-            this.btnConfHeartBeat.UseVisualStyleBackColor = true;
-            this.btnConfHeartBeat.Click += new System.EventHandler(this.btnConfHeartBeat_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(243, 388);
+            this.ClientSize = new System.Drawing.Size(382, 388);
             this.Controls.Add(this.linkClick);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.consoleTextBox);
@@ -774,10 +774,10 @@
             this.tabReadDeviceParam.ResumeLayout(false);
             this.grpErrorInformation.ResumeLayout(false);
             this.grpDeviceParams.ResumeLayout(false);
-            this.tab_can_trace.ResumeLayout(false);
             this.tabPDO.ResumeLayout(false);
             this.tabPDO.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numUpDownPdo)).EndInit();
+            this.tab_can_trace.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.numRemoteNode)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             this.ResumeLayout(false);

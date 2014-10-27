@@ -88,7 +88,7 @@ canOpenStatus  LSSSlave :: canFrameConsumer(unsigned long id, unsigned char *dat
   if (id == 0x7e5 && dlc == 8)
   {
       u8 cs = data[0];
-      if (cs == 0x04)
+      if (cs == LSS_CMD_SWITCH_STATE_GLOBAL)
       {
           this->lss_mode = data[1];
           if (this->local_node_lss_callback != NULL)
@@ -97,28 +97,74 @@ canOpenStatus  LSSSlave :: canFrameConsumer(unsigned long id, unsigned char *dat
           }
           ret = CANOPEN_OK;
       } 
-      else if ((cs == 64 && this->vendor_id == ::getU32Val(data, 1)) ||
-               (cs == 65 && this->product_code == ::getU32Val(data, 1)) ||
-               (cs == 66 && this->revision_number == ::getU32Val(data, 1)) ||
-               (cs == 67 && this->serial_number == ::getU32Val(data, 1)))
+      else if (cs == LSS_CMD_SWITCH_SELECTIVE_VENDOR)
       {
-          if (this->lss_mode == 0)
+          if (this->vendor_id == ::getU32Val(data, 1))
           {
-              this->lss_mode = 1;
+              this->lss_selective_state = cs; // Start selective state approval
           }
           else
           {
-              this->lss_mode = 0;
-          }
-          u8 canData[8] = { 68, this->lss_mode, 0, 0, 0, 0, 0, 0 };
-          this->can_interface->canWrite(0x7e4, canData, 8, 0);
-          if (this->local_node_lss_callback != NULL)
-          {
-            
-            this->local_node_lss_callback(this->local_lss_callback_context, this->lss_mode);
+              this->lss_selective_state = 0; // Not this LSS slave
+              this->lss_mode = LSS_MODE_WAITING_STATE; // LSS waiting state
           }
       }
-      else if (cs == 17)
+      else if (cs == LSS_CMD_SWITCH_SELECTIVE_PRODUCT)
+      { 
+          // Vendor approved, and still this LSS Slave
+          if (this->lss_selective_state == LSS_CMD_SWITCH_SELECTIVE_VENDOR
+              && this->product_code == ::getU32Val(data, 1))
+          {
+              this->lss_selective_state = cs; // continue selective state approval
+          }
+          else
+          {
+              this->lss_selective_state = 0; // Not this LSS slave
+              this->lss_mode = LSS_MODE_WAITING_STATE; // LSS waiting state
+          }
+      }
+      else if (cs == LSS_CMD_SWITCH_SELECTIVE_REVISION)
+      { 
+          // Product approved, and still this LSS Slave
+          if (this->lss_selective_state == LSS_CMD_SWITCH_SELECTIVE_PRODUCT && this->revision_number == ::getU32Val(data, 1))
+          {
+              this->lss_selective_state = cs; // continue selective state approval
+          }
+          else
+          {
+              this->lss_selective_state = 0; // Not this LSS slave
+              this->lss_mode = LSS_MODE_WAITING_STATE;
+          }
+      }
+      else if (cs == LSS_CMD_SWITCH_SELECTIVE_SERIAL)
+      {
+          // Revision approved, and still this LSS Slave
+          if (this->lss_selective_state == LSS_CMD_SWITCH_SELECTIVE_REVISION && this->serial_number == ::getU32Val(data, 1))
+          {
+              this->lss_selective_state = cs;
+              if (this->lss_mode == LSS_MODE_WAITING_STATE)
+              {
+                  this->lss_mode = LSS_MODE_CONFIGURATION_STATE;
+              }
+              else
+              {
+                  this->lss_mode = LSS_MODE_WAITING_STATE;
+              }
+              u8 canData[8] = { LSS_CMD_SWITCH_SELECTIVE_CONFIRMATION, 0, 0, 0, 0, 0, 0, 0 };
+              ret = this->can_interface->canWrite(0x7e4, canData, 8, 0);
+              if (this->local_node_lss_callback != NULL)
+              {
+
+                  this->local_node_lss_callback(this->local_lss_callback_context, this->lss_mode);
+              }
+          }
+          else
+          {
+              this->lss_selective_state = 0; // Not this LSS slave
+              this->lss_mode = LSS_MODE_WAITING_STATE; // LSS waiting state
+          }
+      }
+      else if (cs == LSS_CMD_CONFIGURE_NODE_ID && this->lss_mode == LSS_MODE_CONFIGURATION_STATE)
       {
           u8 errorCode = 0;
           u8 specError = 0;
@@ -127,10 +173,20 @@ canOpenStatus  LSSSlave :: canFrameConsumer(unsigned long id, unsigned char *dat
           {
               this->local_node_lss_configure_node_id_callback(this->local_node_lss_configure_node_id_callback_context, nodeId, &errorCode, &specError);
           }
-          u8 canData[8] = { 17, errorCode, specError, 0, 0, 0, 0, 0 };
-          this->can_interface->canWrite(0x7e4, canData, 8, 0);
+          
+          if (errorCode == 0)
+          {
+              bool isValidPendingNodeId = (nodeId > 0 && nodeId <= 0x7F) || nodeId == 0xFF;
+              if (!isValidPendingNodeId)
+                  errorCode = 1; // Node ID out of range
+              else
+                  this->pendingNodeId = nodeId;
+          }
+
+          u8 canData[8] = { LSS_CMD_CONFIGURE_NODE_ID, errorCode, specError, 0, 0, 0, 0, 0 };
+          ret = this->can_interface->canWrite(0x7e4, canData, 8, 0);
       }
-      else if (cs == 19)
+      else if (cs == LSS_CMD_CONFIGURE_TIMING_PARAMETERS && this->lss_mode == LSS_MODE_CONFIGURATION_STATE)
       {
           u8 errorCode = 0;
           u8 specError = 0;
@@ -141,34 +197,108 @@ canOpenStatus  LSSSlave :: canFrameConsumer(unsigned long id, unsigned char *dat
           {
               this->local_node_lss_configure_bit_timing_parameters(this->local_node_lss_configure_bit_timing_parameters_context, tableSelector, tableIndex, &errorCode, &specError);
           }
-          u8 canData[8] = { 19, errorCode, specError, 0, 0, 0, 0, 0 };
-          this->can_interface->canWrite(0x7e4, canData, 8, 0);
+          if (errorCode == 0)
+          {
+              if (tableSelector != 0)
+              {
+                  // We can not yet ask the this->can_interface for custom table bit rate translation to real bit rate
+                  errorCode = LSS_TIMING_ERROR_UNSUPPORTED_BITRATE;
+              }
+              else
+              {
+                  switch (tableIndex)
+                  {
+                  case LSS_TIMING_TABLE0_1000K: // CiA 301 estimated bus length 25m
+                      this->pendingBitRate = 1000000;
+                      break;
+                  case LSS_TIMING_TABLE0_800K: // CiA 301 estimated bus length 50m
+                      this->pendingBitRate = 800000;
+                      break;
+                  case LSS_TIMING_TABLE0_500K: // CiA 301 estimated bus length 100m
+                      this->pendingBitRate = 500000;
+                      break;
+                  case LSS_TIMING_TABLE0_250K: // CiA 301 estimated bus length 250m
+                      this->pendingBitRate = 250000;
+                      break;
+                  case LSS_TIMING_TABLE0_125K: // CiA 301 estimated bus length 500m
+                      this->pendingBitRate = 125000;
+                      break;
+                  case LSS_TIMING_TABLE0_50K: // CiA 301 estimated bus length 1000m
+                      this->pendingBitRate = 50000;
+                      break;
+                  case LSS_TIMING_TABLE0_20K: // CiA 301 estimated bus length 2500m
+                      this->pendingBitRate = 20000;
+                      break;
+                  case LSS_TIMING_TABLE0_10K: // CiA 301 estimated bus length 5000m
+                      this->pendingBitRate = 10000;
+                      break;
+                  default:
+                      errorCode = LSS_TIMING_ERROR_UNSUPPORTED_BITRATE;
+                  }
+              }
+              this->pendingBitRateTableSelector = tableSelector;
+              this->pendingBitRateTableIndex = tableIndex;
+          }
+          this->bitRateError = errorCode;
+          u8 canData[8] = { LSS_CMD_CONFIGURE_TIMING_PARAMETERS, errorCode, specError, 0, 0, 0, 0, 0 };
+          ret = this->can_interface->canWrite(0x7e4, canData, 8, 0);
+          if (errorCode == LSS_TIMING_ERROR_UNSUPPORTED_BITRATE)
+          {
+              ret = CANOPEN_UNSUPPORTED_BITRATE;
+          }
       }
-      else if (cs == 21)
+      else if (cs == LSS_CMD_ACTIVATE_TIMING_PARAMETERS && this->lss_mode == LSS_MODE_CONFIGURATION_STATE)
       {
-          u8 errorCode = 0;
-          u8 specError = 0;
           u16 switchDelay = ::buf2val(&data[1], 2);
 
           if (this->local_node_lss_activate_bit_timing_paramters != NULL)
           {
-              this->local_node_lss_activate_bit_timing_paramters(this->local_node_lss_activate_bit_timing_paramters, switchDelay, &errorCode, &specError);
+              this->local_node_lss_activate_bit_timing_paramters(this->local_node_lss_activate_bit_timing_paramters, switchDelay);
           }
-          u8 canData[8] = { 21, errorCode, specError, 0, 0, 0, 0, 0 };
-          this->can_interface->canWrite(0x7e4, canData, 8, 0);
+          // No feedback, 
+          // Flag stop communicating, so all SDO PDO.. start to stop traffic.
+          // Wait switchDelay for completing any queued communication and for all SDO PDO.. to stop
+          // Copy pending bit rate to active bit rate and tell all / HW  to communicate with new rate
+          if (this->bitRateError == LSS_TIMING_ERROR_OK)
+          {
+              canOpenStatus retSetBitRateStatus = this->can_interface->canSetBitrate(this->bitRate);
+              if (retSetBitRateStatus == CANOPEN_OK)
+              {
+                  this->bitRate = this->pendingBitRate;
+                  this->bitRateTableSelector = this->pendingBitRateTableSelector;
+                  this->bitRateTableIndex = this->pendingBitRateTableIndex;
+              }
+          }
+          // Flag waiting to start at new speed
+          // wait switchDelay before starting SDO PDO... for all devices at new speed.
+          // Flag / notify SDO PDO.. to start communication again at new speed.
       }
-      else if (cs == 23)
+      else if (cs == LSS_CMD_STORE_CONFIGURATION && this->lss_mode == LSS_MODE_CONFIGURATION_STATE)
       {
           u8 errorCode = 0;
           u8 specError = 0;
           if (this->local_node_lss_store_configuration != NULL)
           {
+              // It is the handlers responsibility to permanently store pendingNodeId and pendingBitrateTableSelector/index or set error code
               this->local_node_lss_store_configuration(this->local_node_lss_store_configuration_context, &errorCode, &specError);
           }
-          u8 canData[8] = { 23, errorCode, specError, 0, 0, 0, 0, 0 };
+          // store 
+          u8 canData[8] = { LSS_CMD_STORE_CONFIGURATION, errorCode, specError, 0, 0, 0, 0, 0 };
           this->can_interface->canWrite(0x7e4, canData, 8, 0);	  }
   }
-
+  else if (id == 0x0 && dlc == 2) // NMT
+  {
+      // if NMT Reset application, get permanent node id and bit rate to pending node id bit rate
+      // if NMT Reset communication for active node, then copy pending to active node id
+      if (data[0] == 130 && (data[1] == this->activeNodeId || data[1] == 0))
+      {
+          if (this->pendingNodeId > 0 && this->pendingNodeId <= 0x7F)
+          {
+              this->activeNodeId = this->pendingNodeId;
+              // notify that the active node id is set / or notify that the active node id changed if different.
+          }
+      }
+  }
 
   return ret;
 }

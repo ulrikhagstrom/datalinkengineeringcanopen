@@ -235,7 +235,7 @@ namespace CANopenDiagnostic
             stat = can_monitor.canHardwareDisconnect();
             if (stat == CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
             {
-                log.OnLog("Sucess disconnecting CAN Monitor from CAN hardware!");
+                log.OnLog("Success disconnecting CAN Monitor from CAN hardware!");
             }
             else
             {
@@ -243,24 +243,51 @@ namespace CANopenDiagnostic
             }
         }
 
+        static DateTime _callbackLastMessageTime;
+        static long _callbackCountOfMissedMessages;
         static CANOPEN_LIB_ERROR.CanOpenStatus canReceiveCallback(object obj, uint id, byte[] data, byte dlc, uint flags)
         {
-            string temp_string;
             MainForm form = (MainForm)obj;
 
-            temp_string = String.Format("0x{0:X3} {1}: ", id, dlc);
-            if ( (flags & CanMessageTypes.CAN_MSG_RTR_FLAG) != 0 )
+            // prevent more then 10 messages per 0.5s
+            const double maxMessagesIntervalInSeconds = 0.5;
+            const int maxMessagesPerInterval = 10;
+            DateTime now = DateTime.UtcNow;
+            string countContinuation = string.Empty;
+            if (_callbackLastMessageTime.AddSeconds(maxMessagesIntervalInSeconds) < now)
             {
-                temp_string += "RTR";
+                if (_callbackCountOfMissedMessages >= maxMessagesPerInterval)
+                {
+                    countContinuation = string.Format("... count {0} callbacks within {1}\r\n",
+                        _callbackCountOfMissedMessages, TimeSpan.FromSeconds(maxMessagesIntervalInSeconds));
+                }
+                _callbackLastMessageTime = now;
+                _callbackCountOfMissedMessages = 0;
             }
             else
             {
-                for (int i = 0; i < dlc; i++)
-                {
-                    temp_string += String.Format("{0:X2} ", data[i]);
-                }
+                System.Threading.Interlocked.Increment(ref _callbackCountOfMissedMessages);
             }
-            form.canTracePrint(temp_string);
+            // printing will not overload / freeze GUI
+            if (_callbackCountOfMissedMessages < maxMessagesPerInterval)
+            {
+                StringBuilder tempString = new StringBuilder();
+                tempString.AppendFormat("0x{0:X3} {1}: ", id, dlc);
+                if ((flags & CanMessageTypes.CAN_MSG_RTR_FLAG) != 0)
+                {
+                    tempString.Append("RTR");
+                }
+                else
+                {
+                    for (int i = 0; i < dlc; i++)
+                    {
+                        tempString.AppendFormat("{0:X2} ", data[i]);
+                    }
+                }
+
+                // "yyyy.MM.dd HH:mm:ss fffff" "HH:mm:ss fffff"
+                form.canTracePrint(string.Format("{0}{1}: {2}", countContinuation, now.ToLocalTime().ToString("HH:mm:ss fffff"), tempString));
+            }
             return CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK;
         }
 

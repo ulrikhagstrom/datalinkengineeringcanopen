@@ -95,6 +95,9 @@
     <ClInclude Include="inc\LSSSlaveClass.h">
       <Filter>INCLUDES</Filter>
     </ClInclude>
+    <ClInclude Include="inc\LSSDefines.h">
+      <Filter>INCLUDES</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="INCLUDES">

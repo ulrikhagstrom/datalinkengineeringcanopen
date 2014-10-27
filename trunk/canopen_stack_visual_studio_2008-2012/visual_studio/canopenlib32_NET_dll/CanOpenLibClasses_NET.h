@@ -601,13 +601,13 @@ public:
     CanOpenStatus  canHardwareConnect(int port, int btr);
     CanOpenStatus  canHardwareDisconnect(void);
 	CanOpenStatus  switchModeGlobal(u8 mode);
-	CanOpenStatus  switchModeSelectiveVendorId(u32 vendorId, [System::Runtime::InteropServices::Out] u8 %mode);
-	CanOpenStatus  switchModeSelectiveProductCode(u32 productCode, [System::Runtime::InteropServices::Out] u8 %mode);
-	CanOpenStatus  switchModeSelectiveRevisionNumber(u32 revisionNumber, [System::Runtime::InteropServices::Out] u8 %mode);
-	CanOpenStatus  switchModeSelectiveSerialNumber(u32 serialNumber, [System::Runtime::InteropServices::Out] u8 %mode);
+	CanOpenStatus  switchModeSelectiveVendorId(u32 vendorId);
+	CanOpenStatus  switchModeSelectiveProductCode(u32 productCode);
+	CanOpenStatus  switchModeSelectiveRevisionNumber(u32 revisionNumber);
+	CanOpenStatus  switchModeSelectiveSerialNumber(u32 serialNumber);
 	CanOpenStatus  configureNodeId(u8 nodeId, [System::Runtime::InteropServices::Out] u8 %errorCode, [System::Runtime::InteropServices::Out] u8 %specificErrorCode);
 	CanOpenStatus  configureBitTimingParamteres(u8 tableSelector, u8 tableIndex, [System::Runtime::InteropServices::Out] u8 %errorCode, [System::Runtime::InteropServices::Out] u8 %specificErrorCode);
-	CanOpenStatus  activateBitTimingParameters(u16 switchDelay, [System::Runtime::InteropServices::Out] u8 %errorCode, [System::Runtime::InteropServices::Out] u8 %specificErrorCode);
+	CanOpenStatus  activateBitTimingParameters(u16 switchDelay);
 	CanOpenStatus  storeConfiguration([System::Runtime::InteropServices::Out] u8 %errorCode, [System::Runtime::InteropServices::Out] u8 %specificErrorCode);
 
 private:

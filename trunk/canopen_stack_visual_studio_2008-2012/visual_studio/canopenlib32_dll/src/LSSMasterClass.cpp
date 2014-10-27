@@ -58,7 +58,7 @@ canOpenStatus LSSMaster :: switchModeGlobal(u8 mode)
   canOpenStatus ret = CANOPEN_ERROR;
   if ( can_interface != NULL )
   {
-    u8 canData[8] = {0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+    u8 canData[8] = {LSS_CMD_SWITCH_STATE_GLOBAL, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
     setU8Val(mode, canData, 1);
 
@@ -73,7 +73,7 @@ canOpenStatus LSSMaster :: switchModeGlobal(u8 mode)
 
 
 //------------------------------------------------------------------------
-// Generic switch mode helper.
+// Generic switch mode helper without timeout.
 //------------------------------------------------------------------------
 canOpenStatus LSSMaster :: switchModeSelectiveGeneric(u8 cs, u32 param)
 {
@@ -94,9 +94,9 @@ canOpenStatus LSSMaster :: switchModeSelectiveGeneric(u8 cs, u32 param)
 
 
 //------------------------------------------------------------------------
-// CiA DSP-305 v.1.0: 3.9.2 Switch Mode Selective
+// CiA DSP-305 v.2.2.17: 7.4.2 Switch Mode Selective
 //------------------------------------------------------------------------
-canOpenStatus LSSMaster :: switchModeSelectiveSyncResponse(u8 cs, u32 parameter, u8 *mode)
+canOpenStatus LSSMaster :: switchModeSelectiveSyncResponse(u8 cs, u32 parameter)
 {
     unsigned long now = TimeClass::readTimer();
     unsigned long timeout = now + 3000;
@@ -113,48 +113,44 @@ canOpenStatus LSSMaster :: switchModeSelectiveSyncResponse(u8 cs, u32 parameter,
                 break;
             }
         }
-        if (this->wait_lss_mode == false)
-        {
-            *mode = this->response_mode;
-        }
     }
     return res;
 }
 
 //------------------------------------------------------------------------
-// CiA DSP-305 v.1.0: 3.9.2 Switch Mode Selective
+// CiA DSP-305 v.2.2.17: 7.4.2 Switch Mode Selective
 //------------------------------------------------------------------------
-canOpenStatus LSSMaster :: switchModeSelectiveVendorId(u32 vendorId, u8 *mode)
+canOpenStatus LSSMaster :: switchModeSelectiveVendorId(u32 vendorId)
 {
-    canOpenStatus res = switchModeSelectiveSyncResponse(64, vendorId, mode);
+    canOpenStatus res = switchModeSelectiveGeneric(LSS_CMD_SWITCH_SELECTIVE_VENDOR, vendorId);
     return res;
 }
 
 //------------------------------------------------------------------------
-// CiA DSP-305 v.1.0: 3.9.2 Switch Mode Selective
+// CiA DSP-305 v.2.2.17: 7.4.2 Switch Mode Selective
 //------------------------------------------------------------------------
-canOpenStatus LSSMaster :: switchModeSelectiveProductCode(u32 productCode, u8 *mode)
+canOpenStatus LSSMaster :: switchModeSelectiveProductCode(u32 productCode)
 {
-    canOpenStatus res = switchModeSelectiveSyncResponse(65, productCode, mode);
+    canOpenStatus res = switchModeSelectiveGeneric(LSS_CMD_SWITCH_SELECTIVE_PRODUCT, productCode);
     return res;
 }
 
 
 //------------------------------------------------------------------------
-// CiA DSP-305 v.1.0: 3.9.2 Switch Mode Selective
+// CiA DSP-305 v.2.2.17: 7.4.2 Switch Mode Selective
 //------------------------------------------------------------------------
-canOpenStatus LSSMaster :: switchModeSelectiveRevisionNumber(u32 revisionNumber, u8 *mode)
+canOpenStatus LSSMaster :: switchModeSelectiveRevisionNumber(u32 revisionNumber)
 {
-    canOpenStatus res = switchModeSelectiveSyncResponse(66, revisionNumber, mode);
+    canOpenStatus res = switchModeSelectiveGeneric(LSS_CMD_SWITCH_SELECTIVE_REVISION, revisionNumber);
     return res;
 }
 
 //------------------------------------------------------------------------
-// CiA DSP-305 v.1.0: 3.9.2 Switch Mode Selective
+// CiA DSP-305 v.2.2.17: 7.4.2 Switch Mode Selective
 //------------------------------------------------------------------------
-canOpenStatus LSSMaster :: switchModeSelectiveSerialNumber(u32 serialNumber, u8 *mode)
+canOpenStatus LSSMaster :: switchModeSelectiveSerialNumber(u32 serialNumber)
 {
-    canOpenStatus res = switchModeSelectiveSyncResponse(67, serialNumber, mode);
+    canOpenStatus res = switchModeSelectiveSyncResponse(LSS_CMD_SWITCH_SELECTIVE_SERIAL, serialNumber);
     return res;
 }
 
@@ -163,7 +159,7 @@ canOpenStatus LSSMaster :: switchModeSelectiveSerialNumber(u32 serialNumber, u8 
 //------------------------------------------------------------------------
 canOpenStatus LSSMaster :: configureNodeId(u8 nodeId, u8 *errorCode, u8 *specificErrorCode)
 {
-    return this->configureGenericSyncResponse(17, nodeId, 0, errorCode, specificErrorCode);
+    return this->configureGenericSyncResponse(LSS_CMD_CONFIGURE_NODE_ID, nodeId, 0, errorCode, specificErrorCode);
 }
 
 //------------------------------------------------------------------------
@@ -171,15 +167,28 @@ canOpenStatus LSSMaster :: configureNodeId(u8 nodeId, u8 *errorCode, u8 *specifi
 //------------------------------------------------------------------------
 canOpenStatus LSSMaster :: configureBitTimingParamteres(u8 tableSelector, u8 tableIndex, u8 *errorCode, u8 *specificErrorCode)
 {
-    return this->configureGenericSyncResponse(19, tableSelector, tableIndex, errorCode, specificErrorCode);
+    return this->configureGenericSyncResponse(LSS_CMD_CONFIGURE_TIMING_PARAMETERS, tableSelector, tableIndex, errorCode, specificErrorCode);
 }
 
 //------------------------------------------------------------------------
-// CiA DSP-305 v.1.0: 3.10.3 Activate Bit Timing Parameters Protocol
+// CiA DSP-305 v.2.2.7: 7.5.3 Activate Bit Timing Parameters Protocol
 //------------------------------------------------------------------------
-canOpenStatus LSSMaster :: activateBitTimingParameters(u16 switchDelay, u8 *errorCode, u8 *specificErrorCode)
+canOpenStatus LSSMaster :: activateBitTimingParameters(u16 switchDelay)
 {
-    return this->configureGenericSyncResponse(21, (u8)(switchDelay & 0xff), (u8)(switchDelay >> 8), errorCode, specificErrorCode);
+    canOpenStatus ret = CANOPEN_ERROR;
+    if (can_interface != NULL)
+    {
+        u8 canData[8] = { LSS_CMD_ACTIVATE_TIMING_PARAMETERS, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+
+        setU16Val(switchDelay, canData, 1);
+
+        ret = can_interface->canWrite(0x7e5, canData, 8, 0);
+        if (ret != CANOPEN_OK)
+        {
+            DebugLogToFile("canWrite failed\n");
+        }
+    }
+    return ret;
 }
 
 //------------------------------------------------------------------------
@@ -187,7 +196,7 @@ canOpenStatus LSSMaster :: activateBitTimingParameters(u16 switchDelay, u8 *erro
 //------------------------------------------------------------------------
 canOpenStatus LSSMaster :: storeConfiguration(u8 *errorCode, u8 *specificErrorCode)
 {
-    return this->configureGenericSyncResponse(23, 0, 0, errorCode, specificErrorCode);
+    return this->configureGenericSyncResponse(LSS_CMD_STORE_CONFIGURATION, 0, 0, errorCode, specificErrorCode);
 }
 
 //------------------------------------------------------------------------
@@ -283,16 +292,14 @@ canOpenStatus  LSSMaster :: canFrameConsumer(unsigned long id,
   canOpenStatus ret = CANOPEN_ERROR;
   if (id == 0x7e4 && dlc == 8)
   {
-      if (data[0] == 68) // Switch mode response.
+      if (data[0] == LSS_CMD_SWITCH_SELECTIVE_CONFIRMATION) // Switch mode response.
       {
-          this->response_mode = data[1];
           this->wait_lss_mode = false;
           ret = CANOPEN_OK;
       }
-      else if (data[0] == 17 || // Configure node id.
-               data[0] == 19 || // Configure bit timing.
-               data[0] == 21 || // Activate bit timing.
-               data[0] == 23)   // Store configuration.
+      else if (data[0] == LSS_CMD_CONFIGURE_NODE_ID || // Configure node id.
+          data[0] == LSS_CMD_CONFIGURE_TIMING_PARAMETERS || // Configure bit timing.
+          data[0] == LSS_CMD_STORE_CONFIGURATION)   // Store configuration.
       {
           this->configure_error_code = data[1];
           this->configure_specific_error = data[2];
