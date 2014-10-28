@@ -15,6 +15,10 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "canopenlib64_hw.dll (KVASER CANlib)", "..\..\visual_studio\plug_in_canlib32\canopenlib64_hw_VS2012.vcxproj", "{87506536-AB5E-4D66-8288-2961FCECF3B8}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Test_application_1 (CPP console)", "..\..\visual_studio\canopen_console_test_CPP\console_test_cpp_VS2012_x64.vcxproj", "{FF417857-733A-49CD-84F8-8A7568897CDC}"
+	ProjectSection(ProjectDependencies) = postProject
+		{87506536-AB5E-4D66-8288-2961FCECF3B8} = {87506536-AB5E-4D66-8288-2961FCECF3B8}
+		{9EDCD498-21A1-4960-AE0E-C2E445DDC395} = {9EDCD498-21A1-4960-AE0E-C2E445DDC395}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WINDOWS DEMO APPLICATION (.NET)_x64", "..\..\visual_studio\canopen_gui_test_NET\WINDOWS DEMO APPLICATION (.NET)_x64.csproj", "{275CE4F0-21BE-4D5C-BC6D-7C1412258B25}"
 EndProject
