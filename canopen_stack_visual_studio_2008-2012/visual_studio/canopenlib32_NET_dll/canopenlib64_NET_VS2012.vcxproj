@@ -54,7 +54,7 @@
     <LinkIncremental>false</LinkIncremental>
     <TargetName>canopenlib64_NET</TargetName>
     <OutDir>..\binRelease\canopenlib64_NET.dll</OutDir>
-    <IntDir>..\bin\Release\canopenlib64_NET.dll</IntDir>
+    <IntDir>..\bin\Release\</IntDir>
     <OutDir>..\bin\Release\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
