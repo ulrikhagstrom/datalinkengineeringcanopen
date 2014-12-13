@@ -21,27 +21,27 @@
     *******************************************************************
 */
 
-#ifndef CANOPENLLIB_H
-#define CANOPENLLIB_H
+#ifndef SYNC_PRODUCER_CLASS_H
+#define SYNC_PRODUCER_CLASS_H
 
-#include "CanInterfaceClass.h"
-#include "CanOpenErrorCodes.h"
 #include "CANopenLibDefines.h"
-#include "CANopenlibHelper.h"
-#include "ClientSDOClass.h"
-#include "NMTMasterClass.h"
-#include "NMTSlaveClass.h"
-#include "SDOClass.h"
-#include "ServerSDOClass.h"
+#include "CanInterfaceClass.h"
 #include "TimerClass.h"
-#include "CanMonitorClass.h"
-#include "EmcyClientClass.h"
-#include "EmcyServerClass.h"
-#include "SyncServerClass.h"
-#include "SyncProducerClass.h"
-#include "ReceivePDOClass.h"
-#include "TransmitPdoClass.h"
-#include "LSSMasterClass.h"
-#include "LSSSlaveClass.h"
+#include "CanConnectionClass.h"
+#include "PeriodicTransmitterClass.h"
 
-#endif
+
+//
+//  Network management master.
+//
+class SyncProducer : public PeriodicTransmitter
+{
+  public:
+    CANOPENDLL_API SyncProducer(void);
+    CANOPENDLL_API ~SyncProducer(void);
+	CANOPENDLL_API canOpenStatus setSyncCOBID(COBID id);
+	CANOPENDLL_API canOpenStatus setSyncPeriodTime(unsigned long sync_period_time);
+	CANOPENDLL_API canOpenStatus startPeriodicTransmission(bool enabled);
+};
+
+#endif //SYNC_PRODUCER_CLASS_H
