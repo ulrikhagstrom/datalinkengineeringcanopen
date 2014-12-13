@@ -21,27 +21,48 @@
     *******************************************************************
 */
 
-#ifndef CANOPENLLIB_H
-#define CANOPENLLIB_H
-
-#include "CanInterfaceClass.h"
-#include "CanOpenErrorCodes.h"
-#include "CANopenLibDefines.h"
-#include "CANopenlibHelper.h"
-#include "ClientSDOClass.h"
-#include "NMTMasterClass.h"
-#include "NMTSlaveClass.h"
-#include "SDOClass.h"
-#include "ServerSDOClass.h"
-#include "TimerClass.h"
-#include "CanMonitorClass.h"
-#include "EmcyClientClass.h"
-#include "EmcyServerClass.h"
-#include "SyncServerClass.h"
 #include "SyncProducerClass.h"
-#include "ReceivePDOClass.h"
-#include "TransmitPdoClass.h"
-#include "LSSMasterClass.h"
-#include "LSSSlaveClass.h"
+#include <stdio.h>
 
-#endif
+//------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------
+SyncProducer :: SyncProducer (void)
+{
+}
+
+//------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------
+SyncProducer :: ~SyncProducer (void)
+{
+}
+
+
+//------------------------------------------------------------------------
+// 
+//------------------------------------------------------------------------
+canOpenStatus  SyncProducer :: setSyncPeriodTime(unsigned long sync_period_time)
+{
+	this->periodicTransmission(true);
+	return CANOPEN_OK;
+}
+
+//------------------------------------------------------------------------
+// 
+//------------------------------------------------------------------------
+canOpenStatus SyncProducer :: startPeriodicTransmission(bool enabled)
+{
+	return this->periodicTransmission(enabled);
+}
+
+
+//------------------------------------------------------------------------
+// 
+//------------------------------------------------------------------------
+canOpenStatus SyncProducer :: setSyncCOBID(COBID id)
+{
+	return this->setData(id, NULL, 0);
+}
+
+
