@@ -184,9 +184,11 @@
     <ClCompile Include="src\LSSSlaveClass.cpp" />
     <ClCompile Include="src\NMTMasterClass.cpp" />
     <ClCompile Include="src\NMTSlaveClass.cpp" />
+    <ClCompile Include="src\PeriodicTransmitterClass.cpp" />
     <ClCompile Include="src\ReceivePDOClass.cpp" />
     <ClCompile Include="src\SDOClass.cpp" />
     <ClCompile Include="src\ServerSDOClass.cpp" />
+    <ClCompile Include="src\SyncProducerClass.cpp" />
     <ClCompile Include="src\SyncServerClass.cpp" />
     <ClCompile Include="src\TimerClass.cpp" />
     <ClCompile Include="src\TransmitPdoClass.cpp" />
@@ -211,7 +213,9 @@
     <ClInclude Include="inc\LSSSlaveClass.h" />
     <ClInclude Include="inc\NMTMasterClass.h" />
     <ClInclude Include="inc\NMTSlaveClass.h" />
+    <ClInclude Include="inc\PeriodicTransmitterClass.h" />
     <ClInclude Include="inc\ReceivePDOClass.h" />
+    <ClInclude Include="inc\SyncProducerClass.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="inc\SDOClass.h" />
     <ClInclude Include="inc\ServerSDOClass.h" />
