@@ -46,6 +46,45 @@ namespace canopen_demo_kvaser
             uint uint_temp_val;
             ushort ushort_temp_val;
 
+            SyncProducer_NET sync_producer = new SyncProducer_NET();
+
+            if (sync_producer.canHardwareConnect(0, 500000) != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
+            {
+                Console.WriteLine("Could not connect to CAN-adapter 0");
+                Console.ReadLine();
+            }
+
+            if (sync_producer.setSyncCOBID(0x80) != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
+            {
+                Console.WriteLine("Could not setSyncCOBID");
+                Console.ReadLine();
+            }
+
+            if (sync_producer.setTransmissionPeriodTime(1000) != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
+            {
+                Console.WriteLine("Could not setTransmissionPeriodTime");
+                Console.ReadLine();
+            }
+
+            if (sync_producer.startPeriodicTransmission(true) != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
+            {
+                Console.WriteLine("Could not setTransmissionPeriodTime");
+                Console.ReadLine();
+            }
+
+            Thread.Sleep(10000);
+
+            if (sync_producer.canHardwareDisconnect() != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
+            {
+                Console.WriteLine("Could not setTransmissionPeriodTime");
+                Console.ReadLine();
+            }
+
+            sync_producer.Dispose();
+
+            sync_producer = null;
+
+
             LSS_Slave_NET lss_slave = new LSS_Slave_NET();
 
             LSS_Master_NET lss_master = new LSS_Master_NET();

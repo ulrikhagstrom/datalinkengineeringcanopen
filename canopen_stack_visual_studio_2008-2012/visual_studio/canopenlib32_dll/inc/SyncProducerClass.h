@@ -40,7 +40,6 @@ class SyncProducer : public PeriodicTransmitter
     CANOPENDLL_API SyncProducer(void);
     CANOPENDLL_API ~SyncProducer(void);
 	CANOPENDLL_API canOpenStatus setSyncCOBID(COBID id);
-	CANOPENDLL_API canOpenStatus setSyncPeriodTime(unsigned long sync_period_time);
 	CANOPENDLL_API canOpenStatus startPeriodicTransmission(bool enabled);
 };
 

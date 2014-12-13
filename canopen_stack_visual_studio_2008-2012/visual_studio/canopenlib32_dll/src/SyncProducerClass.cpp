@@ -42,15 +42,6 @@ SyncProducer :: ~SyncProducer (void)
 //------------------------------------------------------------------------
 // 
 //------------------------------------------------------------------------
-canOpenStatus  SyncProducer :: setSyncPeriodTime(unsigned long sync_period_time)
-{
-	this->periodicTransmission(true);
-	return CANOPEN_OK;
-}
-
-//------------------------------------------------------------------------
-// 
-//------------------------------------------------------------------------
 canOpenStatus SyncProducer :: startPeriodicTransmission(bool enabled)
 {
 	return this->periodicTransmission(enabled);
