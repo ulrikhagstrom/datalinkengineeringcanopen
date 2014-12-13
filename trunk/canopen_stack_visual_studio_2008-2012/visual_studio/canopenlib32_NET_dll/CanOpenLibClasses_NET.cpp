@@ -270,6 +270,63 @@ EmcyClient_NET::CanOpenStatus EmcyClient_NET::sendEmcyMessage( u16 emcy_error_co
 }
 
 
+/***************
+**
+**  SyncProducer
+**
+****************/
+
+
+SyncProducer_NET::SyncProducer_NET()
+{
+  this->cpp_SyncProducer = new SyncProducer();
+}
+
+SyncProducer_NET::~SyncProducer_NET()
+{
+  delete this->cpp_SyncProducer;
+  this->cpp_SyncProducer = nullptr;
+}
+
+
+SyncProducer_NET::CanOpenStatus SyncProducer_NET::canHardwareConnect(int port, int bitrate)
+{
+  return (SyncProducer_NET::CanOpenStatus)this->cpp_SyncProducer->canHardwareConnect(port, bitrate); 
+}
+
+
+SyncProducer_NET::CanOpenStatus SyncProducer_NET::canHardwareDisconnect(void)
+{
+  return (SyncProducer_NET::CanOpenStatus)this->cpp_SyncProducer->canHardwareDisconnect();
+}
+
+SyncProducer_NET::CanOpenStatus SyncProducer_NET::setSyncCOBID(u32 id)
+{
+  if (cpp_SyncProducer == nullptr)
+    return (SyncProducer_NET::CanOpenStatus::CANOPEN_INTERNAL_STATE_ERROR);
+
+  SyncProducer_NET::CanOpenStatus ret = (SyncProducer_NET::CanOpenStatus)this->cpp_SyncProducer->setSyncCOBID(id);
+
+  return ret;
+
+}
+  
+SyncProducer_NET::CanOpenStatus SyncProducer_NET::setTransmissionPeriodTime(unsigned long sync_period_time)
+{
+  if (cpp_SyncProducer == nullptr)
+    return (SyncProducer_NET::CanOpenStatus::CANOPEN_INTERNAL_STATE_ERROR);
+
+  SyncProducer_NET::CanOpenStatus ret = (SyncProducer_NET::CanOpenStatus)this->cpp_SyncProducer->setTransmissionPeriodTime(sync_period_time);
+
+  return ret;
+
+}
+
+SyncProducer_NET::CanOpenStatus SyncProducer_NET::startPeriodicTransmission(bool value)
+{
+  return (SyncProducer_NET::CanOpenStatus)cpp_SyncProducer->startPeriodicTransmission(value);
+}
+
 
 /***************
 **

@@ -52,6 +52,7 @@ using namespace System::Runtime::InteropServices;
 #include "EmcyClientClass.h"
 #include "EmcyServerClass.h"
 #include "SyncServerClass.h"
+#include "SyncProducerClass.h"
 #include "LSSMasterClass.h"
 #include "LSSSlaveClass.h"
 
@@ -375,6 +376,25 @@ public:
     CanOpenStatus    periodicTransmission(bool value);
 };
 
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+public ref class SyncProducer_NET : CANOPEN_LIB_ERROR
+{
+private:
+    SyncProducer *cpp_SyncProducer;
+
+public:
+    SyncProducer_NET();
+    ~SyncProducer_NET();
+
+    CanOpenStatus    canHardwareConnect(int port, int bitrate);
+    CanOpenStatus    canHardwareDisconnect(void);
+
+	CanOpenStatus    setSyncCOBID(COBID id);
+	CanOpenStatus    setTransmissionPeriodTime(unsigned long sync_period_time);
+	CanOpenStatus    startPeriodicTransmission(bool enabled);
+};
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
