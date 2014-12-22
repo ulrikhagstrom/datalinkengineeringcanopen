@@ -18,4 +18,6 @@ mkdir zip\dlls\tinycan
 mkdir zip\dlls\zantic
 mkdir zip\inc
 copy ..\..\canopenlib32_dll\inc\*.* zip\inc
+7za a -tzip canopen_binaries.zip zip
+
 
