@@ -98,6 +98,9 @@
       <DataExecutionPrevention>
       </DataExecutionPrevention>
     </Link>
+    <PostBuildEvent>
+      <Command>copy ..\bin\Release\canopenlib64_hw.dll ..\bin\Release\zip\dlls\Kvaser\canopenlib64_hw.dll</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="canopenlib_hw.cpp" />
