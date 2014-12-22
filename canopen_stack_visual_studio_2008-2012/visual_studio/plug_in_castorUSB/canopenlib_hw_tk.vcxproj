@@ -100,6 +100,9 @@
       </DataExecutionPrevention>
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
+    <PostBuildEvent>
+      <Command>copy ..\bin\Release\canopenlib32_hw.dll ..\bin\Release\zip\dlls\castor\canopenlib32_hw.dll</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="canopenlib_hw.cpp" />
