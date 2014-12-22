@@ -62,8 +62,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,0,0,69
- PRODUCTVERSION 1,0,0,69
+ FILEVERSION 1,0,0,95
+ PRODUCTVERSION 1,0,0,95
  FILEFLAGSMASK 0x17L
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -78,13 +78,13 @@ BEGIN
     BEGIN
         BLOCK "041d04b0"
         BEGIN
-            VALUE "FileDescription", "SVN: 69, 2014/10/28 09:05:08"
-            VALUE "FileVersion", "1, 0, 0, 69"
+            VALUE "FileDescription", "SVN: 95, 2014/12/13 15:57:08"
+            VALUE "FileVersion", "1, 0, 0, 95"
             VALUE "InternalName", "canopenlib32_NET.dll"
             VALUE "LegalCopyright", "Copyright Ulrik Hagström 2013"
             VALUE "OriginalFilename", "canopenlib32_NET.dll"
             VALUE "ProductName", "canopenlib32_NET"
-            VALUE "ProductVersion", "1, 0, 0, 69"
+            VALUE "ProductVersion", "1, 0, 0, 95"
         END
     END
     BLOCK "VarFileInfo"
