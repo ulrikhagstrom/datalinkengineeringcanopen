@@ -29,8 +29,6 @@
 #include "CanOpenDispatcher.h"
 
 
-HINSTANCE  hCanLib;
-
 //
 // CAN informaiton flags.
 //
@@ -120,6 +118,11 @@ CanInterface :: ~CanInterface()
 {
   this->stopDispatcherThread();   // qqq change so it is one thread per port.
   CloseHandle( this->can_message_dispatcher_mutex );
+  if (hCanLib != NULL)
+  {
+      FreeLibrary(hCanLib);
+      hCanLib = NULL;
+  }
 }
 
 //------------------------------------------------------------------------
