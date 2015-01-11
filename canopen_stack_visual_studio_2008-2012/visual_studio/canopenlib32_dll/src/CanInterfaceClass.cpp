@@ -27,7 +27,7 @@
 #include "TimerClass.h"
 #include "canopenlibdefines.h"
 #include "CanOpenDispatcher.h"
-
+#include "CanopenLibHelper.h"
 
 //
 // CAN informaiton flags.
@@ -411,6 +411,56 @@ canOpenStatus CanInterface :: canGoBusOff(void)
 //------------------------------------------------------------------------
 canOpenStatus CanInterface :: canLibraryInit(void)
 {
+  switch (getAdapter())
+  {
+#ifdef WIN64
+  case canAdapter_DEFAULT:
+    hCanLib = LoadLibrary(TEXT("canopenlib64_hw.dll"));
+    break;
+  case canAdapter_IXXAT:
+    hCanLib = LoadLibrary(TEXT("canopenlib64_hw_ixxat.dll"));
+    break;
+  case canAdapter_KVASER:
+    hCanLib = LoadLibrary(TEXT("canopenlib64_hw_kvaser.dll"));
+    break;
+  default:
+    hCanLib = LoadLibrary(TEXT("canopenlib64_hw.dll"));
+    break;
+#else
+  case canAdapter_DEFAULT:
+    hCanLib = LoadLibrary(TEXT("canopenlib32_hw.dll"));
+    break;
+  case canAdapter_IXXAT:
+    hCanLib = LoadLibrary(TEXT("canopenlib32_hw_ixxat.dll"));
+    break;
+  case canAdapter_KVASER:
+    hCanLib = LoadLibrary(TEXT("canopenlib32_hw_kvaser.dll"));
+    break;
+  case canAdapter_CAN232:
+    hCanLib = LoadLibrary(TEXT("canopenlib32_hw_can232.dll"));
+    break;
+  case canAdapter_CANUSB:
+    hCanLib = LoadLibrary(TEXT("canopenlib32_hw_canusb.dll"));
+    break;
+  case canAdapter_EMS:
+    hCanLib = LoadLibrary(TEXT("canopenlib32_hw_ems.dll"));
+    break;
+  case canAdapter_PCAN:
+    hCanLib = LoadLibrary(TEXT("canopenlib32_hw_pcan.dll"));
+    break;
+  case canAdapter_TINYCAN:
+    hCanLib = LoadLibrary(TEXT("canopenlib32_hw_tinycan.dll"));
+    break;
+  case canAdapter_ZANTHIC:
+    hCanLib = LoadLibrary(TEXT("canopenlib32_hw_zanthic.dll"));
+    break;
+default:
+    hCanLib = LoadLibrary(TEXT("canopenlib32_hw.dll"));
+    break;
+#endif
+  }
+
+
     /*
     *	Load proper CANLIB.DLL
     */

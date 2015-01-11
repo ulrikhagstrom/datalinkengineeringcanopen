@@ -26,6 +26,24 @@
 
 #include "CANopenLibDefines.h"
 
+typedef enum {
+  canAdapter_DEFAULT = 0,
+  canAdapter_EMS = 1,
+  canAdapter_IXXAT = 2,
+  canAdapter_KVASER = 3,
+  canAdapter_CAN232 = 4,
+  canAdapter_CANUSB = 5,
+  canAdapter_CASTOR = 6,
+  canAdapter_PCAN = 7,
+  canAdapter_TINYCAN = 8,
+  canAdapter_ZANTHIC = 9
+} canAdapter;
+
+
+
+void CANOPENDLL_API setAdapter(canAdapter userAdapter);
+canAdapter CANOPENDLL_API getAdapter();
+
 #define DLL_DEVELOPMENT 1
 
 #ifndef __cplusplus

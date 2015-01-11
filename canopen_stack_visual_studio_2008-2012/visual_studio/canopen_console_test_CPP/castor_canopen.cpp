@@ -25,7 +25,7 @@
 #include <conio.h>
 
 #include "canopenlib.h"
-
+#include "CANopenLibHelper.h"
 
 #define FULL_TEST  1
 
@@ -181,6 +181,9 @@ int main (void) {
   printf("\n*********************************************************");
 
   //getch();
+
+
+  setAdapter(canAdapter_DEFAULT);
 
   LSSMaster *lss_master = new LSSMaster();
 

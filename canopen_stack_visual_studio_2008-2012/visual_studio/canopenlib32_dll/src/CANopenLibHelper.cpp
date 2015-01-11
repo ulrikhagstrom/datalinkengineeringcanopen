@@ -26,6 +26,18 @@
 #include <stdio.h>
 #include <Windows.h>
 
+canAdapter selectedAdapter = canAdapter_DEFAULT; // Global, this is ulgy, I think.
+
+void CANOPENDLL_API setAdapter(canAdapter userAdapter)
+{
+  selectedAdapter = userAdapter;
+}
+
+canAdapter CANOPENDLL_API getAdapter()
+{
+  return selectedAdapter;
+}
+
 //------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------

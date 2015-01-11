@@ -653,4 +653,29 @@ private:
 
 };
 
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+
+public ref class CANopenLibraryConfiguration
+{
+
+public:
+  enum class CanAdapter {  // qqq. CANT MAKE THIS CLASS VISIBLE IN MANAGED ENVIRONMENT!
+    canAdapter_DEFAULT = 0,
+    canAdapter_EMS = 1,
+    canAdapter_IXXAT = 2,
+    canAdapter_KVASER = 3,
+    canAdapter_CAN232 = 4,
+    canAdapter_CANUSB = 5,
+    canAdapter_CASTOR = 6,
+    canAdapter_PCAN = 7,
+    canAdapter_TINYCAN = 8,
+    canAdapter_ZANTHIC = 9
+} ;
+
+  static void SetAdapter(CanAdapter userAdapter);
+};
+
+
 #endif
