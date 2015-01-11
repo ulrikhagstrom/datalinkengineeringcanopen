@@ -1482,3 +1482,14 @@ void  LSS_Slave_NET :: setDeviceParameters(u32 vendorId, u32 productCode, u32 re
 {
   return this->cpp_LSSSlave->setDeviceParameters(vendorId, productCode, revisionNumber, serialNumber);
 }
+
+// **************************
+// Library configuration
+// **************************
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+void CANopenLibraryConfiguration :: SetAdapter(CanAdapter adapter)
+{
+  return ::setAdapter((canAdapter)adapter);
+}

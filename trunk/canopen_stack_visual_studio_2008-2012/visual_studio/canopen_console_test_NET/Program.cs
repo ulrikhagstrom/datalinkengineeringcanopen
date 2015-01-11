@@ -41,6 +41,8 @@ namespace canopen_demo_kvaser
             Console.WriteLine("******************************************************");
             Console.ReadLine();
 
+            CANopenLibraryConfiguration.SetAdapter(0); // qqq can't make CanAdapter enum visible here :(
+
             byte[] test;
             uint uint_test;
             uint uint_temp_val;
