@@ -464,11 +464,11 @@ default:
     /*
     *	Load proper CANLIB.DLL
     */
-#ifdef WIN64
-    hCanLib = LoadLibrary(TEXT("canopenlib64_hw.dll"));
-#else
-    hCanLib = LoadLibrary(TEXT("canopenlib32_hw.dll"));
-#endif
+//#ifdef WIN64
+//    hCanLib = LoadLibrary(TEXT("canopenlib64_hw.dll"));
+//#else
+//    hCanLib = LoadLibrary(TEXT("canopenlib32_hw.dll"));
+//#endif
   if (hCanLib == NULL)
   {
     MessageBox(NULL, "CAN hardware layer DLL (canopenlib32_hw.dll) was not found!","Missing file!", MB_OK);
