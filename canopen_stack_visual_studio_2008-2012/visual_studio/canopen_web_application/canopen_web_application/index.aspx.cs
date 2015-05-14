@@ -159,5 +159,30 @@ namespace canopen_web_application
         {
             nmt_Master.nodeResetCommunication(3);
         }
+
+        protected void btnCfgNodeGuardNode3_Click(object sender, EventArgs e)
+        {
+            uint error_code;
+            client_SDO.objectWrite(0x100c, 0, (ushort)1000, out error_code);
+            client_SDO.objectWrite(0x100d, 0, (byte)3, out error_code);
+        }
+
+        protected void btnEnterPreopNode3_Click(object sender, EventArgs e)
+        {
+            nmt_Master.nodePreoperational(3);
+        }
+
+        protected void btnSetTransmitPdo1Timer_Click(object sender, EventArgs e)
+        {
+            uint error_code;
+            client_SDO.objectWrite(0x1800, 5, (ushort)1000, out error_code);
+
+        }
+
+        protected void btnEnableTPDO1Node3_Click(object sender, EventArgs e)
+        {
+            uint error_code;
+            client_SDO.objectWrite(0x1800, 1, 0x280, out error_code);
+        }
     }
 }

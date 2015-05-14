@@ -15,10 +15,15 @@
         <asp:UpdatePanel runat="server" id="UpdatePanel">
         <ContentTemplate>
         <asp:Timer runat="server" id="Timer1" Interval="1000" OnTick="Timer1_Tick"></asp:Timer>
+            <asp:Button ID="btnCfgNodeGuardNode3" runat="server" 
+                onclick="btnCfgNodeGuardNode3_Click" Text="Configure node guard node 3" />
+            <br />
+            <br />
             <asp:Button ID="btnStartNodeGuardNode3" runat="server" 
-                onclick="btnStartNodeGuardNode3_Click" Text="Button start node guard node 3" />
+                onclick="btnStartNodeGuardNode3_Click" Text="Start node guard node 3" />
             <asp:Button ID="btnStartHeartBeatNode3" runat="server" onclick="btnStartHeartBeatNode3_Click" 
                 Text="Start heartbeat node 3" />
+            <br />
             <br />
             <br />
             <asp:Button ID="btnStopNodeGuardNode3" runat="server" 
@@ -38,10 +43,21 @@
                 Text="Start node 3" />
             <asp:Button ID="btnStopNode3" runat="server" onclick="btnStopNode3_Click" 
                 Text="Stop node 3" />
+            <asp:Button ID="btnEnterPreopNode3" runat="server" 
+                onclick="btnEnterPreopNode3_Click" Text="Preoperational node 3" />
             <br />
             <br />
             <asp:Button ID="btnReadDeviceNameNode3" runat="server" 
                 onclick="btnReadDeviceName_Click" Text="Read Device Name node 3" />
+            <br />
+            <br />
+            <asp:Button ID="btnSetTransmitPdo1Timer" runat="server" 
+                onclick="btnSetTransmitPdo1Timer_Click" 
+                Text="Set node 3 TPDO 1 timer to 1000ms" />
+            <br />
+            <br />
+            <asp:Button ID="btnEnableTPDO1Node3" runat="server" 
+                onclick="btnEnableTPDO1Node3_Click" Text="Enable node 3 TPDO 1" />
             <br />
             <br />
         <asp:Label runat="server" Text="Page not refreshed yet." id="Label1">
