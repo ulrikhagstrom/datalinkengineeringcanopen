@@ -9,10 +9,41 @@
 <body>
     <form id="form1" runat="server">
     <div>
+
+        <asp:ScriptManager runat="server" id="ScriptManager1">
+        </asp:ScriptManager>
+        <asp:UpdatePanel runat="server" id="UpdatePanel">
+        <ContentTemplate>
+        <asp:Timer runat="server" id="Timer1" Interval="1000" OnTick="Timer1_Tick"></asp:Timer>
+            <asp:Button ID="btnStartNodeGuardNode3" runat="server" 
+                onclick="btnStartNodeGuardNode3_Click" Text="Button start node guard node 3" />
+            <br />
+            <br />
+            <asp:Button ID="btnStopNodeGuardNode3" runat="server" 
+                Text="Stop node guard node 3" onclick="btnStopNodeGuardNode3_Click" />
+            <br />
+            <br />
+            <asp:Button ID="btnReadDeviceName" runat="server" 
+                onclick="btnReadDeviceName_Click" Text="Read Device Name" />
+            <br />
+            <br />
+        <asp:Label runat="server" Text="Page not refreshed yet." id="Label1">
+        </asp:Label>
+        <asp:GridView ID="CanGrid" runat="server" EnableModelValidation="True" AutoGenerateColumns="false">
+            <Columns> 
+                <asp:BoundField HeaderText="Id" 
+                    DataField="Id"  /> 
+                <asp:BoundField HeaderText="Data" 
+                    DataField="Data"  />
+                <asp:BoundField HeaderText="Dlc" 
+                    DataField="Dlc"  />
+            </Columns> 
+        </asp:GridView>
+
+        </ContentTemplate>
+        </asp:UpdatePanel>
     
     </div>
-    <asp:Button ID="btnStartNodeGuardNode3" runat="server" 
-        onclick="btnStartNodeGuardNode3_Click" Text="Button start node guard node 3" />
     </form>
 </body>
 </html>
