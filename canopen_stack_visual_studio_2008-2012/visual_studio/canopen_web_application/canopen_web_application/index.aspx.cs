@@ -110,39 +110,57 @@ namespace canopen_web_application
 
         protected void btnStartNodeGuardNode3_Click(object sender, EventArgs e)
         {
-            nmt_Master.nodeGuardPollStart(3, 1000);
+            lock (nmt_Master)
+            {
+                nmt_Master.nodeGuardPollStart(3, 1000);
+            }
         }
 
 
 
         protected void btnStopNodeGuardNode3_Click(object sender, EventArgs e)
         {
-            nmt_Master.nodeGuardPollStop(3);
+            lock (nmt_Master)
+            {
+                nmt_Master.nodeGuardPollStop(3);
+            }
         }
 
         protected void btnReadDeviceName_Click(object sender, EventArgs e)
         {
-            byte[] receive_buffer = new byte[100];
-            UInt32 error_code;
-            uint valid;
-            client_SDO.objectRead(0x1008, 0, receive_buffer, out valid, out error_code);
+            lock (client_SDO)
+            {
+                byte[] receive_buffer = new byte[100];
+                UInt32 error_code;
+                uint valid;
+                client_SDO.objectRead(0x1008, 0, receive_buffer, out valid, out error_code);
+            }
         }
 
         protected void btnStartHeartBeatNode3_Click(object sender, EventArgs e)
         {
             uint error_code;
-            client_SDO.objectWrite(0x1017, 0, (ushort)1000, out error_code);
+            lock (client_SDO)
+            {
+                client_SDO.objectWrite(0x1017, 0, (ushort)1000, out error_code);
+            }
         }
 
         protected void btnStopHeartBeatNode3_Click(object sender, EventArgs e)
         {
             uint error_code;
-            client_SDO.objectWrite(0x1017, 0, (ushort)0, out error_code);
+            lock (client_SDO)
+            {
+                client_SDO.objectWrite(0x1017, 0, (ushort)0, out error_code);
+            }
         }
 
         protected void btnResetNode3_Click(object sender, EventArgs e)
         {
-            nmt_Master.nodeReset(3);
+            lock (nmt_Master)
+            {
+                nmt_Master.nodeReset(3);
+            }
         }
 
         protected void btnStartNode3_Click(object sender, EventArgs e)
@@ -163,26 +181,38 @@ namespace canopen_web_application
         protected void btnCfgNodeGuardNode3_Click(object sender, EventArgs e)
         {
             uint error_code;
-            client_SDO.objectWrite(0x100c, 0, (ushort)1000, out error_code);
-            client_SDO.objectWrite(0x100d, 0, (byte)3, out error_code);
+            lock (client_SDO)
+            {
+                client_SDO.objectWrite(0x100c, 0, (ushort)1000, out error_code);
+                client_SDO.objectWrite(0x100d, 0, (byte)3, out error_code);
+            }
         }
 
         protected void btnEnterPreopNode3_Click(object sender, EventArgs e)
         {
-            nmt_Master.nodePreoperational(3);
+            lock (nmt_Master)
+            {
+                nmt_Master.nodePreoperational(3);
+            }
         }
 
         protected void btnSetTransmitPdo1Timer_Click(object sender, EventArgs e)
         {
-            uint error_code;
-            client_SDO.objectWrite(0x1800, 5, (ushort)1000, out error_code);
+            lock (client_SDO)
+            {
+                uint error_code;
+                client_SDO.objectWrite(0x1800, 5, (ushort)1000, out error_code);
+            }
 
         }
 
         protected void btnEnableTPDO1Node3_Click(object sender, EventArgs e)
         {
-            uint error_code;
-            client_SDO.objectWrite(0x1800, 1, 0x280, out error_code);
+            lock (client_SDO)
+            {
+                uint error_code;
+                client_SDO.objectWrite(0x1800, 1, 0x280, out error_code);
+            }
         }
     }
 }
