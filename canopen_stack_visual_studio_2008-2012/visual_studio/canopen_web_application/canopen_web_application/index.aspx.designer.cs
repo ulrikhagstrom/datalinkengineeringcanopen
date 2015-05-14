@@ -58,6 +58,15 @@ namespace canopen_web_application {
         protected global::System.Web.UI.WebControls.Button btnStartNodeGuardNode3;
         
         /// <summary>
+        /// btnStartHeartBeatNode3 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnStartHeartBeatNode3;
+        
+        /// <summary>
         /// btnStopNodeGuardNode3 control.
         /// </summary>
         /// <remarks>
@@ -67,13 +76,58 @@ namespace canopen_web_application {
         protected global::System.Web.UI.WebControls.Button btnStopNodeGuardNode3;
         
         /// <summary>
-        /// btnReadDeviceName control.
+        /// btnStopHeartBeatNode3 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnReadDeviceName;
+        protected global::System.Web.UI.WebControls.Button btnStopHeartBeatNode3;
+        
+        /// <summary>
+        /// btnResetNode3 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnResetNode3;
+        
+        /// <summary>
+        /// btnResetCommunicationNode3 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnResetCommunicationNode3;
+        
+        /// <summary>
+        /// btnStartNode3 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnStartNode3;
+        
+        /// <summary>
+        /// btnStopNode3 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnStopNode3;
+        
+        /// <summary>
+        /// btnReadDeviceNameNode3 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnReadDeviceNameNode3;
         
         /// <summary>
         /// Label1 control.

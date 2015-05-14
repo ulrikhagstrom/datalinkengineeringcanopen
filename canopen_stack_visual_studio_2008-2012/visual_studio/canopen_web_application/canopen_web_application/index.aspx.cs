@@ -127,5 +127,37 @@ namespace canopen_web_application
             uint valid;
             client_SDO.objectRead(0x1008, 0, receive_buffer, out valid, out error_code);
         }
+
+        protected void btnStartHeartBeatNode3_Click(object sender, EventArgs e)
+        {
+            uint error_code;
+            client_SDO.objectWrite(0x1017, 0, (ushort)1000, out error_code);
+        }
+
+        protected void btnStopHeartBeatNode3_Click(object sender, EventArgs e)
+        {
+            uint error_code;
+            client_SDO.objectWrite(0x1017, 0, (ushort)0, out error_code);
+        }
+
+        protected void btnResetNode3_Click(object sender, EventArgs e)
+        {
+            nmt_Master.nodeReset(3);
+        }
+
+        protected void btnStartNode3_Click(object sender, EventArgs e)
+        {
+            nmt_Master.nodeStart(3);
+        }
+
+        protected void btnStopNode3_Click(object sender, EventArgs e)
+        {
+            nmt_Master.nodeStop(3);
+        }
+
+        protected void btnResetCommunicationNode3_Click(object sender, EventArgs e)
+        {
+            nmt_Master.nodeResetCommunication(3);
+        }
     }
 }
