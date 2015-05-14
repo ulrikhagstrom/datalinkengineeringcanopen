@@ -49,6 +49,15 @@ namespace canopen_web_application {
         protected global::System.Web.UI.Timer Timer1;
         
         /// <summary>
+        /// btnCfgNodeGuardNode3 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnCfgNodeGuardNode3;
+        
+        /// <summary>
         /// btnStartNodeGuardNode3 control.
         /// </summary>
         /// <remarks>
@@ -121,6 +130,15 @@ namespace canopen_web_application {
         protected global::System.Web.UI.WebControls.Button btnStopNode3;
         
         /// <summary>
+        /// btnEnterPreopNode3 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnEnterPreopNode3;
+        
+        /// <summary>
         /// btnReadDeviceNameNode3 control.
         /// </summary>
         /// <remarks>
@@ -128,6 +146,24 @@ namespace canopen_web_application {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnReadDeviceNameNode3;
+        
+        /// <summary>
+        /// btnSetTransmitPdo1Timer control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnSetTransmitPdo1Timer;
+        
+        /// <summary>
+        /// btnEnableTPDO1Node3 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnEnableTPDO1Node3;
         
         /// <summary>
         /// Label1 control.
