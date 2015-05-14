@@ -54,6 +54,8 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="images\beckhoff_5120.jpg" />
+    <Content Include="images\kvaser_leaf.jpg" />
     <Content Include="index.aspx" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -81,6 +83,7 @@
       <DependentUpon>working_directory.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
   <ProjectExtensions>

@@ -15,6 +15,16 @@
         <asp:UpdatePanel runat="server" id="UpdatePanel">
         <ContentTemplate>
         <asp:Timer runat="server" id="Timer1" Interval="1000" OnTick="Timer1_Tick"></asp:Timer>
+            <br />
+            <asp:Image ID="Image1" runat="server" Height="255px" 
+                ImageUrl="~/images/beckhoff_5120.jpg" Width="176px" />
+            <asp:Image ID="Image2" runat="server" Height="234px" 
+                ImageUrl="~/images/kvaser_leaf.jpg" Width="189px" />
+            <br />
+            <br />
+            ONLINE DEMO (Datalink Engineering CANopen API + Kvaser Leaf Light + Beckhoff 
+            5120 unit)<br />
+            <br />
             <asp:Button ID="btnCfgNodeGuardNode3" runat="server" 
                 onclick="btnCfgNodeGuardNode3_Click" Text="Configure node guard node 3" />
             <br />
