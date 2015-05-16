@@ -223,5 +223,24 @@ namespace canopen_web_application
                 client_SDO.objectWrite(0x1800, 1, 0x280, out error_code);
             }
         }
+
+        protected void btnReadSoftwareVersion_Click(object sender, EventArgs e)
+        {
+            lock (client_SDO)
+            {
+                byte[] receive_buffer = new byte[100];
+                UInt32 error_code;
+                uint valid;
+                client_SDO.objectRead(0x100a, 0, receive_buffer, out valid, out error_code);
+
+                string temp_str = "Software version: ";
+                for (int i = 0; i < valid; i++)
+                {
+                    temp_str += Convert.ToChar(receive_buffer[i]);
+                }
+
+                lblSoftwareVersion.Text = temp_str;
+            }
+        }
     }
 }
