@@ -9,12 +9,6 @@
 <body>
     <form id="form1" runat="server">
     <div>
-
-        <asp:ScriptManager runat="server" id="ScriptManager1">
-        </asp:ScriptManager>
-        <asp:UpdatePanel runat="server" id="UpdatePanel">
-        <ContentTemplate>
-        <asp:Timer runat="server" id="Timer1" Interval="1000" OnTick="Timer1_Tick"></asp:Timer>
             <br />
             <asp:Image ID="Image1" runat="server" Height="255px" 
                 ImageUrl="~/images/beckhoff_5120.jpg" Width="176px" />
@@ -70,8 +64,20 @@
                 onclick="btnEnableTPDO1Node3_Click" Text="Enable node 3 TPDO 1" />
             <br />
             <br />
-        <asp:Label runat="server" Text="Page not refreshed yet." id="Label1">
-        </asp:Label>
+        <asp:ScriptManager runat="server" id="ScriptManager1">
+        </asp:ScriptManager>
+        <asp:UpdatePanel runat="server" id="UpdatePanel">
+        <ContentTemplate>
+        <asp:Timer runat="server" id="Timer1" Interval="1000" OnTick="Timer1_Tick"></asp:Timer>
+
+        <asp:Label runat="server" Text="Page not refreshed yet." id="Label1"></asp:Label>
+        </br>
+        <asp:Label ID="lblDeviceName" runat="server" Text="Device name not read"></asp:Label>
+        </br>
+        <asp:Label ID="lblSoftwareVersion" runat="server" Text="Node software version not read"></asp:Label>
+        </br>
+
+
         <asp:GridView ID="CanGrid" runat="server" EnableModelValidation="True" AutoGenerateColumns="false">
             <Columns> 
                 <asp:BoundField HeaderText="Id" 
