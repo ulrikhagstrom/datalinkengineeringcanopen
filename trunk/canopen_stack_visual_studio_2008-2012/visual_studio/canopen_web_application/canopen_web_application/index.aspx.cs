@@ -134,6 +134,15 @@ namespace canopen_web_application
                 UInt32 error_code;
                 uint valid;
                 client_SDO.objectRead(0x1008, 0, receive_buffer, out valid, out error_code);
+
+                string temp_str = "Device name: ";
+                for (int i = 0; i < valid; i++)
+                {
+                    temp_str += Convert.ToChar(receive_buffer[i]);
+                }
+
+                lblDeviceName.Text = temp_str;
+
             }
         }
 
