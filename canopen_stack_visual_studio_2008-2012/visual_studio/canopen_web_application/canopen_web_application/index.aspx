@@ -9,6 +9,11 @@
 <body>
     <form id="form1" runat="server">
     <div>
+        <asp:ScriptManager runat="server" id="ScriptManager1">
+        </asp:ScriptManager>
+        <asp:UpdatePanel runat="server" id="UpdatePanel">
+        <ContentTemplate>
+        <asp:Timer runat="server" id="Timer1" Interval="1000" OnTick="Timer1_Tick"></asp:Timer>
             <br />
             <asp:Image ID="Image1" runat="server" Height="255px" 
                 ImageUrl="~/images/beckhoff_5120.jpg" Width="176px" />
@@ -19,6 +24,22 @@
             ONLINE DEMO (Datalink Engineering CANopen API + Kvaser Leaf Light + Beckhoff 
             5120 unit)<br />
             <br />
+        <asp:GridView ID="CanGrid" runat="server" EnableModelValidation="True" AutoGenerateColumns="false">
+            <Columns> 
+                <asp:BoundField HeaderText="Id" 
+                    DataField="Id"  /> 
+                <asp:BoundField HeaderText="Data" 
+                    DataField="Data"  />
+                <asp:BoundField HeaderText="Dlc" 
+                    DataField="Dlc"  />
+            </Columns> 
+        </asp:GridView>
+        <asp:Label runat="server" Text="Page not refreshed yet." id="Label1"></asp:Label>
+        </br>
+        <asp:Label ID="lblDeviceName" runat="server" Text="Device name not read"></asp:Label>
+        </br>
+        <asp:Label ID="lblSoftwareVersion" runat="server" Text="Node software version not read"></asp:Label>
+        </br>
             <asp:Button ID="btnCfgNodeGuardNode3" runat="server" 
                 onclick="btnCfgNodeGuardNode3_Click" Text="Configure node guard node 3" />
             <br />
@@ -52,42 +73,21 @@
             <br />
             <br />
             <asp:Button ID="btnReadDeviceNameNode3" runat="server" 
-                onclick="btnReadDeviceName_Click" Text="Read Device Name node 3" />
+                onclick="btnReadDeviceName_Click" Text="Read Device Name node 3" 
+                Width="171px" />
+            <asp:Button ID="btnReadSoftwareVersion" runat="server" 
+                onclick="btnReadSoftwareVersion_Click" Text="Read software version" />
             <br />
             <br />
             <asp:Button ID="btnSetTransmitPdo1Timer" runat="server" 
                 onclick="btnSetTransmitPdo1Timer_Click" 
-                Text="Set node 3 TPDO 1 timer to 1000ms" />
+                Text="Set node 3 TPDO 1 timer to 1000ms" Width="228px" />
             <br />
             <br />
             <asp:Button ID="btnEnableTPDO1Node3" runat="server" 
                 onclick="btnEnableTPDO1Node3_Click" Text="Enable node 3 TPDO 1" />
             <br />
             <br />
-        <asp:ScriptManager runat="server" id="ScriptManager1">
-        </asp:ScriptManager>
-        <asp:UpdatePanel runat="server" id="UpdatePanel">
-        <ContentTemplate>
-        <asp:Timer runat="server" id="Timer1" Interval="1000" OnTick="Timer1_Tick"></asp:Timer>
-
-        <asp:Label runat="server" Text="Page not refreshed yet." id="Label1"></asp:Label>
-        </br>
-        <asp:Label ID="lblDeviceName" runat="server" Text="Device name not read"></asp:Label>
-        </br>
-        <asp:Label ID="lblSoftwareVersion" runat="server" Text="Node software version not read"></asp:Label>
-        </br>
-
-
-        <asp:GridView ID="CanGrid" runat="server" EnableModelValidation="True" AutoGenerateColumns="false">
-            <Columns> 
-                <asp:BoundField HeaderText="Id" 
-                    DataField="Id"  /> 
-                <asp:BoundField HeaderText="Data" 
-                    DataField="Data"  />
-                <asp:BoundField HeaderText="Dlc" 
-                    DataField="Dlc"  />
-            </Columns> 
-        </asp:GridView>
 
         </ContentTemplate>
         </asp:UpdatePanel>
