@@ -24,10 +24,14 @@
 #ifndef CANOPEN_LIB_DEFINES_H
 #define CANOPEN_LIB_DEFINES_H
 
-#ifdef CANOPENDLL_EXPORTS
-#define CANOPENDLL_API __declspec(dllexport)
+#ifndef CANOPENDLL_BUILT_IN
+  #ifdef CANOPENDLL_EXPORTS
+    #define CANOPENDLL_API __declspec(dllexport)
+  #else
+    #define CANOPENDLL_API __declspec(dllimport)
+  #endif
 #else
-#define CANOPENDLL_API __declspec(dllimport)
+  #define CANOPENDLL_API
 #endif
 
 #undef WRITE_TO_LOGFILE
