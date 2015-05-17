@@ -471,7 +471,11 @@ default:
 //#endif
   if (hCanLib == NULL)
   {
+#ifdef CANOPENDLL_BUILT_IN
+    MessageBox(NULL, ((LPCTSTR)"CAN hardware layer DLL (canopenlib32_hw.dll) was not found!"), ((LPCTSTR)"Missing file!"), MB_OK);
+#else
     MessageBox(NULL, "CAN hardware layer DLL (canopenlib32_hw.dll) was not found!","Missing file!", MB_OK);
+#endif
     return CANOPEN_ERROR_DRIVER;
   }
     /*
