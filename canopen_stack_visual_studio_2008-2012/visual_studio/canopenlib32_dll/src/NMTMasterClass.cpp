@@ -333,7 +333,7 @@ canOpenStatus  NMTMaster :: nodeReadOperationalState(u8 node_id,
   if (node_id > 0 && node_id < 128)
   {
     unsigned long now = GetTickCount();
-    if ((this->nodeList[node_id].time_stamp - now) < maxMsTimeout)
+    if ((now - this->nodeList[node_id].time_stamp) < maxMsTimeout)
     {
       *node_stateP = this->nodeList[node_id].node_state;
       ret = CANOPEN_OK;
