@@ -11,7 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectName>canopenlib64_NET.dll (C++ to C Sharp wrapper)</ProjectName>
+    <ProjectName>canopenlib64_NET.dll (standalone)</ProjectName>
     <ProjectGuid>{54DDACC0-E19B-41D4-8235-6DA310F4D670}</ProjectGuid>
     <RootNamespace>CANOPEN_DLL_EXPORT_NET</RootNamespace>
     <Keyword>ManagedCProj</Keyword>
