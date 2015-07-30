@@ -107,6 +107,7 @@ class CANOPENDLL_API CanInterface
     static CanInterface       *canInterfaceSingleton[ MAX_CAN_INTERFACES ];
     DispatcherConfiguration   dispatcherConfiguration[ MAX_PROCESS_MSG_CALLBACKS ];
     static DWORD WINAPI       canFrameDispatcherThread( PVOID p );
+    HINSTANCE                 hCanLib;
     HANDLE                    can_frame_dispatcher_thread_handle;
     bool                      drivers_initialized;
     static bool               driver_licensed;
