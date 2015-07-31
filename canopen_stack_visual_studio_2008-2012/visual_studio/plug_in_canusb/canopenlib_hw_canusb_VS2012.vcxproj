@@ -105,7 +105,7 @@
     <ClInclude Include="canusb_porting.h" />
   </ItemGroup>
   <ItemGroup>
-    <Library Include="drivers\ftd2xx.lib" />
+    <Library Include="drivers\canusbdrv.lib" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
