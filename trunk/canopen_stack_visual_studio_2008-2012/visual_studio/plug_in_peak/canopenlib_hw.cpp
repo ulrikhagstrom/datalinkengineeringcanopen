@@ -26,7 +26,7 @@
 #include "windows.h"
 #include "stdio.h"
 #include "canopenlib_hw.h"
-#include "Pcan_usb.h"
+#include "PCANBasic.h"
 //#include "Pcan_2usb.h"
 #include <time.h>
 #include <string.h>
@@ -192,39 +192,39 @@ CANOPENLIB_HW_API   canOpenStatus    __stdcall canPortBitrateSet( canPortHandle 
   switch ( bitrate ) 
   {
     case 5000:
-      can_port_data_devices[handle].bitrate = CAN_BAUD_5K;
+      can_port_data_devices[handle].bitrate = PCAN_BAUD_5K;
       canopen_res = CANOPEN_OK;
       break;
     case 10000:
-      can_port_data_devices[handle].bitrate = CAN_BAUD_10K;
+      can_port_data_devices[handle].bitrate = PCAN_BAUD_10K;
       canopen_res = CANOPEN_OK;
       break;
     case 20000:
-      can_port_data_devices[handle].bitrate = CAN_BAUD_20K;
+      can_port_data_devices[handle].bitrate = PCAN_BAUD_20K;
       canopen_res = CANOPEN_OK;
       break;
     case 50000:
-      can_port_data_devices[handle].bitrate = CAN_BAUD_50K;
+      can_port_data_devices[handle].bitrate = PCAN_BAUD_50K;
       canopen_res = CANOPEN_OK;
       break;
     case 100000:
-      can_port_data_devices[handle].bitrate = CAN_BAUD_100K;
+      can_port_data_devices[handle].bitrate = PCAN_BAUD_100K;
       canopen_res = CANOPEN_OK;
       break;
     case 125000:
-      can_port_data_devices[handle].bitrate = CAN_BAUD_125K;
+      can_port_data_devices[handle].bitrate = PCAN_BAUD_125K;
       canopen_res = CANOPEN_OK;
       break;
     case 250000:
-      can_port_data_devices[handle].bitrate = CAN_BAUD_250K;
+      can_port_data_devices[handle].bitrate = PCAN_BAUD_250K;
       canopen_res = CANOPEN_OK;
       break;
     case 500000:
-      can_port_data_devices[handle].bitrate = CAN_BAUD_500K;
+      can_port_data_devices[handle].bitrate = PCAN_BAUD_500K;
       canopen_res = CANOPEN_OK;
       break;
     case 1000000:
-      can_port_data_devices[handle].bitrate = CAN_BAUD_1M;
+      can_port_data_devices[handle].bitrate = PCAN_BAUD_1M;
       canopen_res = CANOPEN_OK;
       break;
     default:
@@ -251,13 +251,20 @@ CANOPENLIB_HW_API   canOpenStatus    __stdcall canPortEcho( canPortHandle handle
 
 CANOPENLIB_HW_API   canOpenStatus    __stdcall canPortGoBusOn( canPortHandle handle )
 {
-  canOpenStatus canopen_res = CANOPEN_ERROR; 
-  DWORD res = CAN_Init( can_port_data_devices[ handle ].bitrate, 1 );
-  if ( res == CAN_ERR_OK ) {
-    can_port_data_devices[ handle ].can_bus_on = true;
-    canopen_res = CANOPEN_OK;
-  }
-  return canopen_res;
+	canOpenStatus canopen_res = CANOPEN_ERROR; 
+	TPCANStatus res = CAN_Initialize(
+		(TPCANHandle)1,
+		(TPCANBaudrate)can_port_data_devices[ handle ].bitrate,
+		(TPCANType)PCAN_USB,
+		0,
+		0);
+
+	if ( res == PCAN_ERROR_OK )
+	{
+		can_port_data_devices[ handle ].can_bus_on = true;
+		canopen_res = CANOPEN_OK;
+	}
+	return canopen_res;
 }
 
 //------------------------------------------------------------------------
@@ -267,8 +274,8 @@ CANOPENLIB_HW_API   canOpenStatus    __stdcall canPortGoBusOn( canPortHandle han
 CANOPENLIB_HW_API   canOpenStatus    __stdcall canPortGoBusOff( canPortHandle handle )
 {
   canOpenStatus canopen_res = CANOPEN_ERROR; 
-  DWORD res = CAN_Close();
-  if ( res == CAN_ERR_OK ) {
+  DWORD res = CAN_Uninitialize((TPCANHandle)1);
+  if ( res == PCAN_ERROR_OK ) {
     can_port_data_devices[ handle ].can_bus_on = false;
     canopen_res = CANOPEN_OK;
   }
@@ -291,13 +298,13 @@ CANOPENLIB_HW_API   canOpenStatus    __stdcall canPortWrite(canPortHandle handle
   frame.LEN = dlc;
   frame.MSGTYPE = 0; // Clear all flags.
   if ( flags & CAN_MSG_EXT ) 
-    frame.MSGTYPE = MSGTYPE_EXTENDED;
+    frame.MSGTYPE = PCAN_MESSAGE_EXTENDED;
   if ( flags & CAN_MSG_RTR ) 
-    frame.MSGTYPE = MSGTYPE_RTR;
+    frame.MSGTYPE = PCAN_MESSAGE_RTR;
   else 
     memcpy( frame.DATA, msg, dlc);
-  DWORD res = CAN_Write( &frame );
-  if ( res == CAN_ERR_OK ) {
+  DWORD res = CAN_Write(1, &frame );
+  if ( res == PCAN_ERROR_OK ) {
     if ( can_port_data_devices[ handle ].echo_enabled ) {
       (void)putCanMessageInQueue( &can_port_data_devices[ handle ], &frame);
     }
@@ -319,21 +326,23 @@ CANOPENLIB_HW_API   canOpenStatus    __stdcall canPortRead(canPortHandle handle,
   canOpenStatus canopen_res = CANOPEN_CAN_LAYER_FAILED;
   TPCANMsg frame;
   DWORD res;
+  TPCANTimestamp dummy;
   *flags = 0;
+
   // First check if there are any echos avilable.
   canopen_res = getCanMessageFromQueue( &can_port_data_devices[ handle ], &frame );  
   if ( canopen_res == CANOPEN_OK ) {
     TPCANMsg tmp_frame;
-    res = CAN_Read( &tmp_frame );
-    if ( res == CAN_ERR_OK && !( tmp_frame.MSGTYPE & MSGTYPE_STATUS ) ) {
+    res = CAN_Read(1, &tmp_frame, &dummy);
+    if ( res == PCAN_ERROR_OK && !( tmp_frame.MSGTYPE & PCAN_MESSAGE_STATUS ) ) {
       (void)putCanMessageInQueue( &can_port_data_devices[ handle ], &tmp_frame);
     } else {
       res = CANOPEN_ERROR_NO_MESSAGE;
     }
   }  else {
-    res = CAN_Read( &frame );
-    if ( res == CAN_ERR_OK ) {
-      if  ( frame.MSGTYPE & MSGTYPE_STATUS  ) {
+    res = CAN_Read(1, &frame, &dummy );
+    if ( res == PCAN_ERROR_OK ) {
+      if  ( frame.MSGTYPE & PCAN_MESSAGE_STATUS  ) {
         res = CANOPEN_ERROR_NO_MESSAGE;
       } else {
         canopen_res = CANOPEN_OK;
@@ -343,10 +352,10 @@ CANOPENLIB_HW_API   canOpenStatus    __stdcall canPortRead(canPortHandle handle,
   if ( canopen_res == CANOPEN_OK  ) {
     *id = (long)frame.ID;
     *dlc = frame.LEN;
-    if ( frame.MSGTYPE & MSGTYPE_RTR ) 
+    if ( frame.MSGTYPE & PCAN_MESSAGE_RTR ) 
       *flags = CAN_MSG_RTR;
-    if ( frame.MSGTYPE & MSGTYPE_EXTENDED ) 
-      *flags |= MSGTYPE_EXTENDED;
+    if ( frame.MSGTYPE & PCAN_MESSAGE_EXTENDED ) 
+      *flags |= CAN_MSG_EXT;
     memcpy( msg, frame.DATA, *dlc);
     canopen_res = CANOPEN_OK;
   }

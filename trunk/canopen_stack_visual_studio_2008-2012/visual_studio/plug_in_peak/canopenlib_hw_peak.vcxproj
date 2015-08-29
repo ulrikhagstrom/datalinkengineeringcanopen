@@ -71,7 +71,7 @@
       <CallingConvention>Cdecl</CallingConvention>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>lib/Pcan_usb.lib;lib/Pcan_2usb.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>lib/PCANBasic.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>..\bin\Debug\canopenlib32_hw.dll</OutputFile>
       <ModuleDefinitionFile>canopenlib_hw.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -117,8 +117,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\proj_src\canopen_stack\inc\canopenlib_hw.h" />
-    <ClInclude Include="inc\Pcan_2usb.h" />
-    <ClInclude Include="inc\Pcan_usb.h" />
+    <ClInclude Include="inc\PCANBasic.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
