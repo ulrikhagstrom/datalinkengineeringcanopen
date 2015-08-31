@@ -60,6 +60,7 @@ typedef struct
   int rx_queue_put_pos;
   int rx_queue_get_pos;
   bool can_bus_on;
+  int port;
 } CanPortDataStruct;
 
 static CanPortDataStruct can_port_data_devices[ MAX_CAN_DEVICES ];
@@ -166,6 +167,7 @@ CANOPENLIB_HW_API   canOpenStatus    __stdcall canPortOpen( int port, canPortHan
   canOpenStatus canopen_res = CANOPEN_ERROR_HW_NOT_CONNECTED;
   if ( port >= 0 && port < MAX_CAN_DEVICES ) {
     *handle = port;
+	can_port_data_devices[port].port = port;
     canopen_res = CANOPEN_OK;
   }
   return canopen_res;
@@ -253,7 +255,7 @@ CANOPENLIB_HW_API   canOpenStatus    __stdcall canPortGoBusOn( canPortHandle han
 {
 	canOpenStatus canopen_res = CANOPEN_ERROR; 
 	TPCANStatus res = CAN_Initialize(
-		(TPCANHandle)1,
+		(TPCANHandle)can_port_data_devices[ handle ].port,
 		(TPCANBaudrate)can_port_data_devices[ handle ].bitrate,
 		(TPCANType)PCAN_USB,
 		0,
@@ -274,7 +276,7 @@ CANOPENLIB_HW_API   canOpenStatus    __stdcall canPortGoBusOn( canPortHandle han
 CANOPENLIB_HW_API   canOpenStatus    __stdcall canPortGoBusOff( canPortHandle handle )
 {
   canOpenStatus canopen_res = CANOPEN_ERROR; 
-  DWORD res = CAN_Uninitialize((TPCANHandle)1);
+  DWORD res = CAN_Uninitialize((TPCANHandle)can_port_data_devices[ handle ].port);
   if ( res == PCAN_ERROR_OK ) {
     can_port_data_devices[ handle ].can_bus_on = false;
     canopen_res = CANOPEN_OK;
@@ -303,7 +305,7 @@ CANOPENLIB_HW_API   canOpenStatus    __stdcall canPortWrite(canPortHandle handle
     frame.MSGTYPE = PCAN_MESSAGE_RTR;
   else 
     memcpy( frame.DATA, msg, dlc);
-  DWORD res = CAN_Write(1, &frame );
+  DWORD res = CAN_Write((TPCANHandle)can_port_data_devices[ handle ].port, &frame );
   if ( res == PCAN_ERROR_OK ) {
     if ( can_port_data_devices[ handle ].echo_enabled ) {
       (void)putCanMessageInQueue( &can_port_data_devices[ handle ], &frame);
@@ -333,7 +335,7 @@ CANOPENLIB_HW_API   canOpenStatus    __stdcall canPortRead(canPortHandle handle,
   canopen_res = getCanMessageFromQueue( &can_port_data_devices[ handle ], &frame );  
   if ( canopen_res == CANOPEN_OK ) {
     TPCANMsg tmp_frame;
-    res = CAN_Read(1, &tmp_frame, &dummy);
+    res = CAN_Read((TPCANHandle)can_port_data_devices[ handle ].port, &tmp_frame, &dummy);
     if ( res == PCAN_ERROR_OK && !( tmp_frame.MSGTYPE & PCAN_MESSAGE_STATUS ) ) {
       (void)putCanMessageInQueue( &can_port_data_devices[ handle ], &tmp_frame);
     } else {
