@@ -167,7 +167,7 @@ CANOPENLIB_HW_API   canOpenStatus    __stdcall canPortOpen( int port, canPortHan
   canOpenStatus canopen_res = CANOPEN_ERROR_HW_NOT_CONNECTED;
   if ( port >= 0 && port < MAX_CAN_DEVICES ) {
     *handle = port;
-	can_port_data_devices[port].port = port;
+	can_port_data_devices[port].port = port + 0x51U;
     canopen_res = CANOPEN_OK;
   }
   return canopen_res;
@@ -305,11 +305,12 @@ CANOPENLIB_HW_API   canOpenStatus    __stdcall canPortWrite(canPortHandle handle
     frame.MSGTYPE = PCAN_MESSAGE_RTR;
   else 
     memcpy( frame.DATA, msg, dlc);
+
+  if ( can_port_data_devices[ handle ].echo_enabled ) {
+    (void)putCanMessageInQueue( &can_port_data_devices[ handle ], &frame);
+  }
   DWORD res = CAN_Write((TPCANHandle)can_port_data_devices[ handle ].port, &frame );
   if ( res == PCAN_ERROR_OK ) {
-    if ( can_port_data_devices[ handle ].echo_enabled ) {
-      (void)putCanMessageInQueue( &can_port_data_devices[ handle ], &frame);
-    }
     canopen_res = CANOPEN_OK;
   }
   return canopen_res;
@@ -333,7 +334,7 @@ CANOPENLIB_HW_API   canOpenStatus    __stdcall canPortRead(canPortHandle handle,
 
   // First check if there are any echos avilable.
   canopen_res = getCanMessageFromQueue( &can_port_data_devices[ handle ], &frame );  
-  if ( canopen_res == CANOPEN_OK ) {
+  if ( canopen_res != CANOPEN_OK ) {
     TPCANMsg tmp_frame;
     res = CAN_Read((TPCANHandle)can_port_data_devices[ handle ].port, &tmp_frame, &dummy);
     if ( res == PCAN_ERROR_OK && !( tmp_frame.MSGTYPE & PCAN_MESSAGE_STATUS ) ) {
