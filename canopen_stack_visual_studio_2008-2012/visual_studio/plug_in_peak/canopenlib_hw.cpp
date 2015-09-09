@@ -167,8 +167,13 @@ CANOPENLIB_HW_API   canOpenStatus    __stdcall canPortOpen( int port, canPortHan
   canOpenStatus canopen_res = CANOPEN_ERROR_HW_NOT_CONNECTED;
   if ( port >= 0 && port < MAX_CAN_DEVICES ) {
     *handle = port;
-	can_port_data_devices[port].port = port + 0x51U;
-    canopen_res = CANOPEN_OK;
+	can_port_data_devices[port].port = port + PCAN_USBBUS1;
+
+	TPCANStatus res = CAN_Reset(can_port_data_devices[port].port);
+	if (res != PCAN_ERROR_OK )
+	{
+      canopen_res = CANOPEN_OK;
+	}
   }
   return canopen_res;
 }
