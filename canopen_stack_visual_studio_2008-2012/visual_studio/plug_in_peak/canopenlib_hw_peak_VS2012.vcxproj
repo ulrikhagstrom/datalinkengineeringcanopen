@@ -55,7 +55,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <PreBuildEvent>
-      <Command>copy lib\Pcan_*.dll ..\bin\Debug</Command>
+      <Command>copy lib\PCANBasic.dll ..\bin\Debug</Command>
     </PreBuildEvent>
     <ClCompile>
       <Optimization>Disabled</Optimization>
@@ -82,7 +82,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <PreBuildEvent>
-      <Command>copy lib\Pcan_*.dll ..\bin\Release</Command>
+      <Command>copy lib\PCANBasic.dll ..\bin\Release</Command>
     </PreBuildEvent>
     <ClCompile>
       <AdditionalIncludeDirectories>..\canopenlib32_dll\inc;.\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
