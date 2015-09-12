@@ -47,6 +47,7 @@
 #pragma managed(pop)
 #endif
 
+#define USE_PCAN_PCI        FALSE   // {TRUE, FALSE} Default is PCAN-USB (FALSE)
 #define MAX_CAN_DEVICES     2
 #define RX_QUEUE_SIZE       100
 
@@ -167,7 +168,11 @@ CANOPENLIB_HW_API   canOpenStatus    __stdcall canPortOpen( int port, canPortHan
   canOpenStatus canopen_res = CANOPEN_ERROR_HW_NOT_CONNECTED;
   if ( port >= 0 && port < MAX_CAN_DEVICES ) {
     *handle = port;
-	can_port_data_devices[port].port = port + PCAN_USBBUS1;
+#if USE_PCAN_PCI == TRUE
+    can_port_data_devices[port].port = port + PCAN_PCIBUS1;
+#else
+    can_port_data_devices[port].port = port + PCAN_USBBUS1;
+#endif
 
 	TPCANStatus res = CAN_Reset(can_port_data_devices[port].port);
 	if (res != PCAN_ERROR_OK )
@@ -258,20 +263,24 @@ CANOPENLIB_HW_API   canOpenStatus    __stdcall canPortEcho( canPortHandle handle
 
 CANOPENLIB_HW_API   canOpenStatus    __stdcall canPortGoBusOn( canPortHandle handle )
 {
-	canOpenStatus canopen_res = CANOPEN_ERROR; 
-	TPCANStatus res = CAN_Initialize(
-		(TPCANHandle)can_port_data_devices[ handle ].port,
-		(TPCANBaudrate)can_port_data_devices[ handle ].bitrate,
-		(TPCANType)PCAN_USB,
-		0,
-		0);
+  canOpenStatus canopen_res = CANOPEN_ERROR; 
+  TPCANStatus res = CAN_Initialize(
+    (TPCANHandle)can_port_data_devices[ handle ].port,
+    (TPCANBaudrate)can_port_data_devices[ handle ].bitrate,
+#if USE_PCAN_PCI == TRUE
+    (TPCANType)PCAN_PCI,
+#else 
+    (TPCANType)PCAN_USB,
+#endif
+    0,
+    0);
 
-	if ( res == PCAN_ERROR_OK )
-	{
-		can_port_data_devices[ handle ].can_bus_on = true;
-		canopen_res = CANOPEN_OK;
-	}
-	return canopen_res;
+  if ( res == PCAN_ERROR_OK )
+  {
+    can_port_data_devices[ handle ].can_bus_on = true;
+    canopen_res = CANOPEN_OK;
+  }
+  return canopen_res;
 }
 
 //------------------------------------------------------------------------
