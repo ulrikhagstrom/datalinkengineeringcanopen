@@ -64,41 +64,41 @@ ServerSDO_NET::~ServerSDO_NET()
   this->cpp_ServerSDO = nullptr;
 }
 
-ServerSDO_NET::CanOpenStatus ServerSDO_NET::registerObjectReadCallback(SrvReadDelegate^ readDelegate, System::Object^ obj)
+CanOpenStatus ServerSDO_NET::registerObjectReadCallback(SrvReadDelegate^ readDelegate, System::Object^ obj)
 {
   this->readObjectDelegate = readDelegate;
   this->readObjectDelgateObject = obj;
-  return ServerSDO_NET::CanOpenStatus::CANOPEN_OK;
+  return CanOpenStatus::CANOPEN_OK;
 }
 
-ServerSDO_NET::CanOpenStatus ServerSDO_NET::registerObjectWriteCallback(SrvWriteDelegate^ writeDelegate, System::Object^ obj)
+CanOpenStatus ServerSDO_NET::registerObjectWriteCallback(SrvWriteDelegate^ writeDelegate, System::Object^ obj)
 {
   this->writeObjectDelegate = writeDelegate;
   this->writeObjectDelegateObject = obj;
-  return ServerSDO_NET::CanOpenStatus::CANOPEN_OK;
+  return CanOpenStatus::CANOPEN_OK;
 }
   
-ServerSDO_NET::CanOpenStatus ServerSDO_NET::registerObjectGetAttributesCallback(SrvGetAttrDelegate^ getAttrDelegate, System::Object^ obj)
+CanOpenStatus ServerSDO_NET::registerObjectGetAttributesCallback(SrvGetAttrDelegate^ getAttrDelegate, System::Object^ obj)
 {
   this->attribObjectDelegate = getAttrDelegate;
   this->attribObjectDelegateObject = obj;
-  return ServerSDO_NET::CanOpenStatus::CANOPEN_OK;
+  return CanOpenStatus::CANOPEN_OK;
 }
 
-ServerSDO_NET::CanOpenStatus ServerSDO_NET::canHardwareConnect(int port, int bitrate)
+CanOpenStatus ServerSDO_NET::canHardwareConnect(int port, int bitrate)
 {
-  return (ServerSDO_NET::CanOpenStatus)this->cpp_ServerSDO->canHardwareConnect(port, bitrate); 
+  return (CanOpenStatus)this->cpp_ServerSDO->canHardwareConnect(port, bitrate); 
 }
 
-ServerSDO_NET::CanOpenStatus  ServerSDO_NET::canHardwareDisconnect(void)
+CanOpenStatus  ServerSDO_NET::canHardwareDisconnect(void)
 {
-  return (ServerSDO_NET::CanOpenStatus)this->cpp_ServerSDO->canHardwareDisconnect(); 
+  return (CanOpenStatus)this->cpp_ServerSDO->canHardwareDisconnect(); 
 }
 
 
-ServerSDO_NET::CanOpenStatus ServerSDO_NET::nodeSetId(u8 node_id)
+CanOpenStatus ServerSDO_NET::nodeSetId(u8 node_id)
 {
-  return (ServerSDO_NET::CanOpenStatus)this->cpp_ServerSDO->nodeSetId(node_id);
+  return (CanOpenStatus)this->cpp_ServerSDO->nodeSetId(node_id);
 }
 
 
@@ -162,32 +162,32 @@ CanMonitor_NET::~CanMonitor_NET()
 }
 
 
-CanMonitor_NET::CanOpenStatus CanMonitor_NET::canHardwareConnect(int port, int bitrate)
+CanOpenStatus CanMonitor_NET::canHardwareConnect(int port, int bitrate)
 {
-  return (CanMonitor_NET::CanOpenStatus)this->cpp_CanMonitor->canHardwareConnect(port, bitrate); 
+  return (CanOpenStatus)this->cpp_CanMonitor->canHardwareConnect(port, bitrate); 
 }
 
 
-CanMonitor_NET::CanOpenStatus CanMonitor_NET::canHardwareDisconnect(void)
+CanOpenStatus CanMonitor_NET::canHardwareDisconnect(void)
 {
-  return (CanMonitor_NET::CanOpenStatus)this->cpp_CanMonitor->canHardwareDisconnect();
+  return (CanOpenStatus)this->cpp_CanMonitor->canHardwareDisconnect();
 }
 
-CanMonitor_NET::CanOpenStatus CanMonitor_NET::registerCanReceiveCallback( System::Object^ obj, CanReceiveDelegate^ can_receive_delegate )
+CanOpenStatus CanMonitor_NET::registerCanReceiveCallback( System::Object^ obj, CanReceiveDelegate^ can_receive_delegate )
 {
   this->can_receive_delegate = can_receive_delegate;
   this->can_receive_delegate_object = obj;
-  return CanMonitor_NET::CanOpenStatus::CANOPEN_OK;
+  return CanOpenStatus::CANOPEN_OK;
 }
 
-CanMonitor_NET::CanOpenStatus CanMonitor_NET::canWrite( u32 id,  array<Byte>^ data, u8 dlc, u32 flags)
+CanOpenStatus CanMonitor_NET::canWrite( u32 id,  array<Byte>^ data, u8 dlc, u32 flags)
 {
   u8 *data_cpp = new u8[dlc];
 
   for (int j = 0; j < dlc; j++)
     data_cpp[j] = data[j]; 
 
-  CanMonitor_NET::CanOpenStatus ret = (CanMonitor_NET::CanOpenStatus)this->cpp_CanMonitor->canWrite( id, data_cpp, dlc, flags );
+  CanOpenStatus ret = (CanOpenStatus)this->cpp_CanMonitor->canWrite( id, data_cpp, dlc, flags );
 
   delete[] data_cpp;
   return ret;
@@ -225,45 +225,45 @@ EmcyClient_NET::~EmcyClient_NET()
 }
 
 
-EmcyClient_NET::CanOpenStatus EmcyClient_NET::canHardwareConnect(int port, int bitrate)
+CanOpenStatus EmcyClient_NET::canHardwareConnect(int port, int bitrate)
 {
-  return (EmcyClient_NET::CanOpenStatus)this->cpp_EmcyClient->canHardwareConnect(port, bitrate); 
+  return (CanOpenStatus)this->cpp_EmcyClient->canHardwareConnect(port, bitrate); 
 }
 
 
-EmcyClient_NET::CanOpenStatus EmcyClient_NET::canHardwareDisconnect(void)
+CanOpenStatus EmcyClient_NET::canHardwareDisconnect(void)
 {
-  return (EmcyClient_NET::CanOpenStatus)this->cpp_EmcyClient->canHardwareDisconnect();
+  return (CanOpenStatus)this->cpp_EmcyClient->canHardwareDisconnect();
 }
   
-EmcyClient_NET::CanOpenStatus EmcyClient_NET::nodeSetId(u8 nodeId)
+CanOpenStatus EmcyClient_NET::nodeSetId(u8 nodeId)
 {
-  return (EmcyClient_NET::CanOpenStatus)cpp_EmcyClient->nodeSetId(nodeId);
+  return (CanOpenStatus)cpp_EmcyClient->nodeSetId(nodeId);
 }
 
 
-EmcyClient_NET::CanOpenStatus EmcyClient_NET::sendEmcyMessage( u8 nodeId, u16 emcy_error_code, u8 error_register, array<Byte>^ manufSpecificErrorField )
+CanOpenStatus EmcyClient_NET::sendEmcyMessage( u8 nodeId, u16 emcy_error_code, u8 error_register, array<Byte>^ manufSpecificErrorField )
 {
   u8 *data_cpp = new u8[5];
 
   for (int j = 0; j < 5; j++)
     data_cpp[j] = manufSpecificErrorField[j]; 
 
-  EmcyClient_NET::CanOpenStatus ret = (EmcyClient_NET::CanOpenStatus)this->cpp_EmcyClient->sendEmcyMessage(nodeId, emcy_error_code, error_register, data_cpp);
+  CanOpenStatus ret = (CanOpenStatus)this->cpp_EmcyClient->sendEmcyMessage(nodeId, emcy_error_code, error_register, data_cpp);
 
   delete[] data_cpp;
   return ret;
 }
 
 
-EmcyClient_NET::CanOpenStatus EmcyClient_NET::sendEmcyMessage( u16 emcy_error_code, u8 error_register, array<Byte>^ manufSpecificErrorField )
+CanOpenStatus EmcyClient_NET::sendEmcyMessage( u16 emcy_error_code, u8 error_register, array<Byte>^ manufSpecificErrorField )
 {
   u8 *data_cpp = new u8[5];
 
   for (int j = 0; j < 5; j++)
     data_cpp[j] = manufSpecificErrorField[j]; 
 
-  EmcyClient_NET::CanOpenStatus ret = (EmcyClient_NET::CanOpenStatus)this->cpp_EmcyClient->sendEmcyMessage(emcy_error_code, error_register, data_cpp);
+  CanOpenStatus ret = (CanOpenStatus)this->cpp_EmcyClient->sendEmcyMessage(emcy_error_code, error_register, data_cpp);
 
   delete[] data_cpp;
   return ret;
@@ -289,42 +289,42 @@ SyncProducer_NET::~SyncProducer_NET()
 }
 
 
-SyncProducer_NET::CanOpenStatus SyncProducer_NET::canHardwareConnect(int port, int bitrate)
+CanOpenStatus SyncProducer_NET::canHardwareConnect(int port, int bitrate)
 {
-  return (SyncProducer_NET::CanOpenStatus)this->cpp_SyncProducer->canHardwareConnect(port, bitrate); 
+  return (CanOpenStatus)this->cpp_SyncProducer->canHardwareConnect(port, bitrate); 
 }
 
 
-SyncProducer_NET::CanOpenStatus SyncProducer_NET::canHardwareDisconnect(void)
+CanOpenStatus SyncProducer_NET::canHardwareDisconnect(void)
 {
-  return (SyncProducer_NET::CanOpenStatus)this->cpp_SyncProducer->canHardwareDisconnect();
+  return (CanOpenStatus)this->cpp_SyncProducer->canHardwareDisconnect();
 }
 
-SyncProducer_NET::CanOpenStatus SyncProducer_NET::setSyncCOBID(u32 id)
+CanOpenStatus SyncProducer_NET::setSyncCOBID(u32 id)
 {
   if (cpp_SyncProducer == nullptr)
-    return (SyncProducer_NET::CanOpenStatus::CANOPEN_INTERNAL_STATE_ERROR);
+    return (CanOpenStatus::CANOPEN_INTERNAL_STATE_ERROR);
 
-  SyncProducer_NET::CanOpenStatus ret = (SyncProducer_NET::CanOpenStatus)this->cpp_SyncProducer->setSyncCOBID(id);
+  CanOpenStatus ret = (CanOpenStatus)this->cpp_SyncProducer->setSyncCOBID(id);
 
   return ret;
 
 }
   
-SyncProducer_NET::CanOpenStatus SyncProducer_NET::setTransmissionPeriodTime(unsigned long sync_period_time)
+CanOpenStatus SyncProducer_NET::setTransmissionPeriodTime(unsigned long sync_period_time)
 {
   if (cpp_SyncProducer == nullptr)
-    return (SyncProducer_NET::CanOpenStatus::CANOPEN_INTERNAL_STATE_ERROR);
+    return (CanOpenStatus::CANOPEN_INTERNAL_STATE_ERROR);
 
-  SyncProducer_NET::CanOpenStatus ret = (SyncProducer_NET::CanOpenStatus)this->cpp_SyncProducer->setTransmissionPeriodTime(sync_period_time);
+  CanOpenStatus ret = (CanOpenStatus)this->cpp_SyncProducer->setTransmissionPeriodTime(sync_period_time);
 
   return ret;
 
 }
 
-SyncProducer_NET::CanOpenStatus SyncProducer_NET::startPeriodicTransmission(bool value)
+CanOpenStatus SyncProducer_NET::startPeriodicTransmission(bool value)
 {
-  return (SyncProducer_NET::CanOpenStatus)cpp_SyncProducer->startPeriodicTransmission(value);
+  return (CanOpenStatus)cpp_SyncProducer->startPeriodicTransmission(value);
 }
 
 
@@ -347,49 +347,49 @@ TransmitPDO_NET::~TransmitPDO_NET()
 }
 
 
-TransmitPDO_NET::CanOpenStatus TransmitPDO_NET::canHardwareConnect(int port, int bitrate)
+CanOpenStatus TransmitPDO_NET::canHardwareConnect(int port, int bitrate)
 {
-  return (CanMonitor_NET::CanOpenStatus)this->cpp_TransmitPDO->canHardwareConnect(port, bitrate); 
+  return (CanOpenStatus)this->cpp_TransmitPDO->canHardwareConnect(port, bitrate); 
 }
 
 
-TransmitPDO_NET::CanOpenStatus TransmitPDO_NET::canHardwareDisconnect(void)
+CanOpenStatus TransmitPDO_NET::canHardwareDisconnect(void)
 {
-  return (CanMonitor_NET::CanOpenStatus)this->cpp_TransmitPDO->canHardwareDisconnect();
+  return (CanOpenStatus)this->cpp_TransmitPDO->canHardwareDisconnect();
 }
 
-TransmitPDO_NET::CanOpenStatus TransmitPDO_NET::setup(u32 id,  array<Byte>^ data, u8 dlc)
+CanOpenStatus TransmitPDO_NET::setup(u32 id,  array<Byte>^ data, u8 dlc)
 {
   if (cpp_TransmitPDO == nullptr)
-    return (TransmitPDO_NET::CanOpenStatus::CANOPEN_INTERNAL_STATE_ERROR);
+    return (CanOpenStatus::CANOPEN_INTERNAL_STATE_ERROR);
 
   u8 *data_cpp = new u8[8];
 
   if (dlc < 0 || dlc > 8)
-    return CanMonitor_NET::CanOpenStatus::CANOPEN_ARG_ERROR;
+    return CanOpenStatus::CANOPEN_ARG_ERROR;
 
   for (int j = 0; j < dlc; j++)
     data_cpp[j] = data[j]; 
 
-  TransmitPDO_NET::CanOpenStatus ret = (TransmitPDO_NET::CanOpenStatus)this->cpp_TransmitPDO->setData( id, data_cpp, dlc);
+  CanOpenStatus ret = (CanOpenStatus)this->cpp_TransmitPDO->setData( id, data_cpp, dlc);
 
   delete[] data_cpp;
   return ret;
 
 }
   
-TransmitPDO_NET::CanOpenStatus TransmitPDO_NET::transmit(void)
+CanOpenStatus TransmitPDO_NET::transmit(void)
 {
   if (cpp_TransmitPDO != nullptr)
-    return (TransmitPDO_NET::CanOpenStatus)cpp_TransmitPDO->transmitPdo();
+    return (CanOpenStatus)cpp_TransmitPDO->transmitPdo();
   else
-    return (TransmitPDO_NET::CanOpenStatus::CANOPEN_INTERNAL_STATE_ERROR);
+    return (CanOpenStatus::CANOPEN_INTERNAL_STATE_ERROR);
 }
 
 
-TransmitPDO_NET::CanOpenStatus TransmitPDO_NET::periodicTransmission(bool value)
+CanOpenStatus TransmitPDO_NET::periodicTransmission(bool value)
 {
-  return (TransmitPDO_NET::CanOpenStatus)cpp_TransmitPDO->periodicTransmission(value);
+  return (CanOpenStatus)cpp_TransmitPDO->periodicTransmission(value);
 }
 
 
@@ -419,22 +419,22 @@ ReceivePDO_NET::~ReceivePDO_NET()
 }
 
 
-ReceivePDO_NET::CanOpenStatus ReceivePDO_NET::canHardwareConnect(int port, int bitrate)
+CanOpenStatus ReceivePDO_NET::canHardwareConnect(int port, int bitrate)
 {
-  return (ReceivePDO_NET::CanOpenStatus)this->cpp_ReceivePDO->canHardwareConnect(port, bitrate); 
+  return (CanOpenStatus)this->cpp_ReceivePDO->canHardwareConnect(port, bitrate); 
 }
 
 
-ReceivePDO_NET::CanOpenStatus ReceivePDO_NET::canHardwareDisconnect(void)
+CanOpenStatus ReceivePDO_NET::canHardwareDisconnect(void)
 {
-  return (ReceivePDO_NET::CanOpenStatus)this->cpp_ReceivePDO->canHardwareDisconnect();
+  return (CanOpenStatus)this->cpp_ReceivePDO->canHardwareDisconnect();
 }
 
-ReceivePDO_NET::CanOpenStatus ReceivePDO_NET::registerReceivePdoMessageCallBack( System::Object^ obj, ReceivePdoDelegate^ receive_pdo_delegate )
+CanOpenStatus ReceivePDO_NET::registerReceivePdoMessageCallBack( System::Object^ obj, ReceivePdoDelegate^ receive_pdo_delegate )
 {
   this->receive_pdo_delegate = receive_pdo_delegate;
   this->receive_pdo_delegate_object = obj;
-  return ReceivePDO_NET::CanOpenStatus::CANOPEN_OK;
+  return CanOpenStatus::CANOPEN_OK;
 }
 
 canOpenStatus ReceivePDO_NET::receivePdoCPP(void *context, u32 id, u8 *data, u8 dlc)
@@ -451,9 +451,9 @@ canOpenStatus ReceivePDO_NET::receivePdoCPP(void *context, u32 id, u8 *data, u8 
   return ret;
 }
 
-ReceivePDO_NET::CanOpenStatus ReceivePDO_NET::setCobid(u32 cobid)
+CanOpenStatus ReceivePDO_NET::setCobid(u32 cobid)
 {
-  return (ReceivePDO_NET::CanOpenStatus)this->cpp_ReceivePDO->setCobid( cobid );
+  return (CanOpenStatus)this->cpp_ReceivePDO->setCobid( cobid );
 }
 
 
@@ -482,21 +482,21 @@ SyncServer_NET::~SyncServer_NET()
   this->cpp_SyncServer = nullptr;
 }
 
-SyncServer_NET::CanOpenStatus SyncServer_NET::canHardwareConnect(int port, int bitrate)
+CanOpenStatus SyncServer_NET::canHardwareConnect(int port, int bitrate)
 {
-  return (ReceivePDO_NET::CanOpenStatus)this->cpp_SyncServer->canHardwareConnect(port, bitrate); 
+  return (CanOpenStatus)this->cpp_SyncServer->canHardwareConnect(port, bitrate); 
 }
 
-SyncServer_NET::CanOpenStatus SyncServer_NET::canHardwareDisconnect(void)
+CanOpenStatus SyncServer_NET::canHardwareDisconnect(void)
 {
-  return (ReceivePDO_NET::CanOpenStatus)this->cpp_SyncServer->canHardwareDisconnect();
+  return (CanOpenStatus)this->cpp_SyncServer->canHardwareDisconnect();
 }
 
-SyncServer_NET::CanOpenStatus SyncServer_NET::registerSyncMessageCallBack( System::Object^ obj, SyncServerDelegate^ sync_server_delegate )
+CanOpenStatus SyncServer_NET::registerSyncMessageCallBack( System::Object^ obj, SyncServerDelegate^ sync_server_delegate )
 {
   this->sync_server_delegate = sync_server_delegate;
   this->sync_server_delegate_object = obj;
-  return ReceivePDO_NET::CanOpenStatus::CANOPEN_OK;
+  return CanOpenStatus::CANOPEN_OK;
 }
 
 canOpenStatus SyncServer_NET::syncServerCallbackCPP(void *context)
@@ -506,9 +506,9 @@ canOpenStatus SyncServer_NET::syncServerCallbackCPP(void *context)
   return ret;
 }
 
-SyncServer_NET::CanOpenStatus SyncServer_NET::setCobid(u32 cobid)
+CanOpenStatus SyncServer_NET::setCobid(u32 cobid)
 {
-  return (SyncServer_NET::CanOpenStatus)this->cpp_SyncServer->reconfigureSyncCOBID( cobid );
+  return (CanOpenStatus)this->cpp_SyncServer->reconfigureSyncCOBID( cobid );
 }
 
 
@@ -539,22 +539,22 @@ EmcyServer_NET::~EmcyServer_NET()
 }
 
 
-EmcyServer_NET::CanOpenStatus EmcyServer_NET::canHardwareConnect(int port, int bitrate)
+CanOpenStatus EmcyServer_NET::canHardwareConnect(int port, int bitrate)
 {
-  return (EmcyServer_NET::CanOpenStatus)this->cpp_EmcyServer->canHardwareConnect(port, bitrate); 
+  return (CanOpenStatus)this->cpp_EmcyServer->canHardwareConnect(port, bitrate); 
 }
 
 
-EmcyServer_NET::CanOpenStatus EmcyServer_NET::canHardwareDisconnect(void)
+CanOpenStatus EmcyServer_NET::canHardwareDisconnect(void)
 {
-  return (EmcyServer_NET::CanOpenStatus)this->cpp_EmcyServer->canHardwareDisconnect();
+  return (CanOpenStatus)this->cpp_EmcyServer->canHardwareDisconnect();
 }
 
-EmcyServer_NET::CanOpenStatus EmcyServer_NET::registerEmcyServerMessageCallBack( System::Object^ obj, EmcyServerDelegate^ emcy_server_delegate )
+CanOpenStatus EmcyServer_NET::registerEmcyServerMessageCallBack( System::Object^ obj, EmcyServerDelegate^ emcy_server_delegate )
 {
   this->emcy_server_delegate = emcy_server_delegate;
   this->emcy_server_delegate_object = obj;
-  return EmcyServer_NET::CanOpenStatus::CANOPEN_OK;
+  return CanOpenStatus::CANOPEN_OK;
 }
 
 canOpenStatus EmcyServer_NET::emcyServerCallbackCPP(void *context, u8 nodeId, u16 emcyErrorCode, u8 errorRegister, u8 *manufacturerSpecificErrorField)
@@ -594,7 +594,7 @@ ClientSDO_NET::~ClientSDO_NET()
   this->cpp_ClientSDO = NULL;
 }
 
-ClientSDO_NET::CanOpenStatus ClientSDO_NET::registerObjectReadResultCallback(CliReadResultDelegate^ readResultDelegate, System::Object^ obj)
+CanOpenStatus ClientSDO_NET::registerObjectReadResultCallback(CliReadResultDelegate^ readResultDelegate, System::Object^ obj)
 {
   typedef void (*CliReadResultFuncPtr)(void *context, canOpenStatus status, u8 nodeid, u16 object_index, u8 sub_index, u8 *buffer, u32 valid, u32 co_error_code);
   this->readObjectResultDelegate = readResultDelegate;
@@ -605,10 +605,10 @@ ClientSDO_NET::CanOpenStatus ClientSDO_NET::registerObjectReadResultCallback(Cli
   void *pf = pCliReadResultDelegate.ToPointer();
   this->cpp_ClientSDO->registerObjectReadResultCallback((CliReadResultFuncPtr)pf, 0); 
 
-  return ClientSDO_NET::CanOpenStatus::CANOPEN_OK;
+  return CanOpenStatus::CANOPEN_OK;
 }
 
-ClientSDO_NET::CanOpenStatus ClientSDO_NET::registerObjectWriteResultCallback(CliWriteResultDelegate^ writeDelegate, System::Object^ obj)
+CanOpenStatus ClientSDO_NET::registerObjectWriteResultCallback(CliWriteResultDelegate^ writeDelegate, System::Object^ obj)
 {
   typedef void (*CliWriteResultFuncPtr)(void *context, canOpenStatus status, u8 node_id, u16 object_index, u8 sub_index, u32 co_error_code);
   this->writeObjectResultDelegate = writeDelegate;
@@ -619,14 +619,14 @@ ClientSDO_NET::CanOpenStatus ClientSDO_NET::registerObjectWriteResultCallback(Cl
   void *pf = pCliWriteResultDelegate.ToPointer();
   this->cpp_ClientSDO->registerObjectWriteResultCallback((CliWriteResultFuncPtr)pf, 0); 
 
-  return ClientSDO_NET::CanOpenStatus::CANOPEN_OK;
+  return CanOpenStatus::CANOPEN_OK;
 }
 
-ClientSDO_NET::CanOpenStatus ClientSDO_NET::unregisterObjectReadWriteResultCallbacks(void)
+CanOpenStatus ClientSDO_NET::unregisterObjectReadWriteResultCallbacks(void)
 {
   this->writeObjectResultDelegate = nullptr;
   this->writeObjectResultDelegateObject = nullptr;
-  return (ClientSDO_NET::CanOpenStatus)this->cpp_ClientSDO->unregisterObjectReadWriteResultCallbacks();
+  return (CanOpenStatus)this->cpp_ClientSDO->unregisterObjectReadWriteResultCallbacks();
 }
 
 void ClientSDO_NET::setWriteObjectTimeout(u32 timeout)
@@ -655,27 +655,27 @@ bool ClientSDO_NET::isObjectReadResultCallbackEnabled(void)
 }
 
 
-ClientSDO_NET::CanOpenStatus ClientSDO_NET::objectRead(u16 object_index, u8 sub_index, 
+CanOpenStatus ClientSDO_NET::objectRead(u16 object_index, u8 sub_index, 
                 [System::Runtime::InteropServices::Out] u8 %val, 
                 [System::Runtime::InteropServices::Out] CanOpenErrorCode %coErrorCode)
 {
   CanOpenErrorCode temp_coErrorCode;
-  ClientSDO_NET::CanOpenStatus ret;
+  CanOpenStatus ret;
   u8 temp_val;
   
-  ret = (ClientSDO_NET::CanOpenStatus)this->cpp_ClientSDO->objectRead(object_index, sub_index, &temp_val, &temp_coErrorCode);
+  ret = (CanOpenStatus)this->cpp_ClientSDO->objectRead(object_index, sub_index, &temp_val, &temp_coErrorCode);
   val = temp_val;
   coErrorCode = temp_coErrorCode;
   return ret;
 }
 
-ClientSDO_NET::CanOpenStatus ClientSDO_NET::objectRead(u16 object_index, 
+CanOpenStatus ClientSDO_NET::objectRead(u16 object_index, 
                              u8 sub_index, 
                              array<Byte>^ data_buffer, 
                              [System::Runtime::InteropServices::Out] u32 %valid,
                              [System::Runtime::InteropServices::Out] u32 %coErrorCode)
 {
-  ClientSDO_NET::CanOpenStatus ret;
+  CanOpenStatus ret;
   u32 temp_coErrorCode;
   u32 temp_valid;
 
@@ -684,14 +684,14 @@ ClientSDO_NET::CanOpenStatus ClientSDO_NET::objectRead(u16 object_index,
     this->temp_data_buffer = new u8[data_buffer->Length];
     this->applicationsBuffer = data_buffer;
 
-    ret = (ClientSDO_NET::CanOpenStatus)this->cpp_ClientSDO->objectRead( object_index, 
+    ret = (CanOpenStatus)this->cpp_ClientSDO->objectRead( object_index, 
                                        sub_index, 
                                        temp_data_buffer, 
                                        data_buffer->Length, 
                                        &temp_valid, 
                                        &temp_coErrorCode);
 
-    if (ret == ClientSDO_NET::CanOpenStatus::CANOPEN_OK)
+    if (ret == CanOpenStatus::CANOPEN_OK)
     {
       for (u32 i = 0 ; i < temp_valid; i++)
       {
@@ -701,7 +701,7 @@ ClientSDO_NET::CanOpenStatus ClientSDO_NET::objectRead(u16 object_index,
       valid = temp_valid;
       coErrorCode = temp_coErrorCode;
     }
-    if ( ret != ClientSDO_NET::CanOpenStatus::CANOPEN_ASYNC_TRANSFER)
+    if ( ret != CanOpenStatus::CANOPEN_ASYNC_TRANSFER)
     {
       delete[] this->temp_data_buffer;
       this->temp_data_buffer = NULL;
@@ -709,64 +709,64 @@ ClientSDO_NET::CanOpenStatus ClientSDO_NET::objectRead(u16 object_index,
   }
   else
   {
-    ret = ClientSDO_NET::CanOpenStatus::CANOPEN_ERROR; // Busy.
+    ret = CanOpenStatus::CANOPEN_ERROR; // Busy.
   }
 
   return ret;
 }
 
 
-ClientSDO_NET::CanOpenStatus ClientSDO_NET::objectRead(u16 object_index, u8 sub_index, 
+CanOpenStatus ClientSDO_NET::objectRead(u16 object_index, u8 sub_index, 
                 [System::Runtime::InteropServices::Out] u16 %val, 
                 [System::Runtime::InteropServices::Out] CanOpenErrorCode %coErrorCode)
 {
   CanOpenErrorCode temp_coErrorCode;
-  ClientSDO_NET::CanOpenStatus ret;
+  CanOpenStatus ret;
   u16 temp_val;
   
-  ret = (ClientSDO_NET::CanOpenStatus)this->cpp_ClientSDO->objectRead(object_index, sub_index, &temp_val, &temp_coErrorCode);
+  ret = (CanOpenStatus)this->cpp_ClientSDO->objectRead(object_index, sub_index, &temp_val, &temp_coErrorCode);
   val = temp_val;
   coErrorCode = temp_coErrorCode;
   return ret;
 }
 
-ClientSDO_NET::CanOpenStatus ClientSDO_NET::objectRead(u16 object_index, u8 sub_index, 
+CanOpenStatus ClientSDO_NET::objectRead(u16 object_index, u8 sub_index, 
                 [System::Runtime::InteropServices::Out] u32 %val, 
                 [System::Runtime::InteropServices::Out] CanOpenErrorCode %coErrorCode)
 {
   CanOpenErrorCode temp_coErrorCode;
-  ClientSDO_NET::CanOpenStatus ret;
+  CanOpenStatus ret;
   u32 temp_val;
   
-  ret = (ClientSDO_NET::CanOpenStatus)this->cpp_ClientSDO->objectRead(object_index, sub_index, &temp_val, &temp_coErrorCode);
+  ret = (CanOpenStatus)this->cpp_ClientSDO->objectRead(object_index, sub_index, &temp_val, &temp_coErrorCode);
   val = temp_val;
   coErrorCode = temp_coErrorCode;
   return ret;
 }
 #ifdef HAS_LONG_LONG
 
-ClientSDO_NET::CanOpenStatus ClientSDO_NET::objectRead(u16 object_index, u8 sub_index, 
+CanOpenStatus ClientSDO_NET::objectRead(u16 object_index, u8 sub_index, 
                 [System::Runtime::InteropServices::Out] u64 %val, 
                 [System::Runtime::InteropServices::Out] CanOpenErrorCode %coErrorCode)
 {
   CanOpenErrorCode temp_coErrorCode;
-  ClientSDO_NET::CanOpenStatus ret;
+  CanOpenStatus ret;
   u64 temp_val;
   
-  ret = (ClientSDO_NET::CanOpenStatus)this->cpp_ClientSDO->objectRead(object_index, sub_index, &temp_val, &temp_coErrorCode);
+  ret = (CanOpenStatus)this->cpp_ClientSDO->objectRead(object_index, sub_index, &temp_val, &temp_coErrorCode);
   val = temp_val;
   coErrorCode = temp_coErrorCode;
   return ret;
 }
 
 #endif
-ClientSDO_NET::CanOpenStatus  ClientSDO_NET::objectWrite(u16 object_index, 
+CanOpenStatus  ClientSDO_NET::objectWrite(u16 object_index, 
                             u8 sub_index, 
                             array<Byte>^ data_buffer, //u8 *buf, 
                             u32 valid, 
                             [System::Runtime::InteropServices::Out] CanOpenErrorCode %coErrorCode)
 {
-  ClientSDO_NET::CanOpenStatus ret;
+  CanOpenStatus ret;
   CanOpenErrorCode temp_coErrorCode;
   
   if (this->temp_data_buffer == NULL)
@@ -778,13 +778,13 @@ ClientSDO_NET::CanOpenStatus  ClientSDO_NET::objectWrite(u16 object_index,
       this->temp_data_buffer[j] = data_buffer[j];
     }
 
-    ret = (ClientSDO_NET::CanOpenStatus)this->cpp_ClientSDO->objectWrite(object_index,
+    ret = (CanOpenStatus)this->cpp_ClientSDO->objectWrite(object_index,
                                       sub_index,
                                       temp_data_buffer,
                                       valid,
                                       &temp_coErrorCode);
     
-    if ( ret != ClientSDO_NET::CanOpenStatus::CANOPEN_ASYNC_TRANSFER)
+    if ( ret != CanOpenStatus::CANOPEN_ASYNC_TRANSFER)
     {
       delete[] this->temp_data_buffer;
       this->temp_data_buffer = NULL;
@@ -793,19 +793,19 @@ ClientSDO_NET::CanOpenStatus  ClientSDO_NET::objectWrite(u16 object_index,
   }
   else
   {
-    ret = ClientSDO_NET::CanOpenStatus::CANOPEN_ERROR; // Busy.
+    ret = CanOpenStatus::CANOPEN_ERROR; // Busy.
   }  
   return ret;
 }
 
-ClientSDO_NET::CanOpenStatus  ClientSDO_NET::objectWriteBlock(u16 object_index, 
+CanOpenStatus  ClientSDO_NET::objectWriteBlock(u16 object_index, 
                                 u8 sub_index, 
                                 u16 crc, 
                                 array<Byte>^ data_buffer, 
                                 u32 valid, 
                                 [System::Runtime::InteropServices::Out] CanOpenErrorCode %coErrorCode)
 {
-  ClientSDO_NET::CanOpenStatus ret;
+  CanOpenStatus ret;
   CanOpenErrorCode temp_coErrorCode;
 
   if (this->temp_data_buffer == NULL)
@@ -817,7 +817,7 @@ ClientSDO_NET::CanOpenStatus  ClientSDO_NET::objectWriteBlock(u16 object_index,
       temp_data_buffer[j] = data_buffer[j];
     }
 
-    ret = (ClientSDO_NET::CanOpenStatus)this->cpp_ClientSDO->objectWriteBlock(object_index,
+    ret = (CanOpenStatus)this->cpp_ClientSDO->objectWriteBlock(object_index,
                                       sub_index,
                                       crc,
                                       temp_data_buffer,
@@ -826,7 +826,7 @@ ClientSDO_NET::CanOpenStatus  ClientSDO_NET::objectWriteBlock(u16 object_index,
     
     coErrorCode = temp_coErrorCode; 
 
-    if (ret != ClientSDO_NET::CanOpenStatus::CANOPEN_ASYNC_TRANSFER)
+    if (ret != CanOpenStatus::CANOPEN_ASYNC_TRANSFER)
     {
       delete[] this->temp_data_buffer;
       this->temp_data_buffer = NULL;
@@ -834,20 +834,20 @@ ClientSDO_NET::CanOpenStatus  ClientSDO_NET::objectWriteBlock(u16 object_index,
   }
   else
   {
-    ret = ClientSDO_NET::CanOpenStatus::CANOPEN_ERROR; // Busy
+    ret = CanOpenStatus::CANOPEN_ERROR; // Busy
   }
   return ret;
 }
 
-ClientSDO_NET::CanOpenStatus  ClientSDO_NET::objectWrite(u16 object_index, 
+CanOpenStatus  ClientSDO_NET::objectWrite(u16 object_index, 
                              u8 sub_index, 
                              u8  val, 
                              [System::Runtime::InteropServices::Out] CanOpenErrorCode %coErrorCode)
 {
-  ClientSDO_NET::CanOpenStatus ret;
+  CanOpenStatus ret;
   CanOpenErrorCode temp_coErrorCode;
 
-  ret = (ClientSDO_NET::CanOpenStatus)this->cpp_ClientSDO->objectWrite(object_index,
+  ret = (CanOpenStatus)this->cpp_ClientSDO->objectWrite(object_index,
                                     sub_index,
                                     val,
                                     &temp_coErrorCode);
@@ -855,15 +855,15 @@ ClientSDO_NET::CanOpenStatus  ClientSDO_NET::objectWrite(u16 object_index,
   return ret;
 }
 
-ClientSDO_NET::CanOpenStatus  ClientSDO_NET::objectWrite(u16 object_index, 
+CanOpenStatus  ClientSDO_NET::objectWrite(u16 object_index, 
                              u8 sub_index, 
                              u16 val, 
                              [System::Runtime::InteropServices::Out] CanOpenErrorCode %coErrorCode)
 {
-  ClientSDO_NET::CanOpenStatus ret;
+  CanOpenStatus ret;
   CanOpenErrorCode temp_coErrorCode;
 
-  ret = (ClientSDO_NET::CanOpenStatus)this->cpp_ClientSDO->objectWrite(object_index,
+  ret = (CanOpenStatus)this->cpp_ClientSDO->objectWrite(object_index,
                                     sub_index,
                                     val,
                                     &temp_coErrorCode);
@@ -871,15 +871,15 @@ ClientSDO_NET::CanOpenStatus  ClientSDO_NET::objectWrite(u16 object_index,
   return ret;
 }
 
-ClientSDO_NET::CanOpenStatus  ClientSDO_NET::objectWrite(u16 object_index, 
+CanOpenStatus  ClientSDO_NET::objectWrite(u16 object_index, 
                              u8 sub_index, 
                              u32 val, 
                              [System::Runtime::InteropServices::Out] CanOpenErrorCode %coErrorCode)
 {
-  ClientSDO_NET::CanOpenStatus ret;
+  CanOpenStatus ret;
   CanOpenErrorCode temp_coErrorCode;
 
-  ret = (ClientSDO_NET::CanOpenStatus)this->cpp_ClientSDO->objectWrite(object_index,
+  ret = (CanOpenStatus)this->cpp_ClientSDO->objectWrite(object_index,
                                     sub_index,
                                     val,
                                     &temp_coErrorCode);
@@ -888,15 +888,15 @@ ClientSDO_NET::CanOpenStatus  ClientSDO_NET::objectWrite(u16 object_index,
 }
 
 #ifdef HAS_LONG_LONG
-ClientSDO_NET::CanOpenStatus  ClientSDO_NET::objectWrite(u16 object_index, 
+CanOpenStatus  ClientSDO_NET::objectWrite(u16 object_index, 
                              u8 sub_index, 
                              u64 val, 
                              [System::Runtime::InteropServices::Out] CanOpenErrorCode %coErrorCode)
 {
-  ClientSDO_NET::CanOpenStatus ret;
+  CanOpenStatus ret;
   CanOpenErrorCode temp_coErrorCode;
 
-  ret = (ClientSDO_NET::CanOpenStatus)this->cpp_ClientSDO->objectWrite(object_index,
+  ret = (CanOpenStatus)this->cpp_ClientSDO->objectWrite(object_index,
                                     sub_index,
                                     val,
                                     &temp_coErrorCode);
@@ -906,33 +906,33 @@ ClientSDO_NET::CanOpenStatus  ClientSDO_NET::objectWrite(u16 object_index,
 #endif
 
 
-ClientSDO_NET::CanOpenStatus ClientSDO_NET::connect(u8 node_id)
+CanOpenStatus ClientSDO_NET::connect(u8 node_id)
 {
-  ClientSDO_NET::CanOpenStatus ret;
+  CanOpenStatus ret;
 
-  ret = (ClientSDO_NET::CanOpenStatus)this->cpp_ClientSDO->connect(node_id);
+  ret = (CanOpenStatus)this->cpp_ClientSDO->connect(node_id);
   return ret;
 }
 
-ClientSDO_NET::CanOpenStatus ClientSDO_NET::connect(COBID cobid_tx, COBID cobid_rx)
+CanOpenStatus ClientSDO_NET::connect(COBID cobid_tx, COBID cobid_rx)
 {
-  ClientSDO_NET::CanOpenStatus ret;
+  CanOpenStatus ret;
 
-  ret = (ClientSDO_NET::CanOpenStatus)this->cpp_ClientSDO->connect(cobid_tx, cobid_rx);
+  ret = (CanOpenStatus)this->cpp_ClientSDO->connect(cobid_tx, cobid_rx);
   return ret;
 }
 
-ClientSDO_NET::CanOpenStatus  ClientSDO_NET::canHardwareConnect(int port, int bitrate)
+CanOpenStatus  ClientSDO_NET::canHardwareConnect(int port, int bitrate)
 {
-  ClientSDO_NET::CanOpenStatus ret;
+  CanOpenStatus ret;
 
-  ret = (ClientSDO_NET::CanOpenStatus)this->cpp_ClientSDO->canHardwareConnect(port,bitrate);
+  ret = (CanOpenStatus)this->cpp_ClientSDO->canHardwareConnect(port,bitrate);
   return ret;
 }
 
-ClientSDO_NET::CanOpenStatus  ClientSDO_NET::canHardwareDisconnect(void)
+CanOpenStatus  ClientSDO_NET::canHardwareDisconnect(void)
 {
-  return (ServerSDO_NET::CanOpenStatus)this->cpp_ClientSDO->canHardwareDisconnect(); 
+  return (CanOpenStatus)this->cpp_ClientSDO->canHardwareDisconnect(); 
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -995,18 +995,18 @@ void ClientSDO_NET :: clientWriteResultWrapperCallback(void *context,
 // Network Mangement Master
 // **************************
 
-NMT_Master_NET::CanOpenStatus NMT_Master_NET::NMTOperationalStateWrapperCPP(void *obj,
+CanOpenStatus NMT_Master_NET::NMTOperationalStateWrapperCPP(void *obj,
                                                                             u8 node_id,
                                                                             u8 state)
 {
   // Convert and call the C# callback
   if ( this->nmtOperationalStateDelegate_CS != nullptr )
   {
-    return (NMT_Master_NET::CanOpenStatus)this->nmtOperationalStateDelegate_CS(this->nmtOperationalStateDelegateObject, node_id, state);
+    return (CanOpenStatus)this->nmtOperationalStateDelegate_CS(this->nmtOperationalStateDelegateObject, node_id, state);
   }
   else
   { 
-    return NMT_Master_NET::CanOpenStatus::CANOPEN_OK;
+    return CanOpenStatus::CANOPEN_OK;
   }
 }
 
@@ -1036,45 +1036,33 @@ NMT_Master_NET::~NMT_Master_NET()
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-NMT_Master_NET::CanOpenStatus  NMT_Master_NET::canHardwareConnect(int port, int btr)
+CanOpenStatus  NMT_Master_NET::canHardwareConnect(int port, int btr)
 {
-  NMT_Master_NET::CanOpenStatus ret;
+  CanOpenStatus ret;
 
-  ret = (NMT_Master_NET::CanOpenStatus)this->cpp_NMTMaster->canHardwareConnect(port, btr);
+  ret = (CanOpenStatus)this->cpp_NMTMaster->canHardwareConnect(port, btr);
 
   return ret;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-NMT_Master_NET::CanOpenStatus  NMT_Master_NET::canHardwareDisconnect(void)
+CanOpenStatus  NMT_Master_NET::canHardwareDisconnect(void)
 {
-  NMT_Master_NET::CanOpenStatus ret;
+  CanOpenStatus ret;
 
-  ret = (NMT_Master_NET::CanOpenStatus)this->cpp_NMTMaster->canHardwareDisconnect();
+  ret = (CanOpenStatus)this->cpp_NMTMaster->canHardwareDisconnect();
 
   return ret;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-NMT_Master_NET::CanOpenStatus  NMT_Master_NET::nodeStart(u8 node_id)
+CanOpenStatus  NMT_Master_NET::nodeStart(u8 node_id)
 {
-  NMT_Master_NET::CanOpenStatus ret;
+  CanOpenStatus ret;
 
-  ret = (NMT_Master_NET::CanOpenStatus)this->cpp_NMTMaster->nodeStart(node_id);
-
-  return ret;
-
-}
-
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-NMT_Master_NET::CanOpenStatus  NMT_Master_NET::nodeStop(u8 node_id)
-{
-  NMT_Master_NET::CanOpenStatus ret;
-
-  ret = (NMT_Master_NET::CanOpenStatus)this->cpp_NMTMaster->nodeStop(node_id);
+  ret = (CanOpenStatus)this->cpp_NMTMaster->nodeStart(node_id);
 
   return ret;
 
@@ -1082,11 +1070,11 @@ NMT_Master_NET::CanOpenStatus  NMT_Master_NET::nodeStop(u8 node_id)
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-NMT_Master_NET::CanOpenStatus  NMT_Master_NET::nodePreoperational(u8 node_id)
+CanOpenStatus  NMT_Master_NET::nodeStop(u8 node_id)
 {
-  NMT_Master_NET::CanOpenStatus ret;
+  CanOpenStatus ret;
 
-  ret = (NMT_Master_NET::CanOpenStatus)this->cpp_NMTMaster->nodePreoperational(node_id);
+  ret = (CanOpenStatus)this->cpp_NMTMaster->nodeStop(node_id);
 
   return ret;
 
@@ -1094,11 +1082,11 @@ NMT_Master_NET::CanOpenStatus  NMT_Master_NET::nodePreoperational(u8 node_id)
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-NMT_Master_NET::CanOpenStatus  NMT_Master_NET::nodeReset(u8 node_id)
+CanOpenStatus  NMT_Master_NET::nodePreoperational(u8 node_id)
 {
-  NMT_Master_NET::CanOpenStatus ret;
+  CanOpenStatus ret;
 
-  ret = (NMT_Master_NET::CanOpenStatus)this->cpp_NMTMaster->nodeReset(node_id);
+  ret = (CanOpenStatus)this->cpp_NMTMaster->nodePreoperational(node_id);
 
   return ret;
 
@@ -1106,11 +1094,11 @@ NMT_Master_NET::CanOpenStatus  NMT_Master_NET::nodeReset(u8 node_id)
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-NMT_Master_NET::CanOpenStatus  NMT_Master_NET::nodeResetCommunication(u8 node_id)
+CanOpenStatus  NMT_Master_NET::nodeReset(u8 node_id)
 {
-  NMT_Master_NET::CanOpenStatus ret;
+  CanOpenStatus ret;
 
-  ret = (NMT_Master_NET::CanOpenStatus)this->cpp_NMTMaster->nodeResetCommunication(node_id);
+  ret = (CanOpenStatus)this->cpp_NMTMaster->nodeReset(node_id);
 
   return ret;
 
@@ -1118,12 +1106,24 @@ NMT_Master_NET::CanOpenStatus  NMT_Master_NET::nodeResetCommunication(u8 node_id
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-NMT_Master_NET::CanOpenStatus  NMT_Master_NET::nodeGuardPollStart(u8 node_id,
+CanOpenStatus  NMT_Master_NET::nodeResetCommunication(u8 node_id)
+{
+  CanOpenStatus ret;
+
+  ret = (CanOpenStatus)this->cpp_NMTMaster->nodeResetCommunication(node_id);
+
+  return ret;
+
+}
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+CanOpenStatus  NMT_Master_NET::nodeGuardPollStart(u8 node_id,
                                                                   u32 node_life_time_ms)
 {
-  NMT_Master_NET::CanOpenStatus ret;
+  CanOpenStatus ret;
 
-  ret = (NMT_Master_NET::CanOpenStatus)this->cpp_NMTMaster->nodeGuardPollStart(node_id,
+  ret = (CanOpenStatus)this->cpp_NMTMaster->nodeGuardPollStart(node_id,
     node_life_time_ms);
 
   return ret;
@@ -1132,11 +1132,11 @@ NMT_Master_NET::CanOpenStatus  NMT_Master_NET::nodeGuardPollStart(u8 node_id,
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-NMT_Master_NET::CanOpenStatus  NMT_Master_NET::nodeGuardPollStop(u8 node_id)
+CanOpenStatus  NMT_Master_NET::nodeGuardPollStop(u8 node_id)
 {
-  NMT_Master_NET::CanOpenStatus ret;
+  CanOpenStatus ret;
 
-  ret = (NMT_Master_NET::CanOpenStatus)this->cpp_NMTMaster->nodeGuardPollStop(node_id);
+  ret = (CanOpenStatus)this->cpp_NMTMaster->nodeGuardPollStop(node_id);
 
   return ret;
 
@@ -1144,11 +1144,11 @@ NMT_Master_NET::CanOpenStatus  NMT_Master_NET::nodeGuardPollStop(u8 node_id)
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-NMT_Master_NET::CanOpenStatus  NMT_Master_NET::heartbeatMonitorStart(u8 node_id, u32 heartbeat_consumer_time_ms)
+CanOpenStatus  NMT_Master_NET::heartbeatMonitorStart(u8 node_id, u32 heartbeat_consumer_time_ms)
 {
-  NMT_Master_NET::CanOpenStatus ret;
+  CanOpenStatus ret;
 
-  ret = (NMT_Master_NET::CanOpenStatus)this->cpp_NMTMaster->heartbeatMonitorStart(node_id, heartbeat_consumer_time_ms);
+  ret = (CanOpenStatus)this->cpp_NMTMaster->heartbeatMonitorStart(node_id, heartbeat_consumer_time_ms);
 
   return ret;
 
@@ -1156,11 +1156,11 @@ NMT_Master_NET::CanOpenStatus  NMT_Master_NET::heartbeatMonitorStart(u8 node_id,
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-NMT_Master_NET::CanOpenStatus  NMT_Master_NET::heartbeatMonitorStop(u8 node_id)
+CanOpenStatus  NMT_Master_NET::heartbeatMonitorStop(u8 node_id)
 {
-  NMT_Master_NET::CanOpenStatus ret;
+  CanOpenStatus ret;
 
-  ret = (NMT_Master_NET::CanOpenStatus)this->cpp_NMTMaster->heartbeatMonitorStop(node_id);
+  ret = (CanOpenStatus)this->cpp_NMTMaster->heartbeatMonitorStop(node_id);
 
   return ret;
 
@@ -1168,27 +1168,27 @@ NMT_Master_NET::CanOpenStatus  NMT_Master_NET::heartbeatMonitorStop(u8 node_id)
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-NMT_Master_NET::CanOpenStatus NMT_Master_NET::registerNodeStateCallback(NMTOperationalStateDelegate^ opStateDelegate,
+CanOpenStatus NMT_Master_NET::registerNodeStateCallback(NMTOperationalStateDelegate^ opStateDelegate,
                                                                         System::Object^ obj)
 {
-  NMT_Master_NET::CanOpenStatus ret;
+  CanOpenStatus ret;
   this->nmtOperationalStateDelegateObject = obj;
   this->nmtOperationalStateDelegate_CS = opStateDelegate;
-  ret = NMT_Master_NET::CanOpenStatus::CANOPEN_OK;
+  ret = CanOpenStatus::CANOPEN_OK;
   return ret;
 
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-NMT_Master_NET::CanOpenStatus  NMT_Master_NET::nodeReadOperationalState(u8 node_id, 
+CanOpenStatus  NMT_Master_NET::nodeReadOperationalState(u8 node_id, 
                                                                         u32 maxMsTimeout,
                                                                         [System::Runtime::InteropServices::Out] u8 %node_state)
 {
-  NMT_Master_NET::CanOpenStatus ret;
+  CanOpenStatus ret;
   NodeState tmp_NodeState;
 
-  ret =(NMT_Master_NET::CanOpenStatus)this->cpp_NMTMaster->nodeReadOperationalState(node_id,
+  ret =(CanOpenStatus)this->cpp_NMTMaster->nodeReadOperationalState(node_id,
     maxMsTimeout,
     &tmp_NodeState);
 
@@ -1226,43 +1226,43 @@ NMT_Slave_NET::~NMT_Slave_NET()
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-NMT_Slave_NET :: CanOpenStatus  NMT_Slave_NET :: canHardwareConnect(int port, int btr)
+CanOpenStatus  NMT_Slave_NET :: canHardwareConnect(int port, int btr)
 {
-  NMT_Slave_NET::CanOpenStatus ret;
-  ret = (NMT_Slave_NET::CanOpenStatus)this->cpp_NMTSlave->canHardwareConnect( port, btr );
+  CanOpenStatus ret;
+  ret = (CanOpenStatus)this->cpp_NMTSlave->canHardwareConnect( port, btr );
   return ret;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-NMT_Slave_NET :: CanOpenStatus  NMT_Slave_NET :: canHardwareDisconnect(void)
+CanOpenStatus  NMT_Slave_NET :: canHardwareDisconnect(void)
 {
-  NMT_Slave_NET::CanOpenStatus ret;
-  ret = (NMT_Slave_NET::CanOpenStatus)this->cpp_NMTSlave->canHardwareDisconnect();
+  CanOpenStatus ret;
+  ret = (CanOpenStatus)this->cpp_NMTSlave->canHardwareDisconnect();
   return ret;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-NMT_Slave_NET :: CanOpenStatus  NMT_Slave_NET :: nodeSetId(u8 node_id)
+CanOpenStatus  NMT_Slave_NET :: nodeSetId(u8 node_id)
 {
-  NMT_Slave_NET::CanOpenStatus ret;
-  ret = (NMT_Slave_NET::CanOpenStatus)this->cpp_NMTSlave->nodeSetId(node_id);
+  CanOpenStatus ret;
+  ret = (CanOpenStatus)this->cpp_NMTSlave->nodeSetId(node_id);
   return ret;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
  
-NMT_Slave_NET :: CanOpenStatus  NMT_Slave_NET :: nodeSetState(u8 node_state)
+CanOpenStatus  NMT_Slave_NET :: nodeSetState(u8 node_state)
 {
-  NMT_Slave_NET::CanOpenStatus ret;
-  ret = (NMT_Slave_NET::CanOpenStatus)this->cpp_NMTSlave->nodeSetState(node_state);
+  CanOpenStatus ret;
+  ret = (CanOpenStatus)this->cpp_NMTSlave->nodeSetState(node_state);
   return ret;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-NMT_Slave_NET :: CanOpenStatus  NMT_Slave_NET :: writeMessage(u32 id, array<Byte>^ msg, u8 dlc, u32 flags)
+CanOpenStatus  NMT_Slave_NET :: writeMessage(u32 id, array<Byte>^ msg, u8 dlc, u32 flags)
 {
   u8 *msg_cpp = new u8[dlc];
 
@@ -1271,7 +1271,7 @@ NMT_Slave_NET :: CanOpenStatus  NMT_Slave_NET :: writeMessage(u32 id, array<Byte
     msg_cpp[j] = msg[j];
   }
 
-  NMT_Slave_NET::CanOpenStatus ret  = (NMT_Slave_NET::CanOpenStatus)this->cpp_NMTSlave->writeMessage(id,
+  CanOpenStatus ret  = (CanOpenStatus)this->cpp_NMTSlave->writeMessage(id,
     msg_cpp,
     dlc,
     flags);
@@ -1282,11 +1282,11 @@ NMT_Slave_NET :: CanOpenStatus  NMT_Slave_NET :: writeMessage(u32 id, array<Byte
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-NMT_Slave_NET :: CanOpenStatus  NMT_Slave_NET :: registerLocalNodeStateChangeCallback(
+CanOpenStatus  NMT_Slave_NET :: registerLocalNodeStateChangeCallback(
   NMTLocalNodeOperationalStateDelegate^ localOperationalStateDelegate,
   System::Object^ obj)
 {
-  NMT_Slave_NET::CanOpenStatus ret = NMT_Slave_NET::CanOpenStatus::CANOPEN_OK;
+  CanOpenStatus ret = CanOpenStatus::CANOPEN_OK;
   this->nmtLocalNodeOperationalStateDelegateObject = obj;
   this->nmtLocalNodeOperationalStateDelegate_CS = localOperationalStateDelegate;
   return ret;
@@ -1294,14 +1294,14 @@ NMT_Slave_NET :: CanOpenStatus  NMT_Slave_NET :: registerLocalNodeStateChangeCal
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-NMT_Slave_NET :: CanOpenStatus NMT_Slave_NET :: NMTLocalNodeOperationalStateWrapperCPP(void *obj, u8 state)
+CanOpenStatus NMT_Slave_NET :: NMTLocalNodeOperationalStateWrapperCPP(void *obj, u8 state)
 {
   // Convert and call the C# callback
   if (nmtLocalNodeOperationalStateDelegate_CS != nullptr)
-    return (NMT_Slave_NET::CanOpenStatus)this->nmtLocalNodeOperationalStateDelegate_CS(
+    return (CanOpenStatus)this->nmtLocalNodeOperationalStateDelegate_CS(
     this->nmtLocalNodeOperationalStateDelegateObject , state);
   else 
-    return NMT_Slave_NET::CanOpenStatus::CANOPEN_OK;
+    return CanOpenStatus::CANOPEN_OK;
 }
 
 // **************************
@@ -1325,74 +1325,74 @@ LSS_Master_NET::~LSS_Master_NET()
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-LSS_Master_NET :: CanOpenStatus  LSS_Master_NET :: canHardwareConnect(int port, int btr)
+CanOpenStatus  LSS_Master_NET :: canHardwareConnect(int port, int btr)
 {
-  NMT_Slave_NET::CanOpenStatus ret;
-  ret = (NMT_Slave_NET::CanOpenStatus)this->cpp_LSSMaster->canHardwareConnect( port, btr );
+  CanOpenStatus ret;
+  ret = (CanOpenStatus)this->cpp_LSSMaster->canHardwareConnect( port, btr );
   return ret;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-LSS_Master_NET :: CanOpenStatus  LSS_Master_NET :: canHardwareDisconnect(void)
+CanOpenStatus  LSS_Master_NET :: canHardwareDisconnect(void)
 {
-  LSS_Master_NET::CanOpenStatus ret;
-  ret = (LSS_Master_NET::CanOpenStatus)this->cpp_LSSMaster->canHardwareDisconnect();
+  CanOpenStatus ret;
+  ret = (CanOpenStatus)this->cpp_LSSMaster->canHardwareDisconnect();
   return ret;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-LSS_Master_NET :: CanOpenStatus  LSS_Master_NET :: switchModeGlobal(u8 mode)
+CanOpenStatus  LSS_Master_NET :: switchModeGlobal(u8 mode)
 {
-  LSS_Master_NET::CanOpenStatus ret;
-  ret = (LSS_Master_NET::CanOpenStatus)this->cpp_LSSMaster->switchModeGlobal(mode);
+  CanOpenStatus ret;
+  ret = (CanOpenStatus)this->cpp_LSSMaster->switchModeGlobal(mode);
   return ret;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-LSS_Master_NET :: CanOpenStatus  LSS_Master_NET :: switchModeSelectiveVendorId(u32 vendorId)
+CanOpenStatus  LSS_Master_NET :: switchModeSelectiveVendorId(u32 vendorId)
 {
-  LSS_Master_NET::CanOpenStatus ret;
-  ret = (LSS_Master_NET::CanOpenStatus)this->cpp_LSSMaster->switchModeSelectiveVendorId(vendorId);
+  CanOpenStatus ret;
+  ret = (CanOpenStatus)this->cpp_LSSMaster->switchModeSelectiveVendorId(vendorId);
   return ret;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-LSS_Master_NET :: CanOpenStatus  LSS_Master_NET :: switchModeSelectiveProductCode(u32 productCode)
+CanOpenStatus  LSS_Master_NET :: switchModeSelectiveProductCode(u32 productCode)
 {
-  LSS_Master_NET::CanOpenStatus ret;
-  ret = (LSS_Master_NET::CanOpenStatus)this->cpp_LSSMaster->switchModeSelectiveProductCode(productCode);
+  CanOpenStatus ret;
+  ret = (CanOpenStatus)this->cpp_LSSMaster->switchModeSelectiveProductCode(productCode);
   return ret;
 }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-LSS_Master_NET :: CanOpenStatus  LSS_Master_NET :: switchModeSelectiveRevisionNumber(u32 revisionNumber)
+CanOpenStatus  LSS_Master_NET :: switchModeSelectiveRevisionNumber(u32 revisionNumber)
 {
-  LSS_Master_NET::CanOpenStatus ret;
-  ret = (LSS_Master_NET::CanOpenStatus)this->cpp_LSSMaster->switchModeSelectiveRevisionNumber(revisionNumber);
+  CanOpenStatus ret;
+  ret = (CanOpenStatus)this->cpp_LSSMaster->switchModeSelectiveRevisionNumber(revisionNumber);
   return ret;
 }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-LSS_Master_NET :: CanOpenStatus  LSS_Master_NET :: switchModeSelectiveSerialNumber(u32 serialNumber)
+CanOpenStatus  LSS_Master_NET :: switchModeSelectiveSerialNumber(u32 serialNumber)
 {
-  LSS_Master_NET::CanOpenStatus ret;
-  ret = (LSS_Master_NET::CanOpenStatus)this->cpp_LSSMaster->switchModeSelectiveSerialNumber(serialNumber);
+  CanOpenStatus ret;
+  ret = (CanOpenStatus)this->cpp_LSSMaster->switchModeSelectiveSerialNumber(serialNumber);
   return ret;
 }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-LSS_Master_NET :: CanOpenStatus  LSS_Master_NET :: configureNodeId(u8 nodeId,
+CanOpenStatus  LSS_Master_NET :: configureNodeId(u8 nodeId,
                                                                    [System::Runtime::InteropServices::Out] u8 %errorCode,
                                                                    [System::Runtime::InteropServices::Out] u8 %specificErrorCode)
 {
-  LSS_Master_NET::CanOpenStatus ret;
+  CanOpenStatus ret;
   u8 cpp_error_code;
   u8 cpp_specific_error_code;
-  ret = (LSS_Master_NET::CanOpenStatus)this->cpp_LSSMaster->configureNodeId(nodeId,
+  ret = (CanOpenStatus)this->cpp_LSSMaster->configureNodeId(nodeId,
     &cpp_error_code,
     &cpp_specific_error_code);
   errorCode = cpp_error_code;
@@ -1401,15 +1401,15 @@ LSS_Master_NET :: CanOpenStatus  LSS_Master_NET :: configureNodeId(u8 nodeId,
 }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-LSS_Master_NET :: CanOpenStatus  LSS_Master_NET :: configureBitTimingParamteres(u8 tableSelector,
+CanOpenStatus  LSS_Master_NET :: configureBitTimingParamteres(u8 tableSelector,
                                                                                 u8 tableIndex,
                                                                                 [System::Runtime::InteropServices::Out] u8 %errorCode,
                                                                                 [System::Runtime::InteropServices::Out] u8 %specificErrorCode)
 {
-  LSS_Master_NET::CanOpenStatus ret;
+  CanOpenStatus ret;
   u8 cpp_error_code;
   u8 cpp_specific_error_code;
-  ret = (LSS_Master_NET::CanOpenStatus)this->cpp_LSSMaster->configureBitTimingParamteres(tableSelector,
+  ret = (CanOpenStatus)this->cpp_LSSMaster->configureBitTimingParamteres(tableSelector,
     tableIndex,
     &cpp_error_code,
     &cpp_specific_error_code);
@@ -1419,21 +1419,21 @@ LSS_Master_NET :: CanOpenStatus  LSS_Master_NET :: configureBitTimingParamteres(
 }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-LSS_Master_NET :: CanOpenStatus  LSS_Master_NET :: activateBitTimingParameters(u16 switchDelay)
+CanOpenStatus  LSS_Master_NET :: activateBitTimingParameters(u16 switchDelay)
 {
-  LSS_Master_NET::CanOpenStatus ret;
-  ret = (LSS_Master_NET::CanOpenStatus)this->cpp_LSSMaster->activateBitTimingParameters(switchDelay);
+  CanOpenStatus ret;
+  ret = (CanOpenStatus)this->cpp_LSSMaster->activateBitTimingParameters(switchDelay);
   return ret;
 }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-LSS_Master_NET :: CanOpenStatus  LSS_Master_NET :: storeConfiguration([System::Runtime::InteropServices::Out] u8 %errorCode,
+CanOpenStatus  LSS_Master_NET :: storeConfiguration([System::Runtime::InteropServices::Out] u8 %errorCode,
                                                                       [System::Runtime::InteropServices::Out] u8 %specificErrorCode)
 {
-  LSS_Master_NET::CanOpenStatus ret;
+  CanOpenStatus ret;
   u8 cpp_error_code;
   u8 cpp_specific_error_code;
-  ret = (LSS_Master_NET::CanOpenStatus)this->cpp_LSSMaster->storeConfiguration(&cpp_error_code, &cpp_specific_error_code);
+  ret = (CanOpenStatus)this->cpp_LSSMaster->storeConfiguration(&cpp_error_code, &cpp_specific_error_code);
   errorCode = cpp_error_code;
   specificErrorCode = cpp_specific_error_code;
   return ret;
@@ -1460,19 +1460,19 @@ LSS_Slave_NET::~LSS_Slave_NET()
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-LSS_Slave_NET :: CanOpenStatus  LSS_Slave_NET :: canHardwareConnect(int port, int btr)
+CanOpenStatus  LSS_Slave_NET :: canHardwareConnect(int port, int btr)
 {
-  LSS_Slave_NET::CanOpenStatus ret;
-  ret = (LSS_Slave_NET::CanOpenStatus)this->cpp_LSSSlave->canHardwareConnect( port, btr );
+  CanOpenStatus ret;
+  ret = (CanOpenStatus)this->cpp_LSSSlave->canHardwareConnect( port, btr );
   return ret;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-LSS_Slave_NET :: CanOpenStatus  LSS_Slave_NET :: canHardwareDisconnect(void)
+CanOpenStatus  LSS_Slave_NET :: canHardwareDisconnect(void)
 {
-  LSS_Slave_NET::CanOpenStatus ret;
-  ret = (LSS_Slave_NET::CanOpenStatus)this->cpp_LSSSlave->canHardwareDisconnect();
+  CanOpenStatus ret;
+  ret = (CanOpenStatus)this->cpp_LSSSlave->canHardwareDisconnect();
   return ret;
 }
 
