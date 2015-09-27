@@ -56,74 +56,42 @@ using namespace System::Runtime::InteropServices;
 #include "LSSMasterClass.h"
 #include "LSSSlaveClass.h"
 
-public ref class CANOPEN_LIB_ERROR
-{
-public:
-    enum class CanOpenStatus {     
-        CANOPEN_OK                             =  0,
-        CANOPEN_ARG_ERROR                      = -1,
-        CANOPEN_UNEXPECTED_SCS                 = -2,
-        CANOPEN_UNEXPECTED_CCS                 = -3,
-        CANOPEN_TIMEOUT                        = -4,
-        CANOPEN_MSG_NOT_PROCESSED              = -5,
-        CANOPEN_TOGGLE                         = -6,
-        CANOPEN_BUFFER_TOO_SMALL               = -7,
-        CANOPEN_OBJECT_MISSMATCH               = -8,
-        CANOPEN_APP_BUF_OUT_OF_RANGE           = -9,
-        CANOPEN_REMOTE_NODE_ABORT              = -10,
-        CANOPEN_OUT_OF_MEM                     = -11,
-        CANOPEN_ERR_DEFINED_BY_APPL            = -12,
-        CANOPEN_CMD_SPEC_UNKNOWN_OR_INVALLD    = -13,
-        CANOPEN_INTERNAL_STATE_ERROR           = -14,
-        CANOPEN_NODE_ID_OUT_OF_RANGE           = -15,
-        CANOPEN_CAN_LAYER_FAILED               = -100,
-        CANOPEN_ERROR_CAN_LAYER                = -101,
-        CANOPEN_ERROR_CAN_LAYER_OVRFLOW        = -102,
-        CANOPEN_ERROR_HW_CONNECTED             = -103,
-        CANOPEN_ERROR_HW_NOT_CONNECTED         = -104,
-        CANOPEN_ERROR_HW_UNDEFINED             = -105,
-        CANOPEN_ERROR_DRIVER                   = -106,
-        CANOPEN_OUT_OF_CAN_INTERFACES          = -107,
-        CANOPEN_UNSUPPORTED_BITRATE            = -108,
-        CANOPEN_ERROR_NO_MESSAGE               = -109,
-        CANOPEN_ERROR_NOT_IMPLEMENTED          = -110,
-        CANOPEN_ERROR_FILE_NOT_FOUND           = -111,
-        CANOPEN_ERROR_NOT_EDS_DCF_CONFIGURED   = -112,
-        CANOPEN_ASYNC_TRANSFER                 = -113,
-        CANOPEN_ERROR_ASYNC_TRANSFER_ENABLED   = -114,
-        CANOPEN_ERROR                          = -255 
-    };
+public enum class CanOpenStatus {     
+    CANOPEN_OK                             =  0,
+    CANOPEN_ARG_ERROR                      = -1,
+    CANOPEN_UNEXPECTED_SCS                 = -2,
+    CANOPEN_UNEXPECTED_CCS                 = -3,
+    CANOPEN_TIMEOUT                        = -4,
+    CANOPEN_MSG_NOT_PROCESSED              = -5,
+    CANOPEN_TOGGLE                         = -6,
+    CANOPEN_BUFFER_TOO_SMALL               = -7,
+    CANOPEN_OBJECT_MISSMATCH               = -8,
+    CANOPEN_APP_BUF_OUT_OF_RANGE           = -9,
+    CANOPEN_REMOTE_NODE_ABORT              = -10,
+    CANOPEN_OUT_OF_MEM                     = -11,
+    CANOPEN_ERR_DEFINED_BY_APPL            = -12,
+    CANOPEN_CMD_SPEC_UNKNOWN_OR_INVALLD    = -13,
+    CANOPEN_INTERNAL_STATE_ERROR           = -14,
+    CANOPEN_NODE_ID_OUT_OF_RANGE           = -15,
+    CANOPEN_CAN_LAYER_FAILED               = -100,
+    CANOPEN_ERROR_CAN_LAYER                = -101,
+    CANOPEN_ERROR_CAN_LAYER_OVRFLOW        = -102,
+    CANOPEN_ERROR_HW_CONNECTED             = -103,
+    CANOPEN_ERROR_HW_NOT_CONNECTED         = -104,
+    CANOPEN_ERROR_HW_UNDEFINED             = -105,
+    CANOPEN_ERROR_DRIVER                   = -106,
+    CANOPEN_OUT_OF_CAN_INTERFACES          = -107,
+    CANOPEN_UNSUPPORTED_BITRATE            = -108,
+    CANOPEN_ERROR_NO_MESSAGE               = -109,
+    CANOPEN_ERROR_NOT_IMPLEMENTED          = -110,
+    CANOPEN_ERROR_FILE_NOT_FOUND           = -111,
+    CANOPEN_ERROR_NOT_EDS_DCF_CONFIGURED   = -112,
+    CANOPEN_ASYNC_TRANSFER                 = -113,
+    CANOPEN_ERROR_ASYNC_TRANSFER_ENABLED   = -114,
+    CANOPEN_ERROR                          = -255 
 };
 
 
-public ref class SDO_NET : CANOPEN_LIB_ERROR
-{
-public:
-/*
-  enum class CanOpenStatus {     
-        CANOPEN_OK                             =  0,
-        CANOPEN_ARG_ERROR                      = -1,
-        CANOPEN_UNEXPECTED_SCS                 = -2,
-        CANOPEN_UNEXPECTED_CCS                 = -3,
-        CANOPEN_TIMEOUT                        = -4,
-        CANOPEN_MSG_NOT_PROCESSED              = -5,
-        CANOPEN_TOGGLE                         = -6,
-        CANOPEN_BUFFER_TOO_SMALL               = -7,
-        CANOPEN_OBJECT_MISSMATCH               = -8,
-        CANOPEN_APP_BUF_OUT_OF_RANGE           = -9,
-        CANOPEN_REMOTE_NODE_ABORT              = -10,
-        CANOPEN_OUT_OF_MEM                     = -11,
-        CANOPEN_ERR_DEFINED_BY_APPL            = -12,
-        CANOPEN_CMD_SPEC_UNKNOWN_OR_INVALLD    = -13,
-        CANOPEN_INTERNAL_STATE_ERROR           = -14,
-        CANOPEN_NODE_ID_OUT_OF_RANGE           = -15,
-        CANOPEN_CAN_LAYER_FAILED               = -100,
-        CANOPEN_ERROR_CAN_LAYER                = -101,
-        CANOPEN_ERROR_CAN_LAYER_OVRFLOW        = -102,
-        CANOPEN_ERROR                          = -255 
-    };
-*/
-};
 
 public ref class OBJECT_ATTRIBUTES_NET 
 {
@@ -143,27 +111,27 @@ public:
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 
-public delegate SDO_NET::CanOpenStatus SrvReadDelegate( System::Object^ obj, u16 object_index, u8 sub_index, array<System::Byte>^ data,
+public delegate CanOpenStatus SrvReadDelegate( System::Object^ obj, u16 object_index, u8 sub_index, array<System::Byte>^ data,
                                                        [OutAttribute] u32 %valid,
                                                        [OutAttribute] u32 %canopenErrorCode); //Read from srv's application.
-public delegate SDO_NET::CanOpenStatus SrvWriteDelegate( System::Object^ obj, 
+public delegate CanOpenStatus SrvWriteDelegate( System::Object^ obj, 
                                                         u16 object_index, 
                                                         u8 sub_index, 
                                                         array<System::Byte>^ data,
                                                         u32 valid,
                                                         [OutAttribute] u32 %canopenErrorCode); //Write to srv's application.
-public delegate SDO_NET::CanOpenStatus SrvGetAttrDelegate( System::Object^ obj, 
+public delegate CanOpenStatus SrvGetAttrDelegate( System::Object^ obj, 
                                                           u16 object_index, 
                                                           u8 sub_index, 
                                                           [OutAttribute] u16 %flags );
 
 
-public delegate void CliReadResultDelegate( System::Object^ obj, SDO_NET::CanOpenStatus status, u8 node_id, u16 object_index, u8 sub_index, array<System::Byte>^ data,
+public delegate void CliReadResultDelegate( System::Object^ obj, CanOpenStatus status, u8 node_id, u16 object_index, u8 sub_index, array<System::Byte>^ data,
                                                        u32 valid,
                                                        u32 canopenErrorCode); 
 
 public delegate void CliWriteResultDelegate( System::Object^ obj, 
-                                                        SDO_NET::CanOpenStatus status,
+                                                        CanOpenStatus status,
                                                         u8 node_id,
                                                         u16 object_index, 
                                                         u8 sub_index, 
@@ -172,7 +140,7 @@ public delegate void CliWriteResultDelegate( System::Object^ obj,
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 
-public ref class ServerSDO_NET : SDO_NET
+public ref class ServerSDO_NET
 {
 
 private:
@@ -218,26 +186,26 @@ private:
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 
-public delegate CANOPEN_LIB_ERROR::CanOpenStatus CanReceiveDelegate( System::Object^ obj, 
+public delegate CanOpenStatus CanReceiveDelegate( System::Object^ obj, 
                                                         u32 id, 
                                                         array<System::Byte>^ data,
                                                         u8 dlc,
                                                         u32 flags); //Write to srv's application.
 
-public delegate CANOPEN_LIB_ERROR::CanOpenStatus ReceivePdoDelegate( System::Object^ obj, 
+public delegate CanOpenStatus ReceivePdoDelegate( System::Object^ obj, 
                                                         u32 id, 
                                                         array<System::Byte>^ data,
                                                         u8 len); 
 
-public delegate CANOPEN_LIB_ERROR::CanOpenStatus EmcyServerDelegate( System::Object^ obj, 
+public delegate CanOpenStatus EmcyServerDelegate( System::Object^ obj, 
                                                         u8 nodeId,
                                                         u16 emcyErrorCode,
                                                         u8 errorRegister,
                                                         array<System::Byte>^ manufacturerSpecificErrorField); 
 
-public delegate CANOPEN_LIB_ERROR::CanOpenStatus SyncServerDelegate( System::Object^ obj);
+public delegate CanOpenStatus SyncServerDelegate( System::Object^ obj);
 
-public ref class CanInterface_NET : CANOPEN_LIB_ERROR
+public ref class CanInterface_NET
 {
 public:
     CanInterface_NET();
@@ -246,7 +214,7 @@ public:
 };
 
 
-public ref class CanMonitor_NET : CANOPEN_LIB_ERROR
+public ref class CanMonitor_NET
 {
 
 private:
@@ -275,7 +243,7 @@ private:
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-public ref class ReceivePDO_NET : CANOPEN_LIB_ERROR
+public ref class ReceivePDO_NET
 {
 private:
     ReceivePDO *cpp_ReceivePDO;
@@ -302,7 +270,7 @@ private:
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-public ref class SyncServer_NET : CANOPEN_LIB_ERROR
+public ref class SyncServer_NET
 {
 private:
     SyncServer *cpp_SyncServer;
@@ -331,7 +299,7 @@ private:
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-public ref class EmcyServer_NET : CANOPEN_LIB_ERROR
+public ref class EmcyServer_NET
 {
 private:
     EmcyServer *cpp_EmcyServer;
@@ -359,7 +327,7 @@ private:
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-public ref class TransmitPDO_NET : CANOPEN_LIB_ERROR
+public ref class TransmitPDO_NET
 {
 private:
     TransmitPDO *cpp_TransmitPDO;
@@ -379,7 +347,7 @@ public:
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-public ref class SyncProducer_NET : CANOPEN_LIB_ERROR
+public ref class SyncProducer_NET
 {
 private:
     SyncProducer *cpp_SyncProducer;
@@ -398,7 +366,7 @@ public:
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-public ref class EmcyClient_NET : CANOPEN_LIB_ERROR
+public ref class EmcyClient_NET
 {
 private:
     EmcyClient *cpp_EmcyClient;
@@ -418,7 +386,7 @@ public:
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 
-public ref class ClientSDO_NET : SDO_NET
+public ref class ClientSDO_NET
 {
 
 public:
@@ -531,11 +499,11 @@ private:
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-public delegate CANOPEN_LIB_ERROR::CanOpenStatus NMTOperationalStateDelegate(System::Object^ obj, u8 node_id, u8 state);
+public delegate CanOpenStatus NMTOperationalStateDelegate(System::Object^ obj, u8 node_id, u8 state);
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-public ref class NMT_Master_NET : CANOPEN_LIB_ERROR
+public ref class NMT_Master_NET
 {
 public:
 
@@ -579,9 +547,9 @@ private:
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-public delegate CANOPEN_LIB_ERROR::CanOpenStatus NMTLocalNodeOperationalStateDelegate(System::Object^ obj, u8 state);
+public delegate CanOpenStatus NMTLocalNodeOperationalStateDelegate(System::Object^ obj, u8 state);
 
-public ref class NMT_Slave_NET : CANOPEN_LIB_ERROR
+public ref class NMT_Slave_NET
 {
 public:
 
@@ -611,7 +579,7 @@ private:
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-public ref class LSS_Master_NET : CANOPEN_LIB_ERROR
+public ref class LSS_Master_NET
 {
 public:
 
@@ -637,7 +605,7 @@ private:
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-public ref class LSS_Slave_NET : CANOPEN_LIB_ERROR
+public ref class LSS_Slave_NET
 {
 public:
 
