@@ -30,6 +30,7 @@ SDO :: SDO()
   this->can_interface = NULL;
   this->can_hardware_is_initiated = false;
   this->can_message_handler_index = -1;
+  this->rx_tx_mutex = CreateMutex( NULL, FALSE, NULL);
 }
 
 //------------------------------------------------------------------------
@@ -37,6 +38,7 @@ SDO :: SDO()
 //------------------------------------------------------------------------
 SDO :: ~SDO()
 {
+  CloseHandle(this->rx_tx_mutex);
   (void)this->canHardwareDisconnect();
 }
 

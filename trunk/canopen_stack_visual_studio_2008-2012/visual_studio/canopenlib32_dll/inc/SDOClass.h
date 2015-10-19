@@ -133,6 +133,7 @@ class  SDO : public CanConnection
 
     int               periodic_timer_index;
     u8                valid_bytes_in_last_segment_in_last_block;
+    HANDLE            rx_tx_mutex;
 
 private:
 };

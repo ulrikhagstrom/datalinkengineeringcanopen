@@ -578,17 +578,18 @@ canOpenStatus  ClientSDO :: objectRead(u16 object_index, u8 sub_index, u64  *val
 canOpenStatus  ClientSDO :: objectRead(u16 object_index, u8 sub_index, 
   u8 *buf, u32 buffer_size, u32 *valid, CanOpenErrorCode *error_code)
 {
+  WaitForSingleObject( this->rx_tx_mutex, INFINITE);
   DebugLogToFile("objectRead(u16 object_index, u8 sub_index, u8 *buf, u32 buffer_size, u32 *valid, CanOpenErrorCode *error_code) entered\n");
-  this->application_object_index     = object_index;
-  this->application_sub_index     = sub_index;
-  this->application_buffer_length     = buffer_size;
-  this->application_buffer_offset  = 0; // Initiate the buffer pointer.
-  this->application_buffer       = buf;
-  this->application_valid_bytes     = valid;
+  this->application_object_index       = object_index;
+  this->application_sub_index          = sub_index;
+  this->application_buffer_length      = buffer_size;
+  this->application_buffer_offset      = 0; // Initiate the buffer pointer.
+  this->application_buffer             = buf;
+  this->application_valid_bytes        = valid;
   this->application_canopen_error_code = error_code;
-  this->remote_node_error_code    = 0;
-  *error_code = 0;
-  *valid = 0;
+  this->remote_node_error_code         = 0;
+  *error_code                          = 0;
+  *valid                               = 0;
 
   canOpenStatus ret = CANOPEN_ERROR;  
 
@@ -627,6 +628,7 @@ canOpenStatus  ClientSDO :: objectRead(u16 object_index, u8 sub_index,
     DebugLogToFile("objectRead *buf failed #4.\n");
   }
   DebugLogToFile("objectRead(u16 object_index, u8 sub_index, u8 *buf, u32 buffer_size, u32 *valid, CanOpenErrorCode *error_code) exit\n");
+  ReleaseMutex(this->rx_tx_mutex);
   return DebugExitErrorValueLogToFile(ret);
 }
 
@@ -1549,6 +1551,7 @@ canOpenStatus  ClientSDO :: objectWriteBlock(u16 object_index, u8 sub_index,
 canOpenStatus  ClientSDO :: objectWrite(u16 object_index, u8 sub_index, 
   u8 *buf, u32 valid, CanOpenErrorCode *error_code)
 {
+  WaitForSingleObject(rx_tx_mutex, INFINITE);
   DebugLogToFile("objectWrite(u16 object_index, u8 sub_index, u8 *buf, u32 valid, CanOpenErrorCode *error_code) entered\n");
   canOpenStatus ret = CANOPEN_ERROR; 
 
@@ -1598,6 +1601,7 @@ canOpenStatus  ClientSDO :: objectWrite(u16 object_index, u8 sub_index,
     this->is_transfer_stopped_or_finished = FALSE;
     ret = this->synchronize(this->write_object_timeout, WRITE_SESSION);
   }
+  ReleaseMutex(this->rx_tx_mutex);
   return DebugExitErrorValueLogToFile(ret);
 }
 
