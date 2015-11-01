@@ -579,7 +579,8 @@ canOpenStatus EmcyServer_NET::emcyServerCallbackCPP(void *context, u8 nodeId, u1
 
 ClientSDO_NET::ClientSDO_NET()
 {
-  this->temp_data_buffer = NULL;
+  this->rx_tx_mutex = CreateMutex( NULL, FALSE, NULL);
+  this->async_data_buffer = NULL;
   this->readObjectResultDelegate = nullptr;
   this->readObjectResultDelgateObject = nullptr;
   this->writeObjectResultDelegate = nullptr;
@@ -592,6 +593,7 @@ ClientSDO_NET::~ClientSDO_NET()
 {
   delete this->cpp_ClientSDO;
   this->cpp_ClientSDO = NULL;
+  CloseHandle(this->rx_tx_mutex);
 }
 
 CanOpenStatus ClientSDO_NET::registerObjectReadResultCallback(CliReadResultDelegate^ readResultDelegate, System::Object^ obj)
@@ -678,15 +680,15 @@ CanOpenStatus ClientSDO_NET::objectRead(u16 object_index,
   CanOpenStatus ret;
   u32 temp_coErrorCode;
   u32 temp_valid;
-
-  if (this->temp_data_buffer == NULL)
+  WaitForSingleObject( this->rx_tx_mutex, INFINITE);
+  if (this->async_data_buffer == NULL)
   {
-    this->temp_data_buffer = new u8[data_buffer->Length];
+    this->async_data_buffer = new u8[data_buffer->Length];
     this->applicationsBuffer = data_buffer;
 
     ret = (CanOpenStatus)this->cpp_ClientSDO->objectRead( object_index, 
                                        sub_index, 
-                                       temp_data_buffer, 
+                                       this->async_data_buffer, 
                                        data_buffer->Length, 
                                        &temp_valid, 
                                        &temp_coErrorCode);
@@ -695,7 +697,7 @@ CanOpenStatus ClientSDO_NET::objectRead(u16 object_index,
     {
       for (u32 i = 0 ; i < temp_valid; i++)
       {
-        applicationsBuffer[i] = temp_data_buffer[i];
+        applicationsBuffer[i] = async_data_buffer[i];
       }
 
       valid = temp_valid;
@@ -703,15 +705,15 @@ CanOpenStatus ClientSDO_NET::objectRead(u16 object_index,
     }
     if ( ret != CanOpenStatus::CANOPEN_ASYNC_TRANSFER)
     {
-      delete[] this->temp_data_buffer;
-      this->temp_data_buffer = NULL;
+      delete[] this->async_data_buffer;
+      this->async_data_buffer = NULL;
     }
   }
   else
   {
     ret = CanOpenStatus::CANOPEN_ERROR; // Busy.
   }
-
+  ReleaseMutex(this->rx_tx_mutex, INFINITE);
   return ret;
 }
 
@@ -769,32 +771,34 @@ CanOpenStatus  ClientSDO_NET::objectWrite(u16 object_index,
   CanOpenStatus ret;
   CanOpenErrorCode temp_coErrorCode;
   
-  if (this->temp_data_buffer == NULL)
+  WaitForSingleObject( this->rx_tx_mutex, INFINITE);
+  if (this->async_data_buffer == NULL)
   {
-    this->temp_data_buffer = new u8[data_buffer->Length];
+    this->async_data_buffer = new u8[data_buffer->Length];
 
     for (u32 j = 0; j < valid; j++)
     {
-      this->temp_data_buffer[j] = data_buffer[j];
+      this->async_data_buffer[j] = data_buffer[j];
     }
 
     ret = (CanOpenStatus)this->cpp_ClientSDO->objectWrite(object_index,
                                       sub_index,
-                                      temp_data_buffer,
+                                      this->async_data_buffer,
                                       valid,
                                       &temp_coErrorCode);
     
     if ( ret != CanOpenStatus::CANOPEN_ASYNC_TRANSFER)
     {
-      delete[] this->temp_data_buffer;
-      this->temp_data_buffer = NULL;
+      delete[] this->async_data_buffer;
+      this->async_data_buffer = NULL;
     }
     coErrorCode = temp_coErrorCode;
   }
   else
   {
     ret = CanOpenStatus::CANOPEN_ERROR; // Busy.
-  }  
+  }
+  ReleaseMutex(this->rx_tx_mutex);
   return ret;
 }
 
@@ -808,19 +812,21 @@ CanOpenStatus  ClientSDO_NET::objectWriteBlock(u16 object_index,
   CanOpenStatus ret;
   CanOpenErrorCode temp_coErrorCode;
 
-  if (this->temp_data_buffer == NULL)
+  WaitForSingleObject(this->rx_tx_mutex, INFINITE);
+
+  if (this->async_data_buffer == NULL)
   {
-    temp_data_buffer = new u8[data_buffer->Length];
+    this->async_data_buffer = new u8[data_buffer->Length];
 
     for (u32 j = 0; j < valid; j++)
     {
-      temp_data_buffer[j] = data_buffer[j];
+      this->async_data_buffer[j] = data_buffer[j];
     }
 
     ret = (CanOpenStatus)this->cpp_ClientSDO->objectWriteBlock(object_index,
                                       sub_index,
                                       crc,
-                                      temp_data_buffer,
+                                      this->async_data_buffer,
                                       valid,
                                       &temp_coErrorCode);
     
@@ -828,14 +834,16 @@ CanOpenStatus  ClientSDO_NET::objectWriteBlock(u16 object_index,
 
     if (ret != CanOpenStatus::CANOPEN_ASYNC_TRANSFER)
     {
-      delete[] this->temp_data_buffer;
-      this->temp_data_buffer = NULL;
+      delete[] this->async_data_buffer;
+      this->async_data_buffer = NULL;
     }
   }
   else
   {
     ret = CanOpenStatus::CANOPEN_ERROR; // Busy
   }
+
+  ReleaseMutex(this->rx_tx_mutex, INFINITE);
   return ret;
 }
 
@@ -962,10 +970,10 @@ void ClientSDO_NET :: clientReadResultWrapperCallback(void *context,
                                    co_error_code );
   }
 
-  if (this->temp_data_buffer != NULL)
+  if (this->async_data_buffer != NULL)
   {
-    delete[] this->temp_data_buffer;
-    this->temp_data_buffer = NULL;
+    delete[] this->async_data_buffer;
+    this->async_data_buffer = NULL;
   }
 }
 
@@ -982,10 +990,10 @@ void ClientSDO_NET :: clientWriteResultWrapperCallback(void *context,
   {
     this->writeObjectResultDelegate( this->writeObjectResultDelegateObject, (CanOpenStatus)status, node_id, object_index, sub_index, co_error_code);
   }
-  if (this->temp_data_buffer != NULL)
+  if (this->async_data_buffer != NULL)
   {
-    delete[] this->temp_data_buffer;
-    this->temp_data_buffer = NULL;
+    delete[] this->async_data_buffer;
+    this->async_data_buffer = NULL;
   }
 }
 
