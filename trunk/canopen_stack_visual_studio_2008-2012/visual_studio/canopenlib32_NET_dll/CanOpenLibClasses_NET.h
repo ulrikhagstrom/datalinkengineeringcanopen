@@ -469,8 +469,9 @@ public:
                                 [System::Runtime::InteropServices::Out] CanOpenErrorCode %coErrorCode);
 #endif
 private:
+    HANDLE rx_tx_mutex;
     ClientSDO *cpp_ClientSDO;
-    u8 *temp_data_buffer;
+    u8 *async_data_buffer;
     array<Byte>^ applicationsBuffer; 
         
   //typedef void (*CliWriteFuncPtr)(void *context, canOpenStatus status, u16 object_index, 
