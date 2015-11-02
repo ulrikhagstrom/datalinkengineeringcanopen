@@ -713,7 +713,7 @@ CanOpenStatus ClientSDO_NET::objectRead(u16 object_index,
   {
     ret = CanOpenStatus::CANOPEN_ERROR; // Busy.
   }
-  ReleaseMutex(this->rx_tx_mutex, INFINITE);
+  ReleaseMutex(this->rx_tx_mutex);
   return ret;
 }
 
@@ -843,7 +843,7 @@ CanOpenStatus  ClientSDO_NET::objectWriteBlock(u16 object_index,
     ret = CanOpenStatus::CANOPEN_ERROR; // Busy
   }
 
-  ReleaseMutex(this->rx_tx_mutex, INFINITE);
+  ReleaseMutex(this->rx_tx_mutex);
   return ret;
 }
 
