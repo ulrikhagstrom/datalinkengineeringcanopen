@@ -684,7 +684,7 @@ CanOpenStatus ClientSDO_NET::objectRead(u16 object_index,
   if (this->async_data_buffer == NULL)
   {
     this->async_data_buffer = new u8[data_buffer->Length];
-    this->applicationsBuffer = data_buffer;
+    this->applications_buffer = data_buffer;
 
     ret = (CanOpenStatus)this->cpp_ClientSDO->objectRead( object_index, 
                                        sub_index, 
@@ -697,13 +697,13 @@ CanOpenStatus ClientSDO_NET::objectRead(u16 object_index,
     {
       for (u32 i = 0 ; i < temp_valid; i++)
       {
-        applicationsBuffer[i] = async_data_buffer[i];
+        this->applications_buffer[i] = this->async_data_buffer[i];
       }
-
-      valid = temp_valid;
-      coErrorCode = temp_coErrorCode;
     }
-    if ( ret != CanOpenStatus::CANOPEN_ASYNC_TRANSFER)
+	valid = temp_valid;
+	coErrorCode = temp_coErrorCode;
+
+    if (ret != CanOpenStatus::CANOPEN_ASYNC_TRANSFER)
     {
       delete[] this->async_data_buffer;
       this->async_data_buffer = NULL;
@@ -956,7 +956,7 @@ void ClientSDO_NET :: clientReadResultWrapperCallback(void *context,
 {
   for (u32 i = 0; i < valid; i++)
   {
-    this->applicationsBuffer[i] = buffer[i];
+    this->applications_buffer[i] = buffer[i];
   }
 
   if (this->readObjectResultDelegate != nullptr)
@@ -965,7 +965,7 @@ void ClientSDO_NET :: clientReadResultWrapperCallback(void *context,
                                    (CanOpenStatus)status,
                                    node_id, object_index,
                                    sub_index,
-                                   this->applicationsBuffer,
+                                   this->applications_buffer,
                                    valid,
                                    co_error_code );
   }
