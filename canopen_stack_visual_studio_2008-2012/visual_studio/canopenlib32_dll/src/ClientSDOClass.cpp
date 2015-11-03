@@ -29,6 +29,7 @@
 ClientSDO :: ClientSDO()
 {
   DebugLogToFile("ClientSDO() entered\n");
+  this->sync_mutex = CreateMutex( NULL, FALSE, NULL);
   this->state = UNACTIVE;
   this->object_read_callback = NULL;
   this->object_write_callback = NULL;
@@ -44,6 +45,7 @@ ClientSDO :: ~ClientSDO()
 {
     DebugLogToFile("~ClientSDO() entered\n");
   canHardwareDisconnect();
+  CloseHandle(this->sync_mutex);
 }
 
 
@@ -1232,6 +1234,7 @@ canOpenStatus  ClientSDO :: canFrameConsumer(unsigned long id,
   canOpenStatus ret = CANOPEN_ERROR;
   if (id == this->cobid_rx)
   {
+	WaitForSingleObject( this->sync_mutex, INFINITE);
     ret = this->setLatestEventTimestamp();
     if (ret == CANOPEN_OK)
     {
@@ -1329,6 +1332,7 @@ canOpenStatus  ClientSDO :: canFrameConsumer(unsigned long id,
     {
       DebugLogToFile("canFrameConsumer failed #4\n");
     }
+  ReleaseMutex( this->sync_mutex );
   }
   else
   {
@@ -1611,14 +1615,12 @@ canOpenStatus  ClientSDO :: objectWrite(u16 object_index, u8 sub_index,
 canOpenStatus   ClientSDO :: synchronize(unsigned long timeout, Direction direction)
 {
   DebugLogToFile("synchronize(unsigned long timeout, Direction direction) entered\n");
-  unsigned long startTransfertime_stamp = TimeClass ::readTimer();
-  unsigned long now = startTransfertime_stamp ;
   bool transfer_timeout = FALSE;
   bool remote_aborted = FALSE;
+
+  WaitForSingleObject( this->sync_mutex, INFINITE); 
   this->operation_timeout = timeout;
   this->transfer_direction = direction;
-
-  //this->is_transfer_stopped_or_finished = FALSE;
   this->setLatestEventTimestamp(); // Init.
 
   if (this->is_transfer_stopped_or_finished == FALSE)
@@ -1626,10 +1628,10 @@ canOpenStatus   ClientSDO :: synchronize(unsigned long timeout, Direction direct
     this->transfer_result = this->writeToCanBus();
     if (this->transfer_result != CANOPEN_OK)
     {
-      DebugLogToFile("Method writeToCanBus did not return CANOPEN_OK\n");
-      return this->transfer_result;
+      this->is_transfer_stopped_or_finished = TRUE;
     }
   }
+  ReleaseMutex(this->sync_mutex);
   
   while ( ((direction == WRITE_SESSION && object_write_callback == NULL) || // Do not sync if callback configured.
            (direction == READ_SESSION && object_read_callback == NULL)) &&  // Do not sync if callback configured.
@@ -1637,7 +1639,7 @@ canOpenStatus   ClientSDO :: synchronize(unsigned long timeout, Direction direct
           transfer_timeout == FALSE && 
           remote_aborted == FALSE) 
   {
-
+    WaitForSingleObject( this->sync_mutex, INFINITE);
     if (this->isTransferTimeout())
     {
       DebugLogToFile("synchronize timeout\n");
@@ -1652,6 +1654,7 @@ canOpenStatus   ClientSDO :: synchronize(unsigned long timeout, Direction direct
       this->transfer_result = CANOPEN_REMOTE_NODE_ABORT;
     }
     *(this->application_canopen_error_code) = remote_node_error_code;
+    ReleaseMutex(this->sync_mutex);
     Sleep(1);
   }
 
