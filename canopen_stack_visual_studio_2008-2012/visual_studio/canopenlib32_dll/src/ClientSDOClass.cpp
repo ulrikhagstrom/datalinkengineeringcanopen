@@ -1332,7 +1332,7 @@ canOpenStatus  ClientSDO :: canFrameConsumer(unsigned long id,
     {
       DebugLogToFile("canFrameConsumer failed #4\n");
     }
-  ReleaseMutex( this->sync_mutex );
+    ReleaseMutex( this->sync_mutex );
   }
   else
   {
@@ -1643,6 +1643,7 @@ canOpenStatus   ClientSDO :: synchronize(unsigned long timeout, Direction direct
     if (this->isTransferTimeout())
     {
       DebugLogToFile("synchronize timeout\n");
+	  this->state = UNACTIVE;
       this->transfer_result = CANOPEN_TIMEOUT; 
       transfer_timeout = TRUE;
     }
@@ -1650,6 +1651,7 @@ canOpenStatus   ClientSDO :: synchronize(unsigned long timeout, Direction direct
     if (remote_node_error_code != 0)
     {
       DebugLogToFile("synchronize failed #1\n");
+	  this->state = UNACTIVE;
       remote_aborted = true;
       this->transfer_result = CANOPEN_REMOTE_NODE_ABORT;
     }

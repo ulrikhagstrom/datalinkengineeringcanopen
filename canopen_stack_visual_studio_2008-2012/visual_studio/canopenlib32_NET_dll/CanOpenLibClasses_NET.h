@@ -472,7 +472,7 @@ private:
     HANDLE rx_tx_mutex;
     ClientSDO *cpp_ClientSDO;
     u8 *async_data_buffer;
-    array<Byte>^ applicationsBuffer; 
+    array<Byte>^ applications_buffer; 
         
   //typedef void (*CliWriteFuncPtr)(void *context, canOpenStatus status, u16 object_index, 
   //  u8 sub_index, u32 co_error_code); 
