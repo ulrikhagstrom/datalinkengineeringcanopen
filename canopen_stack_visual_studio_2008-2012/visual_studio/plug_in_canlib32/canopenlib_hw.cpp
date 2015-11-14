@@ -164,6 +164,12 @@ BOOL APIENTRY DllMain( HMODULE hModule,
     case DLL_THREAD_DETACH:
       break;
     case DLL_PROCESS_DETACH:
+      if (hCanLib != NULL)
+	  {
+        FreeLibrary(hCanLib);
+        canInitializeLibraryFP = null;
+        canReadFP = NULL;
+      }
       break;
 	}
   return TRUE;
