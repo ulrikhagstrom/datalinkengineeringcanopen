@@ -157,6 +157,8 @@ CanMonitor_NET::CanMonitor_NET()
 
 CanMonitor_NET::~CanMonitor_NET()
 {
+  this->can_receive_delegate = nullptr;
+  this->can_receive_delegate_object = nullptr;
   delete this->cpp_CanMonitor;
   this->cpp_CanMonitor = nullptr;
 }
@@ -182,14 +184,13 @@ CanOpenStatus CanMonitor_NET::registerCanReceiveCallback( System::Object^ obj, C
 
 CanOpenStatus CanMonitor_NET::canWrite( u32 id,  array<Byte>^ data, u8 dlc, u32 flags)
 {
-  u8 *data_cpp = new u8[dlc];
+  u8 data_cpp[8];
 
   for (int j = 0; j < dlc; j++)
     data_cpp[j] = data[j]; 
 
   CanOpenStatus ret = (CanOpenStatus)this->cpp_CanMonitor->canWrite( id, data_cpp, dlc, flags );
 
-  delete[] data_cpp;
   return ret;
 }
 
@@ -202,8 +203,11 @@ canOpenStatus CanMonitor_NET::canReceiveCPP(void *context, u32 id, u8 *data, u8 
   for (u8 i = 0; i < dlc; i++)
     data_cs[i] = data[i];
 
-  ret = (canOpenStatus)this->can_receive_delegate(this->can_receive_delegate_object, 
-    id, data_cs, dlc, flags);
+  if (can_receive_delegate != nullptr)
+  {
+    ret = (canOpenStatus)this->can_receive_delegate(this->can_receive_delegate_object, 
+      id, data_cs, dlc, flags);
+  }
   return ret;
 }
 
@@ -580,7 +584,6 @@ canOpenStatus EmcyServer_NET::emcyServerCallbackCPP(void *context, u8 nodeId, u1
 ClientSDO_NET::ClientSDO_NET()
 {
   this->rx_tx_mutex = CreateMutex( NULL, FALSE, NULL);
-  this->async_data_buffer = NULL;
   this->readObjectResultDelegate = nullptr;
   this->readObjectResultDelgateObject = nullptr;
   this->writeObjectResultDelegate = nullptr;
@@ -591,8 +594,10 @@ ClientSDO_NET::ClientSDO_NET()
 
 ClientSDO_NET::~ClientSDO_NET()
 {
+  WaitForSingleObject( this->rx_tx_mutex, INFINITE);
   delete this->cpp_ClientSDO;
   this->cpp_ClientSDO = NULL;
+  ReleaseMutex(this->rx_tx_mutex);
   CloseHandle(this->rx_tx_mutex);
 }
 
@@ -681,38 +686,23 @@ CanOpenStatus ClientSDO_NET::objectRead(u16 object_index,
   u32 temp_coErrorCode;
   u32 temp_valid;
   WaitForSingleObject( this->rx_tx_mutex, INFINITE);
-  if (this->async_data_buffer == NULL)
+
+  pin_ptr<u8> p = &data_buffer[0];   // pin pointer to first element in arr
+  u8* np = p;   // pointer to the first element in arr
+
+  ret = (CanOpenStatus)this->cpp_ClientSDO->objectRead( object_index, 
+                                    sub_index, 
+                                    np, 
+                                    data_buffer->Length, 
+                                    &temp_valid, 
+                                    &temp_coErrorCode);
+
+  coErrorCode = temp_coErrorCode;
+  if (ret == CanOpenStatus::CANOPEN_OK)
   {
-    this->async_data_buffer = new u8[data_buffer->Length];
-    this->applications_buffer = data_buffer;
-
-    ret = (CanOpenStatus)this->cpp_ClientSDO->objectRead( object_index, 
-                                       sub_index, 
-                                       this->async_data_buffer, 
-                                       data_buffer->Length, 
-                                       &temp_valid, 
-                                       &temp_coErrorCode);
-
-    if (ret == CanOpenStatus::CANOPEN_OK)
-    {
-      for (u32 i = 0 ; i < temp_valid; i++)
-      {
-        this->applications_buffer[i] = this->async_data_buffer[i];
-      }
-    }
 	valid = temp_valid;
-	coErrorCode = temp_coErrorCode;
+  }
 
-    if (ret != CanOpenStatus::CANOPEN_ASYNC_TRANSFER)
-    {
-      delete[] this->async_data_buffer;
-      this->async_data_buffer = NULL;
-    }
-  }
-  else
-  {
-    ret = CanOpenStatus::CANOPEN_ERROR; // Busy.
-  }
   ReleaseMutex(this->rx_tx_mutex);
   return ret;
 }
@@ -772,33 +762,20 @@ CanOpenStatus  ClientSDO_NET::objectWrite(u16 object_index,
   CanOpenErrorCode temp_coErrorCode;
   
   WaitForSingleObject( this->rx_tx_mutex, INFINITE);
-  if (this->async_data_buffer == NULL)
-  {
-    this->async_data_buffer = new u8[data_buffer->Length];
 
-    for (u32 j = 0; j < valid; j++)
-    {
-      this->async_data_buffer[j] = data_buffer[j];
-    }
+  pin_ptr<u8> p = &data_buffer[0];   // pin pointer to first element in arr
+  u8* np = p;   // pointer to the first element in arr
 
-    ret = (CanOpenStatus)this->cpp_ClientSDO->objectWrite(object_index,
-                                      sub_index,
-                                      this->async_data_buffer,
-                                      valid,
-                                      &temp_coErrorCode);
+  ret = (CanOpenStatus)this->cpp_ClientSDO->objectWrite(object_index,
+                                    sub_index,
+                                    np,
+                                    valid,
+                                    &temp_coErrorCode);
     
-    if ( ret != CanOpenStatus::CANOPEN_ASYNC_TRANSFER)
-    {
-      delete[] this->async_data_buffer;
-      this->async_data_buffer = NULL;
-    }
-    coErrorCode = temp_coErrorCode;
-  }
-  else
-  {
-    ret = CanOpenStatus::CANOPEN_ERROR; // Busy.
-  }
+  coErrorCode = temp_coErrorCode;
+
   ReleaseMutex(this->rx_tx_mutex);
+
   return ret;
 }
 
@@ -814,34 +791,18 @@ CanOpenStatus  ClientSDO_NET::objectWriteBlock(u16 object_index,
 
   WaitForSingleObject(this->rx_tx_mutex, INFINITE);
 
-  if (this->async_data_buffer == NULL)
-  {
-    this->async_data_buffer = new u8[data_buffer->Length];
-
-    for (u32 j = 0; j < valid; j++)
-    {
-      this->async_data_buffer[j] = data_buffer[j];
-    }
+  pin_ptr<u8> p = &data_buffer[0];   // pin pointer to first element in arr
+  u8* np = p;   // pointer to the first element in arr
 
     ret = (CanOpenStatus)this->cpp_ClientSDO->objectWriteBlock(object_index,
                                       sub_index,
                                       crc,
-                                      this->async_data_buffer,
+                                      np,
                                       valid,
                                       &temp_coErrorCode);
     
     coErrorCode = temp_coErrorCode; 
 
-    if (ret != CanOpenStatus::CANOPEN_ASYNC_TRANSFER)
-    {
-      delete[] this->async_data_buffer;
-      this->async_data_buffer = NULL;
-    }
-  }
-  else
-  {
-    ret = CanOpenStatus::CANOPEN_ERROR; // Busy
-  }
 
   ReleaseMutex(this->rx_tx_mutex);
   return ret;
@@ -969,12 +930,6 @@ void ClientSDO_NET :: clientReadResultWrapperCallback(void *context,
                                    valid,
                                    co_error_code );
   }
-
-  if (this->async_data_buffer != NULL)
-  {
-    delete[] this->async_data_buffer;
-    this->async_data_buffer = NULL;
-  }
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -989,11 +944,6 @@ void ClientSDO_NET :: clientWriteResultWrapperCallback(void *context,
   if (this->writeObjectResultDelegate != nullptr)
   {
     this->writeObjectResultDelegate( this->writeObjectResultDelegateObject, (CanOpenStatus)status, node_id, object_index, sub_index, co_error_code);
-  }
-  if (this->async_data_buffer != NULL)
-  {
-    delete[] this->async_data_buffer;
-    this->async_data_buffer = NULL;
   }
 }
 
