@@ -43,8 +43,9 @@ ClientSDO :: ClientSDO()
 //------------------------------------------------------------------------
 ClientSDO :: ~ClientSDO()
 {
-    DebugLogToFile("~ClientSDO() entered\n");
-  canHardwareDisconnect();
+  // Hardware disconnect in SDO base class!
+  DebugLogToFile("~ClientSDO() entered\n");
+  WaitForSingleObject(this->sync_mutex, INFINITE);
   CloseHandle(this->sync_mutex);
 }
 
@@ -1640,6 +1641,7 @@ canOpenStatus   ClientSDO :: synchronize(unsigned long timeout, Direction direct
           remote_aborted == FALSE) 
   {
     WaitForSingleObject( this->sync_mutex, INFINITE);
+
     if (this->isTransferTimeout())
     {
       DebugLogToFile("synchronize timeout\n");
@@ -1648,7 +1650,7 @@ canOpenStatus   ClientSDO :: synchronize(unsigned long timeout, Direction direct
       transfer_timeout = TRUE;
     }
 
-    if (remote_node_error_code != 0)
+    if (this->remote_node_error_code != 0)
     {
       DebugLogToFile("synchronize failed #1\n");
 	  this->state = UNACTIVE;

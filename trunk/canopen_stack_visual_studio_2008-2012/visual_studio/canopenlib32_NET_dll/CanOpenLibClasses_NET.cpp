@@ -688,7 +688,6 @@ CanOpenStatus ClientSDO_NET::objectRead(u16 object_index,
   CanOpenStatus ret;
   u32 temp_coErrorCode;
   u32 temp_valid;
-  WaitForSingleObject( this->rx_tx_mutex, INFINITE);
 
   pin_ptr<u8> p = &data_buffer[0];   // pin pointer to first element in arr
   u8* np = p;   // pointer to the first element in arr
@@ -706,7 +705,6 @@ CanOpenStatus ClientSDO_NET::objectRead(u16 object_index,
 	valid = temp_valid;
   }
 
-  ReleaseMutex(this->rx_tx_mutex);
   return ret;
 }
 
