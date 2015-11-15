@@ -529,7 +529,7 @@ typedef canStatus (__stdcall *CanGetErrorTextFP)(int, char *, unsigned int);
 typedef canStatus (__stdcall *CanGetVersionFP)(void);
 typedef canStatus (__stdcall *CanIoCtlFP)(int, unsigned int, void *, unsigned int);
 typedef unsigned long (__stdcall *CanReadTimerFP)(int);
-typedef canStatus (__stdcall *CanOpenChannelFP)(int, int);
+typedef int (__stdcall *CanOpenChannelFP)(int, int);
 typedef canStatus (__stdcall *CanGetNumberOfChannelsFP)(int *);
 typedef canStatus (__stdcall *CanGetChannelDataFP)(int, int, void *, size_t);
 typedef canStatus (__stdcall *CanWaitForEventFP)(int, DWORD);

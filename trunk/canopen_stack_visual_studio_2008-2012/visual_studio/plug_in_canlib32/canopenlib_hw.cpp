@@ -52,7 +52,7 @@
 
 
 
-HINSTANCE  hCanLib;
+static HINSTANCE  hCanLib = NULL;
 
 DllGetVersionFP dllGetVersionFP = NULL;
 CanInitializeLibraryFP canInitializeLibraryFP = NULL;
@@ -167,7 +167,7 @@ BOOL APIENTRY DllMain( HMODULE hModule,
       if (hCanLib != NULL)
 	  {
         FreeLibrary(hCanLib);
-        canInitializeLibraryFP = null;
+        canInitializeLibraryFP = NULL;
         canReadFP = NULL;
       }
       break;
@@ -181,13 +181,15 @@ CANOPENLIB_HW_API   canOpenStatus    __stdcall canPortLibraryInit(void)
   /*
 	*	Load proper CANLIB.DLL
 	*/
-	hCanLib = LoadLibrary(TEXT("canlib32.dll"));
-  if (hCanLib == NULL)
-    return CANOPEN_ERROR_DRIVER;
+	if (hCanLib == NULL)
+	  hCanLib = LoadLibrary(TEXT("canlib32.dll"));
+
+	if (hCanLib == NULL)
+      return CANOPEN_ERROR_DRIVER;
 	/*
 	*	Connect to the functions in the DLL.
 	*/
-  dllGetVersionFP = (DllGetVersionFP) GetProcAddress(hCanLib, "DllGetVersion");
+    dllGetVersionFP = (DllGetVersionFP) GetProcAddress(hCanLib, "DllGetVersion");
 	canInitializeLibraryFP = (CanInitializeLibraryFP)GetProcAddress(hCanLib, "canInitializeLibrary");
 	canOpenChannelFP = (CanOpenChannelFP)GetProcAddress(hCanLib, "canOpenChannel");
 	canBusOnFP = (CanBusOnFP)GetProcAddress(hCanLib, "canBusOn");
@@ -282,9 +284,14 @@ CANOPENLIB_HW_API   canOpenStatus    __stdcall canPortOpen( int port, canPortHan
 {
   if (canOpenChannelFP)
   {
-    *handle =  canOpenChannelFP( port, canOPEN_ACCEPT_VIRTUAL);
-    if (*handle >= 0)
+    int kv_handle;
+
+    kv_handle =  canOpenChannelFP( port, canOPEN_ACCEPT_VIRTUAL);
+    if (kv_handle >= 0)
+	{
+      *handle = kv_handle;
       return CANOPEN_OK;
+	}
     else
       return CANOPEN_ERROR_HW_UNDEFINED;
   }
@@ -298,8 +305,9 @@ CANOPENLIB_HW_API   canOpenStatus    __stdcall canPortClose( canPortHandle handl
   {
     canStatus kv_status = canCloseFP( (int)handle );
     if (kv_status == canOK)
+	{
       return CANOPEN_OK;
-    else
+	} else
       return CANOPEN_ERROR_HW_UNDEFINED;
   }
   return CANOPEN_ERROR_DRIVER;
