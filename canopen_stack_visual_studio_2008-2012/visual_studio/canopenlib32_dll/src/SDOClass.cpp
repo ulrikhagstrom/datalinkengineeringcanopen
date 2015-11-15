@@ -38,6 +38,7 @@ SDO :: SDO()
 //------------------------------------------------------------------------
 SDO :: ~SDO()
 {
+  WaitForSingleObject(this->rx_tx_mutex, INFINITE);
   CloseHandle(this->rx_tx_mutex);
   (void)this->canHardwareDisconnect();
 }
