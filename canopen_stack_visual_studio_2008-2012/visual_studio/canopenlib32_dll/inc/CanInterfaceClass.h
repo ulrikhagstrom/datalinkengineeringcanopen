@@ -118,6 +118,7 @@ class CANOPENDLL_API CanInterface
   
     int               port_index;
     int               port_users;  // Counter for keeping track on the number of users of the port.
+    HANDLE            port_mutex;
 
     HANDLE            can_message_dispatcher_mutex;
     void              startDispatcherThread(void);
