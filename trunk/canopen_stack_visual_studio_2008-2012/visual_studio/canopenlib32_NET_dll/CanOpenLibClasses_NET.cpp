@@ -147,6 +147,7 @@ CanMonitor_NET::CanMonitor_NET()
 {
   typedef void ( * RawCanReceiveFunPtr )( void * context, u32 id, u8 *data, u8 dlc, u32 flags );
 
+  this->rx_tx_mutex = CreateMutex( NULL, FALSE, NULL);
   this->cpp_CanMonitor = new CanMonitor();
   can_receive_delegate_CPP =  gcnew CanReceiveDelegate_CPP( this, &CanMonitor_NET::canReceiveCPP );
   IntPtr p_can_receive_delegate_CPP = Marshal::GetFunctionPointerForDelegate(can_receive_delegate_CPP);
@@ -157,39 +158,46 @@ CanMonitor_NET::CanMonitor_NET()
 
 CanMonitor_NET::~CanMonitor_NET()
 {
-  this->can_receive_delegate = nullptr;
-  this->can_receive_delegate_object = nullptr;
   delete this->cpp_CanMonitor;
   this->cpp_CanMonitor = nullptr;
+  WaitForSingleObject(this->rx_tx_mutex, INFINITE);
+  this->can_receive_delegate = nullptr;
+  this->can_receive_delegate_object = nullptr; 
+  ReleaseMutex(this->rx_tx_mutex);
+  CloseHandle(this->rx_tx_mutex);
 }
 
 
 CanOpenStatus CanMonitor_NET::canHardwareConnect(int port, int bitrate)
 {
-  return (CanOpenStatus)this->cpp_CanMonitor->canHardwareConnect(port, bitrate); 
+  WaitForSingleObject(this->rx_tx_mutex, INFINITE);
+  return (CanOpenStatus)this->cpp_CanMonitor->canHardwareConnect(port, bitrate);
+  ReleaseMutex(this->rx_tx_mutex);
 }
 
 
 CanOpenStatus CanMonitor_NET::canHardwareDisconnect(void)
 {
+  WaitForSingleObject(this->rx_tx_mutex, INFINITE);
   return (CanOpenStatus)this->cpp_CanMonitor->canHardwareDisconnect();
+  ReleaseMutex(this->rx_tx_mutex);
 }
 
 CanOpenStatus CanMonitor_NET::registerCanReceiveCallback( System::Object^ obj, CanReceiveDelegate^ can_receive_delegate )
 {
+  WaitForSingleObject(this->rx_tx_mutex, INFINITE);
   this->can_receive_delegate = can_receive_delegate;
   this->can_receive_delegate_object = obj;
+  ReleaseMutex(this->rx_tx_mutex);
   return CanOpenStatus::CANOPEN_OK;
 }
 
 CanOpenStatus CanMonitor_NET::canWrite( u32 id,  array<Byte>^ data, u8 dlc, u32 flags)
 {
-  u8 data_cpp[8];
+  pin_ptr<u8> p = &data[0];   // pin pointer to first element in arr
+  u8* np = p;   // pointer to the first element in arr
 
-  for (int j = 0; j < dlc; j++)
-    data_cpp[j] = data[j]; 
-
-  CanOpenStatus ret = (CanOpenStatus)this->cpp_CanMonitor->canWrite( id, data_cpp, dlc, flags );
+  CanOpenStatus ret = (CanOpenStatus)this->cpp_CanMonitor->canWrite( id, np, dlc, flags );
 
   return ret;
 }
@@ -197,17 +205,21 @@ CanOpenStatus CanMonitor_NET::canWrite( u32 id,  array<Byte>^ data, u8 dlc, u32 
 canOpenStatus CanMonitor_NET::canReceiveCPP(void *context, u32 id, u8 *data, u8 dlc, u32 flags )
 {
   canOpenStatus ret;
-  array<System::Byte>^ data_cs;
-  data_cs = gcnew array<System::Byte>(dlc);
-
-  for (u8 i = 0; i < dlc; i++)
-    data_cs[i] = data[i];
-
+  
   if (can_receive_delegate != nullptr)
   {
+    array<System::Byte>^ data_cs;
+    data_cs = gcnew array<System::Byte>(dlc);
+    for (u8 i = 0; i < dlc; i++)
+      data_cs[i] = data[i];
+
+
     ret = (canOpenStatus)this->can_receive_delegate(this->can_receive_delegate_object, 
       id, data_cs, dlc, flags);
+
+	delete data_cs;
   }
+
   return ret;
 }
 
@@ -248,28 +260,22 @@ CanOpenStatus EmcyClient_NET::nodeSetId(u8 nodeId)
 
 CanOpenStatus EmcyClient_NET::sendEmcyMessage( u8 nodeId, u16 emcy_error_code, u8 error_register, array<Byte>^ manufSpecificErrorField )
 {
-  u8 *data_cpp = new u8[5];
+  pin_ptr<u8> p = &manufSpecificErrorField[0];   // pin pointer to first element in arr
+  u8* np = p;   // pointer to the first element in arr
 
-  for (int j = 0; j < 5; j++)
-    data_cpp[j] = manufSpecificErrorField[j]; 
+  CanOpenStatus ret = (CanOpenStatus)this->cpp_EmcyClient->sendEmcyMessage(nodeId, emcy_error_code, error_register, np);
 
-  CanOpenStatus ret = (CanOpenStatus)this->cpp_EmcyClient->sendEmcyMessage(nodeId, emcy_error_code, error_register, data_cpp);
-
-  delete[] data_cpp;
   return ret;
 }
 
 
 CanOpenStatus EmcyClient_NET::sendEmcyMessage( u16 emcy_error_code, u8 error_register, array<Byte>^ manufSpecificErrorField )
 {
-  u8 *data_cpp = new u8[5];
+  pin_ptr<u8> p = &manufSpecificErrorField[0];   // pin pointer to first element in arr
+  u8* np = p;   // pointer to the first element in arr
 
-  for (int j = 0; j < 5; j++)
-    data_cpp[j] = manufSpecificErrorField[j]; 
+  CanOpenStatus ret = (CanOpenStatus)this->cpp_EmcyClient->sendEmcyMessage(emcy_error_code, error_register, np);
 
-  CanOpenStatus ret = (CanOpenStatus)this->cpp_EmcyClient->sendEmcyMessage(emcy_error_code, error_register, data_cpp);
-
-  delete[] data_cpp;
   return ret;
 }
 
@@ -367,17 +373,14 @@ CanOpenStatus TransmitPDO_NET::setup(u32 id,  array<Byte>^ data, u8 dlc)
   if (cpp_TransmitPDO == nullptr)
     return (CanOpenStatus::CANOPEN_INTERNAL_STATE_ERROR);
 
-  u8 *data_cpp = new u8[8];
-
   if (dlc < 0 || dlc > 8)
     return CanOpenStatus::CANOPEN_ARG_ERROR;
 
-  for (int j = 0; j < dlc; j++)
-    data_cpp[j] = data[j]; 
+  pin_ptr<u8> p = &data[0];   // pin pointer to first element in arr
+  u8* np = p;   // pointer to the first element in arr
 
-  CanOpenStatus ret = (CanOpenStatus)this->cpp_TransmitPDO->setData( id, data_cpp, dlc);
+  CanOpenStatus ret = (CanOpenStatus)this->cpp_TransmitPDO->setData( id, np, dlc);
 
-  delete[] data_cpp;
   return ret;
 
 }
@@ -1222,19 +1225,14 @@ CanOpenStatus  NMT_Slave_NET :: nodeSetState(u8 node_state)
 
 CanOpenStatus  NMT_Slave_NET :: writeMessage(u32 id, array<Byte>^ msg, u8 dlc, u32 flags)
 {
-  u8 *msg_cpp = new u8[dlc];
-
-  for (int j = 0; j < dlc; j++)
-  {
-    msg_cpp[j] = msg[j];
-  }
+  pin_ptr<u8> p = &msg[0];   // pin pointer to first element in arr
+  u8* np = p;   // pointer to the first element in arr
 
   CanOpenStatus ret  = (CanOpenStatus)this->cpp_NMTSlave->writeMessage(id,
-    msg_cpp,
+    np,
     dlc,
     flags);
 
-  delete[] msg_cpp;
   return ret;
 }
 
