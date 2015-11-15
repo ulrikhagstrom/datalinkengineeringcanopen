@@ -92,6 +92,7 @@ CanInterface :: CanInterface ( int port_index )
     this->can_port_bus_on = false;
     this->can_frame_dispatcher_thread_handle = NULL;
     this->can_message_dispatcher_mutex = CreateMutex( NULL, FALSE, NULL);
+    this->port_mutex = CreateMutex( NULL, FALSE, NULL);
 
     for (int i=0; i < MAX_PROCESS_MSG_CALLBACKS; i++)
     {
@@ -117,12 +118,15 @@ CanInterface :: CanInterface ( int port_index )
 CanInterface :: ~CanInterface()
 {
   this->stopDispatcherThread();   // qqq change so it is one thread per port.
-  CloseHandle( this->can_message_dispatcher_mutex );
+  WaitForSingleObject(this->can_message_dispatcher_mutex, INFINITE);
   if (hCanLib != NULL)
   {
       FreeLibrary(hCanLib);
       hCanLib = NULL;
   }
+  ReleaseMutex(this->can_message_dispatcher_mutex);
+  CloseHandle(this->can_message_dispatcher_mutex);
+  CloseHandle(this->port_mutex);
 }
 
 //------------------------------------------------------------------------
@@ -242,9 +246,6 @@ canOpenStatus  CanInterface :: protocolImplementationDispatcher(DWORD ticks)
     {
       void *context = this->dispatcherConfiguration[i].context;
       ret = this->dispatcherConfiguration[i].protocol_state_machine_callback( context ); 
-
-
-
     }
   }
   ReleaseMutex( this->can_message_dispatcher_mutex );
@@ -262,7 +263,9 @@ CanInterface* CanInterface :: getCanInterface( int port)
     {
       canInterfaceSingleton[port] = new CanInterface( port );
     }
+	WaitForSingleObject(canInterfaceSingleton[port]->port_mutex, INFINITE);
     canInterfaceSingleton[port]->port_users++; // Set to at least 1.
+	ReleaseMutex(canInterfaceSingleton[port]->port_mutex);
     return canInterfaceSingleton[port];
   }
   else
@@ -277,8 +280,11 @@ CanInterface* CanInterface :: getCanInterface( int port)
 canOpenStatus CanInterface::removeCanInterface(void)
 {
   canOpenStatus ret = CANOPEN_OK;
+  
+  WaitForSingleObject(this->port_mutex, INFINITE);
+  
   this->port_users--;
-  if (port_users == 0)
+  if (port_users <= 0)
   {
     // No users left, free the resources.
     //canOpenStatus retGoBufOff = CANOPEN_OK;
