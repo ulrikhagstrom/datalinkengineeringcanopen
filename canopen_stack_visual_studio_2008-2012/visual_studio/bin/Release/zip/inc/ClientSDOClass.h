@@ -186,6 +186,8 @@ class ClientSDO : public SDO
     //SDO block transfer.
     u16     crc;
     u8      block_size; // Block size given by SDO server.
+
+    HANDLE            sync_mutex;
 };
 
 #endif

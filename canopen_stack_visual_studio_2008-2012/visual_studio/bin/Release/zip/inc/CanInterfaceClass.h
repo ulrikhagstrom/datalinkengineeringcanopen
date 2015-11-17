@@ -55,6 +55,7 @@ class CANOPENDLL_API CanInterface
     ~CanInterface();
     static CanInterface   *getCanInterface(int port);
     static CanInterface   *getCanInterfaceNoCreate(int port);
+    HANDLE                can_frame_dispatcher_thread_mutex;
 
     static canOpenStatus  unlockCanopenLibrary(char *license_file, char *unlock_code);
 
@@ -118,6 +119,7 @@ class CANOPENDLL_API CanInterface
   
     int               port_index;
     int               port_users;  // Counter for keeping track on the number of users of the port.
+    HANDLE            port_mutex;
 
     HANDLE            can_message_dispatcher_mutex;
     void              startDispatcherThread(void);
