@@ -147,7 +147,6 @@ CanMonitor_NET::CanMonitor_NET()
 {
   typedef void ( * RawCanReceiveFunPtr )( void * context, u32 id, u8 *data, u8 dlc, u32 flags );
 
-  this->rx_tx_mutex = CreateMutex( NULL, FALSE, NULL);
   this->cpp_CanMonitor = new CanMonitor();
   can_receive_delegate_CPP =  gcnew CanReceiveDelegate_CPP( this, &CanMonitor_NET::canReceiveCPP );
   IntPtr p_can_receive_delegate_CPP = Marshal::GetFunctionPointerForDelegate(can_receive_delegate_CPP);
@@ -160,35 +159,26 @@ CanMonitor_NET::~CanMonitor_NET()
 {
   delete this->cpp_CanMonitor;
   this->cpp_CanMonitor = nullptr;
-  WaitForSingleObject(this->rx_tx_mutex, INFINITE);
   this->can_receive_delegate = nullptr;
   this->can_receive_delegate_object = nullptr; 
-  ReleaseMutex(this->rx_tx_mutex);
-  CloseHandle(this->rx_tx_mutex);
 }
 
 
 CanOpenStatus CanMonitor_NET::canHardwareConnect(int port, int bitrate)
 {
-  WaitForSingleObject(this->rx_tx_mutex, INFINITE);
   return (CanOpenStatus)this->cpp_CanMonitor->canHardwareConnect(port, bitrate);
-  ReleaseMutex(this->rx_tx_mutex);
 }
 
 
 CanOpenStatus CanMonitor_NET::canHardwareDisconnect(void)
 {
-  WaitForSingleObject(this->rx_tx_mutex, INFINITE);
   return (CanOpenStatus)this->cpp_CanMonitor->canHardwareDisconnect();
-  ReleaseMutex(this->rx_tx_mutex);
 }
 
 CanOpenStatus CanMonitor_NET::registerCanReceiveCallback( System::Object^ obj, CanReceiveDelegate^ can_receive_delegate )
 {
-  WaitForSingleObject(this->rx_tx_mutex, INFINITE);
   this->can_receive_delegate = can_receive_delegate;
   this->can_receive_delegate_object = obj;
-  ReleaseMutex(this->rx_tx_mutex);
   return CanOpenStatus::CANOPEN_OK;
 }
 
@@ -586,7 +576,6 @@ canOpenStatus EmcyServer_NET::emcyServerCallbackCPP(void *context, u8 nodeId, u1
 
 ClientSDO_NET::ClientSDO_NET()
 {
-  this->rx_tx_mutex = CreateMutex( NULL, FALSE, NULL);
   this->readObjectResultDelegate = nullptr;
   this->readObjectResultDelgateObject = nullptr;
   this->writeObjectResultDelegate = nullptr;
@@ -597,11 +586,8 @@ ClientSDO_NET::ClientSDO_NET()
 
 ClientSDO_NET::~ClientSDO_NET()
 {
-  WaitForSingleObject( this->rx_tx_mutex, INFINITE);
   delete this->cpp_ClientSDO;
   this->cpp_ClientSDO = NULL;
-  ReleaseMutex(this->rx_tx_mutex);
-  CloseHandle(this->rx_tx_mutex);
 }
 
 CanOpenStatus ClientSDO_NET::registerObjectReadResultCallback(CliReadResultDelegate^ readResultDelegate, System::Object^ obj)
@@ -762,8 +748,6 @@ CanOpenStatus  ClientSDO_NET::objectWrite(u16 object_index,
   CanOpenStatus ret;
   CanOpenErrorCode temp_coErrorCode;
   
-  WaitForSingleObject( this->rx_tx_mutex, INFINITE);
-
   pin_ptr<u8> p = &data_buffer[0];   // pin pointer to first element in arr
   u8* np = p;   // pointer to the first element in arr
 
@@ -774,8 +758,6 @@ CanOpenStatus  ClientSDO_NET::objectWrite(u16 object_index,
                                     &temp_coErrorCode);
     
   coErrorCode = temp_coErrorCode;
-
-  ReleaseMutex(this->rx_tx_mutex);
 
   return ret;
 }
@@ -790,8 +772,6 @@ CanOpenStatus  ClientSDO_NET::objectWriteBlock(u16 object_index,
   CanOpenStatus ret;
   CanOpenErrorCode temp_coErrorCode;
 
-  WaitForSingleObject(this->rx_tx_mutex, INFINITE);
-
   pin_ptr<u8> p = &data_buffer[0];   // pin pointer to first element in arr
   u8* np = p;   // pointer to the first element in arr
 
@@ -804,8 +784,6 @@ CanOpenStatus  ClientSDO_NET::objectWriteBlock(u16 object_index,
     
     coErrorCode = temp_coErrorCode; 
 
-
-  ReleaseMutex(this->rx_tx_mutex);
   return ret;
 }
 

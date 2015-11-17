@@ -222,7 +222,6 @@ private:
     [UnmanagedFunctionPointer(CallingConvention::Cdecl)]
     delegate canOpenStatus CanReceiveDelegate_CPP(void *context, u32 id, u8 *data, u8 dlc, u32 flags);
     CanReceiveDelegate_CPP ^can_receive_delegate_CPP;
-    HANDLE rx_tx_mutex;
 
     CanReceiveDelegate^ can_receive_delegate;  //C#
     System::Object^ can_receive_delegate_object; //C#
@@ -470,7 +469,6 @@ public:
                                 [System::Runtime::InteropServices::Out] CanOpenErrorCode %coErrorCode);
 #endif
 private:
-    HANDLE rx_tx_mutex;
     ClientSDO *cpp_ClientSDO;
     array<Byte>^ applications_buffer; 
         
