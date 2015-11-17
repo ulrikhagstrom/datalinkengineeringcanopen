@@ -76,12 +76,11 @@ canOpenStatus  CanConnection :: canHardwareDisconnect(void)
       if (ret == CANOPEN_OK)
       {
         ret = this->can_interface->canClosePort();
-        if (ret == CANOPEN_OK)
-          this->can_interface = NULL;
       }
     }
     this->can_message_handler_index = - 1;
     this->can_hardware_is_initiated = false;
+    this->can_interface = NULL;
     ret = CANOPEN_OK;
   }  
   return ret;
