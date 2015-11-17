@@ -68,8 +68,7 @@ canPortWriteFP canPortWrite = NULL;
 canPortReadFP canPortRead = NULL;
 canPortGetSerialNumberFP canPortGetSerialNumber = NULL;
 
-
-// Init of the parameters.w
+// Init of the parameters.
 CanInterface* CanInterface :: canInterfaceSingleton[MAX_CAN_INTERFACES] = 
   { NULL, NULL, NULL, NULL };
 
@@ -93,6 +92,7 @@ CanInterface :: CanInterface ( int port_index )
     this->can_frame_dispatcher_thread_handle = NULL;
     this->can_message_dispatcher_mutex = CreateMutex( NULL, FALSE, NULL);
     this->port_mutex = CreateMutex( NULL, FALSE, NULL);
+	this->can_frame_dispatcher_thread_mutex = CreateMutex( NULL, FALSE, NULL);
 
     for (int i=0; i < MAX_PROCESS_MSG_CALLBACKS; i++)
     {
@@ -103,8 +103,6 @@ CanInterface :: CanInterface ( int port_index )
     this->canHandle = -1;
     this->port_index = port_index; // To be able to cleanup later.
     this->port_users = 0; // Number of users of this port set to zero.
-
-    this->startDispatcherThread();
   }
   else
   {
@@ -117,15 +115,15 @@ CanInterface :: CanInterface ( int port_index )
 //------------------------------------------------------------------------
 CanInterface :: ~CanInterface()
 {
-  this->stopDispatcherThread();   // qqq change so it is one thread per port.
+  this->stopDispatcherThread();   // qqq change so it is one thread per port.;
   WaitForSingleObject(this->can_message_dispatcher_mutex, INFINITE);
   if (hCanLib != NULL)
   {
       FreeLibrary(hCanLib);
       hCanLib = NULL;
   }
-  ReleaseMutex(this->can_message_dispatcher_mutex);
   CloseHandle(this->can_message_dispatcher_mutex);
+  CloseHandle(this->can_frame_dispatcher_thread_mutex);
   CloseHandle(this->port_mutex);
 }
 
@@ -299,15 +297,18 @@ canOpenStatus CanInterface::removeCanInterface(void)
     canOpenStatus retPortClose = CANOPEN_OK;
     if (this->can_port_opened)
     {
+      this->stopDispatcherThread();
       retPortClose = ::canPortClose(this->canHandle);
+      this->can_port_bus_on = FALSE;
+      this->can_port_opened = FALSE;
     }
     if (retPortClose != CANOPEN_OK)
     {
       ret = retPortClose;
     }
-    canInterfaceSingleton[this->port_index] = NULL;
-    delete this; // Will call the destructor.
   }
+
+  ReleaseMutex(this->port_mutex);
   return ret;
 }
 
@@ -359,6 +360,7 @@ canOpenStatus CanInterface :: canOpenPort( int port, int bitrate )
     if (ret == CANOPEN_OK) 
     {
       this->can_port_opened = true;
+      this->startDispatcherThread();
     }
   }
   return ret;
@@ -586,6 +588,7 @@ void CanInterface :: stopDispatcherThread(void)
 {
   this->is_can_dispatcher_thread_running = FALSE;
   // Waits for the thread to terminate.
-  WaitForSingleObject( this->can_frame_dispatcher_thread_handle, INFINITE );  
+  WaitForSingleObject(this->can_frame_dispatcher_thread_mutex, INFINITE );
+  ReleaseMutex(this->can_frame_dispatcher_thread_mutex);
 }
 

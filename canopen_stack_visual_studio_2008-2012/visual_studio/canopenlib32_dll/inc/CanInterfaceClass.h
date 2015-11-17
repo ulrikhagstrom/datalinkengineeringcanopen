@@ -55,6 +55,7 @@ class CANOPENDLL_API CanInterface
     ~CanInterface();
     static CanInterface   *getCanInterface(int port);
     static CanInterface   *getCanInterfaceNoCreate(int port);
+    HANDLE                can_frame_dispatcher_thread_mutex;
 
     static canOpenStatus  unlockCanopenLibrary(char *license_file, char *unlock_code);
 
