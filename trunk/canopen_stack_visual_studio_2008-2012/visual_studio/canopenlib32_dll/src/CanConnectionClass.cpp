@@ -35,10 +35,6 @@ canOpenStatus  CanConnection :: canHardwareInit(int port, int bitrate,
     {
       ret = this->can_interface->canGoBusOn();
     } 
-    else 
-    {
-      this->can_interface->removeCanInterface();
-    }
   }
 
   if (ret == CANOPEN_OK)

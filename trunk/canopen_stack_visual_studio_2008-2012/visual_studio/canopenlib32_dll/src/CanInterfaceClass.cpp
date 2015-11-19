@@ -278,37 +278,26 @@ CanInterface* CanInterface :: getCanInterface( int port)
 canOpenStatus CanInterface::removeCanInterface(void)
 {
   canOpenStatus ret = CANOPEN_OK;
-  
-  WaitForSingleObject(this->port_mutex, INFINITE);
-  
+
+  WaitForSingleObject(this->port_mutex, INFINITE);  
   this->port_users--;
   if (port_users <= 0)
   {
-    // No users left, free the resources.
-    //canOpenStatus retGoBufOff = CANOPEN_OK;
-    //if (this->can_port_bus_on)
-    //{
-    //  retGoBufOff = ::canPortGoBusOff(this->canHandle);
-    //}
-    //if (retGoBufOff != CANOPEN_OK)
-    //{
-    //  ret = retGoBufOff;
-    //}
     canOpenStatus retPortClose = CANOPEN_OK;
     if (this->can_port_opened)
     {
       this->stopDispatcherThread();
+	  this->can_port_opened = false;
+	  this->can_port_bus_on = false;
       retPortClose = ::canPortClose(this->canHandle);
-      this->can_port_bus_on = FALSE;
-      this->can_port_opened = FALSE;
     }
     if (retPortClose != CANOPEN_OK)
     {
       ret = retPortClose;
     }
   }
-
   ReleaseMutex(this->port_mutex);
+
   return ret;
 }
 
