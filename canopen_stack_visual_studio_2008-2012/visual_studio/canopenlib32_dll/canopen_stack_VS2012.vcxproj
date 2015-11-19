@@ -148,7 +148,7 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>.\lib\2008\can_dispatcher.lib;libcmt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>.\lib\2010\can_dispatcher.lib;libcmt.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>..\bin\Release\canopenlib32.dll</OutputFile>
       <SuppressStartupBanner>false</SuppressStartupBanner>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
