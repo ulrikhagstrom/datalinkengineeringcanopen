@@ -81,3 +81,18 @@ canOpenStatus  CanConnection :: canHardwareDisconnect(void)
   }  
   return ret;
 }
+
+//------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------
+canOpenStatus CanConnection :: canDispatcherPerformance(
+                                     int sleepNoMessageFromCanInterface,
+                                     int sleepProcessedCanInterface)
+{
+    canOpenStatus ret = CANOPEN_ERROR;
+    if ( this->can_interface != NULL )
+    {
+      ret = this->can_interface->unregisterCanMessageHandler( this->can_message_handler_index );
+    }
+    return ret;
+}

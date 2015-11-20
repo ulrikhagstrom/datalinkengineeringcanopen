@@ -11,6 +11,9 @@ public:
     CanConnection();
     CANOPENDLL_API canOpenStatus canHardwareConnect(u8 port, u32 bitrate);
     CANOPENDLL_API canOpenStatus canHardwareDisconnect(void);
+    CANOPENDLL_API canOpenStatus canDispatcherPerformance(
+                                     int sleepNoMessageFromCanInterface,
+                                     int sleepProcessedCanInterface);
 protected:
     canOpenStatus  canHardwareInit(int port, int bitrate, 
       DispatcherCanFuncPtr can_frame_handler_function, 

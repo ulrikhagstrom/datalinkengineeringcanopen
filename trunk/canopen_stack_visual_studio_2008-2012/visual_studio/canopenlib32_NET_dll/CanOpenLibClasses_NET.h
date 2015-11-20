@@ -170,6 +170,7 @@ public:
     ~ServerSDO_NET();
     CanOpenStatus  canHardwareConnect(int port, int bitrate);
     CanOpenStatus  canHardwareDisconnect(void);
+	CanOpenStatus  canDispatcherPerformance(int sleepNoMessageFromCanInterface, int sleepProcessedCanInterface);
 
     CanOpenStatus  nodeSetId(u8 node_id);
 
@@ -205,13 +206,6 @@ public delegate CanOpenStatus EmcyServerDelegate( System::Object^ obj,
 
 public delegate CanOpenStatus SyncServerDelegate( System::Object^ obj);
 
-public ref class CanInterface_NET
-{
-public:
-    CanInterface_NET();
-    ~CanInterface_NET();
-    //CanOpenStatus unlockCanopenLibrary( array<Byte>^ license_file, array<Byte>^ unlock_code );
-};
 
 
 public ref class CanMonitor_NET
@@ -232,6 +226,7 @@ public:
 
     CanOpenStatus    canHardwareConnect(int port, int bitrate);
     CanOpenStatus    canHardwareDisconnect(void);
+	CanOpenStatus    canDispatcherPerformance(int sleepNoMessageFromCanInterface, int sleepProcessedCanInterface);
 
     CanOpenStatus    registerCanReceiveCallback( System::Object^ obj, CanReceiveDelegate^ can_receive_delegate );
     CanOpenStatus    canWrite( u32 id,  array<Byte>^ data, u8 dlc, u32 flags);
@@ -260,6 +255,7 @@ public:
 
     CanOpenStatus    canHardwareConnect(int port, int bitrate);
     CanOpenStatus    canHardwareDisconnect(void);
+    CanOpenStatus  canDispatcherPerformance(int sleepNoMessageFromCanInterface, int sleepProcessedCanInterface);
 
     CanOpenStatus    registerReceivePdoMessageCallBack( System::Object^ obj, ReceivePdoDelegate^ can_receive_delegate );
     CanOpenStatus    setCobid(u32 cobid);
@@ -287,6 +283,7 @@ public:
 
     CanOpenStatus    canHardwareConnect(int port, int bitrate);
     CanOpenStatus    canHardwareDisconnect(void);
+    CanOpenStatus  canDispatcherPerformance(int sleepNoMessageFromCanInterface, int sleepProcessedCanInterface);
 
     CanOpenStatus    registerSyncMessageCallBack( System::Object^ obj, SyncServerDelegate^ can_receive_delegate );
     CanOpenStatus    setCobid(u32 cobid);
@@ -316,6 +313,7 @@ public:
 
     CanOpenStatus    canHardwareConnect(int port, int bitrate);
     CanOpenStatus    canHardwareDisconnect(void);
+    CanOpenStatus  canDispatcherPerformance(int sleepNoMessageFromCanInterface, int sleepProcessedCanInterface);
 
     CanOpenStatus    registerEmcyServerMessageCallBack( System::Object^ obj, EmcyServerDelegate^ can_receive_delegate );
 
@@ -338,6 +336,7 @@ public:
 
     CanOpenStatus    canHardwareConnect(int port, int bitrate);
     CanOpenStatus    canHardwareDisconnect(void);
+    CanOpenStatus  canDispatcherPerformance(int sleepNoMessageFromCanInterface, int sleepProcessedCanInterface);
 
     CanOpenStatus    setup(u32 id, array<Byte>^ data, u8 dlc);
     CanOpenStatus    transmit(void);
@@ -358,6 +357,7 @@ public:
 
     CanOpenStatus    canHardwareConnect(int port, int bitrate);
     CanOpenStatus    canHardwareDisconnect(void);
+    CanOpenStatus    canDispatcherPerformance(int sleepNoMessageFromCanInterface, int sleepProcessedCanInterface);
 
 	CanOpenStatus    setSyncCOBID(COBID id);
 	CanOpenStatus    setTransmissionPeriodTime(unsigned long sync_period_time);
@@ -377,6 +377,7 @@ public:
 
     CanOpenStatus    canHardwareConnect(int port, int bitrate);
     CanOpenStatus    canHardwareDisconnect(void);
+    CanOpenStatus    canDispatcherPerformance(int sleepNoMessageFromCanInterface, int sleepProcessedCanInterface);
 
     CanOpenStatus    nodeSetId( u8 node_id );
     CanOpenStatus    sendEmcyMessage( u8 nodeId, u16 emcy_error_code, u8 error_register, array<Byte>^ manufSpecificErrorField );
@@ -400,6 +401,7 @@ public:
 
     CanOpenStatus  canHardwareConnect(int port, int bitrate);
     CanOpenStatus  canHardwareDisconnect(void);
+    CanOpenStatus  canDispatcherPerformance(int sleepNoMessageFromCanInterface, int sleepProcessedCanInterface);
 
     CanOpenStatus registerObjectReadResultCallback(CliReadResultDelegate^ readDelegate, System::Object^ obj); 
     CanOpenStatus registerObjectWriteResultCallback(CliWriteResultDelegate^ writeDelegate, System::Object^ obj); 
@@ -511,6 +513,7 @@ public:
 
     CanOpenStatus  canHardwareConnect(int port, int btr);
     CanOpenStatus  canHardwareDisconnect(void);
+    CanOpenStatus  canDispatcherPerformance(int sleepNoMessageFromCanInterface, int sleepProcessedCanInterface);
 
     CanOpenStatus  nodeStart(u8 node_id);
     CanOpenStatus  nodeStop(u8 node_id);
@@ -557,6 +560,7 @@ public:
 
     CanOpenStatus  canHardwareConnect(int port, int btr);
     CanOpenStatus  canHardwareDisconnect(void);
+    CanOpenStatus  canDispatcherPerformance(int sleepNoMessageFromCanInterface, int sleepProcessedCanInterface);
 
     CanOpenStatus  nodeSetId(u8 node_id);
     CanOpenStatus  nodeSetState(u8 node_state);
@@ -587,6 +591,8 @@ public:
 
     CanOpenStatus  canHardwareConnect(int port, int btr);
     CanOpenStatus  canHardwareDisconnect(void);
+    CanOpenStatus  canDispatcherPerformance(int sleepNoMessageFromCanInterface, int sleepProcessedCanInterface);
+
 	CanOpenStatus  switchModeGlobal(u8 mode);
 	CanOpenStatus  switchModeSelectiveVendorId(u32 vendorId);
 	CanOpenStatus  switchModeSelectiveProductCode(u32 productCode);
@@ -613,6 +619,8 @@ public:
 
     CanOpenStatus  canHardwareConnect(int port, int btr);
     CanOpenStatus  canHardwareDisconnect(void);
+    CanOpenStatus  canDispatcherPerformance(int sleepNoMessageFromCanInterface, int sleepProcessedCanInterface);
+
 	void  setDeviceParameters(u32 vendorId, u32 productCode, u32 revisionNumber, u32 serialNumber);
 
 private:
