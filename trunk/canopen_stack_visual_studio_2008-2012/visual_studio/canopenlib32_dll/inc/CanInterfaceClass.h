@@ -106,6 +106,8 @@ class CANOPENDLL_API CanInterface
 	canOpenStatus           canDispatcherPerformance(
                                 int sleepNoMessageFromCanInterface,
                                 int sleepProcessedCanInterface);
+    int                     sleep_no_message_from_can_interface;
+    int                     sleep_processed_can_interface;
 
   protected:
   private:
@@ -118,8 +120,7 @@ class CANOPENDLL_API CanInterface
     static bool             driver_licensed;
     bool                    can_port_opened;
     bool                    can_port_bus_on;
-    int                     sleep_no_message_from_can_interface;
-	int                     sleep_processed_can_interface;
+
 
     
   
