@@ -24,16 +24,6 @@
 #include "stdafx.h"
 #include "CanOpenLibClasses_NET.h"
 
-CanInterface_NET::CanInterface_NET()
-{ 
-  ;
-}
-
-CanInterface_NET::~CanInterface_NET()
-{ 
-  ;
-}
-
 ServerSDO_NET::ServerSDO_NET()
 {
   typedef canOpenStatus (*SrvReadFuncPtr)(void *context, u16 object_index, u8 sub_index, u8 *buf, u32 *valid, u32 buffer_size, u32 *coerror_code); //Read from srv's application.
@@ -95,12 +85,15 @@ CanOpenStatus  ServerSDO_NET::canHardwareDisconnect(void)
   return (CanOpenStatus)this->cpp_ServerSDO->canHardwareDisconnect(); 
 }
 
+CanOpenStatus  ServerSDO_NET::canDispatcherPerformance(int sleepNoMessageFromCanInterface, int sleepProcessedCanInterface)
+{
+  return (CanOpenStatus)this->cpp_ServerSDO->canDispatcherPerformance(sleepNoMessageFromCanInterface, sleepProcessedCanInterface); 
+}
 
 CanOpenStatus ServerSDO_NET::nodeSetId(u8 node_id)
 {
   return (CanOpenStatus)this->cpp_ServerSDO->nodeSetId(node_id);
 }
-
 
 canOpenStatus ServerSDO_NET::serverRead(void *p, u16 object_index, u8 sub_index, u8 *buf, u32 *valid, u32 buffer_size, u32 *coerror_code)
 {
@@ -169,10 +162,14 @@ CanOpenStatus CanMonitor_NET::canHardwareConnect(int port, int bitrate)
   return (CanOpenStatus)this->cpp_CanMonitor->canHardwareConnect(port, bitrate);
 }
 
-
 CanOpenStatus CanMonitor_NET::canHardwareDisconnect(void)
 {
   return (CanOpenStatus)this->cpp_CanMonitor->canHardwareDisconnect();
+}
+
+CanOpenStatus  CanMonitor_NET::canDispatcherPerformance(int sleepNoMessageFromCanInterface, int sleepProcessedCanInterface)
+{
+  return (CanOpenStatus)this->cpp_CanMonitor->canDispatcherPerformance(sleepNoMessageFromCanInterface, sleepProcessedCanInterface); 
 }
 
 CanOpenStatus CanMonitor_NET::registerCanReceiveCallback( System::Object^ obj, CanReceiveDelegate^ can_receive_delegate )
@@ -236,10 +233,14 @@ CanOpenStatus EmcyClient_NET::canHardwareConnect(int port, int bitrate)
   return (CanOpenStatus)this->cpp_EmcyClient->canHardwareConnect(port, bitrate); 
 }
 
-
 CanOpenStatus EmcyClient_NET::canHardwareDisconnect(void)
 {
   return (CanOpenStatus)this->cpp_EmcyClient->canHardwareDisconnect();
+}
+
+CanOpenStatus  EmcyClient_NET::canDispatcherPerformance(int sleepNoMessageFromCanInterface, int sleepProcessedCanInterface)
+{
+  return (CanOpenStatus)this->cpp_EmcyClient->canDispatcherPerformance(sleepNoMessageFromCanInterface, sleepProcessedCanInterface); 
 }
   
 CanOpenStatus EmcyClient_NET::nodeSetId(u8 nodeId)
@@ -292,10 +293,14 @@ CanOpenStatus SyncProducer_NET::canHardwareConnect(int port, int bitrate)
   return (CanOpenStatus)this->cpp_SyncProducer->canHardwareConnect(port, bitrate); 
 }
 
-
 CanOpenStatus SyncProducer_NET::canHardwareDisconnect(void)
 {
   return (CanOpenStatus)this->cpp_SyncProducer->canHardwareDisconnect();
+}
+
+CanOpenStatus  SyncProducer_NET::canDispatcherPerformance(int sleepNoMessageFromCanInterface, int sleepProcessedCanInterface)
+{
+  return (CanOpenStatus)this->cpp_SyncProducer->canDispatcherPerformance(sleepNoMessageFromCanInterface, sleepProcessedCanInterface); 
 }
 
 CanOpenStatus SyncProducer_NET::setSyncCOBID(u32 id)
@@ -338,16 +343,19 @@ TransmitPDO_NET::~TransmitPDO_NET()
   this->cpp_TransmitPDO = nullptr;
 }
 
-
 CanOpenStatus TransmitPDO_NET::canHardwareConnect(int port, int bitrate)
 {
   return (CanOpenStatus)this->cpp_TransmitPDO->canHardwareConnect(port, bitrate); 
 }
 
-
 CanOpenStatus TransmitPDO_NET::canHardwareDisconnect(void)
 {
   return (CanOpenStatus)this->cpp_TransmitPDO->canHardwareDisconnect();
+}
+
+CanOpenStatus  TransmitPDO_NET::canDispatcherPerformance(int sleepNoMessageFromCanInterface, int sleepProcessedCanInterface)
+{
+  return (CanOpenStatus)this->cpp_TransmitPDO->canDispatcherPerformance(sleepNoMessageFromCanInterface, sleepProcessedCanInterface); 
 }
 
 CanOpenStatus TransmitPDO_NET::setup(u32 id,  array<Byte>^ data, u8 dlc)
@@ -416,6 +424,11 @@ CanOpenStatus ReceivePDO_NET::canHardwareDisconnect(void)
   return (CanOpenStatus)this->cpp_ReceivePDO->canHardwareDisconnect();
 }
 
+CanOpenStatus  ReceivePDO_NET::canDispatcherPerformance(int sleepNoMessageFromCanInterface, int sleepProcessedCanInterface)
+{
+  return (CanOpenStatus)this->cpp_ReceivePDO->canDispatcherPerformance(sleepNoMessageFromCanInterface, sleepProcessedCanInterface); 
+}
+
 CanOpenStatus ReceivePDO_NET::registerReceivePdoMessageCallBack( System::Object^ obj, ReceivePdoDelegate^ receive_pdo_delegate )
 {
   this->receive_pdo_delegate = receive_pdo_delegate;
@@ -478,6 +491,11 @@ CanOpenStatus SyncServer_NET::canHardwareDisconnect(void)
   return (CanOpenStatus)this->cpp_SyncServer->canHardwareDisconnect();
 }
 
+CanOpenStatus  SyncServer_NET::canDispatcherPerformance(int sleepNoMessageFromCanInterface, int sleepProcessedCanInterface)
+{
+  return (CanOpenStatus)this->cpp_SyncServer->canDispatcherPerformance(sleepNoMessageFromCanInterface, sleepProcessedCanInterface); 
+}
+
 CanOpenStatus SyncServer_NET::registerSyncMessageCallBack( System::Object^ obj, SyncServerDelegate^ sync_server_delegate )
 {
   this->sync_server_delegate = sync_server_delegate;
@@ -529,6 +547,11 @@ CanOpenStatus EmcyServer_NET::canHardwareConnect(int port, int bitrate)
 CanOpenStatus EmcyServer_NET::canHardwareDisconnect(void)
 {
   return (CanOpenStatus)this->cpp_EmcyServer->canHardwareDisconnect();
+}
+
+CanOpenStatus  EmcyServer_NET::canDispatcherPerformance(int sleepNoMessageFromCanInterface, int sleepProcessedCanInterface)
+{
+  return (CanOpenStatus)this->cpp_EmcyServer->canDispatcherPerformance(sleepNoMessageFromCanInterface, sleepProcessedCanInterface); 
 }
 
 CanOpenStatus EmcyServer_NET::registerEmcyServerMessageCallBack( System::Object^ obj, EmcyServerDelegate^ emcy_server_delegate )
@@ -833,6 +856,11 @@ CanOpenStatus  ClientSDO_NET::canHardwareDisconnect(void)
   return (CanOpenStatus)this->cpp_ClientSDO->canHardwareDisconnect(); 
 }
 
+CanOpenStatus  ClientSDO_NET::canDispatcherPerformance(int sleepNoMessageFromCanInterface, int sleepProcessedCanInterface)
+{
+  return (CanOpenStatus)this->cpp_ClientSDO->canDispatcherPerformance(sleepNoMessageFromCanInterface, sleepProcessedCanInterface); 
+}
+
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 void ClientSDO_NET :: clientReadResultWrapperCallback(void *context,
@@ -933,6 +961,13 @@ CanOpenStatus  NMT_Master_NET::canHardwareConnect(int port, int btr)
 CanOpenStatus  NMT_Master_NET::canHardwareDisconnect(void)
 {
   return (CanOpenStatus)this->cpp_NMTMaster->canHardwareDisconnect();
+}
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+CanOpenStatus  NMT_Master_NET::canDispatcherPerformance(int sleepNoMessageFromCanInterface, int sleepProcessedCanInterface)
+{
+  return (CanOpenStatus)this->cpp_NMTMaster->canDispatcherPerformance(sleepNoMessageFromCanInterface, sleepProcessedCanInterface); 
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1068,6 +1103,13 @@ CanOpenStatus  NMT_Slave_NET :: canHardwareDisconnect(void)
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+CanOpenStatus  NMT_Slave_NET::canDispatcherPerformance(int sleepNoMessageFromCanInterface, int sleepProcessedCanInterface)
+{
+  return (CanOpenStatus)this->cpp_NMTSlave->canDispatcherPerformance(sleepNoMessageFromCanInterface, sleepProcessedCanInterface); 
+}
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 CanOpenStatus  NMT_Slave_NET :: nodeSetId(u8 node_id)
 {
   return (CanOpenStatus)this->cpp_NMTSlave->nodeSetId(node_id);
@@ -1150,6 +1192,13 @@ CanOpenStatus  LSS_Master_NET :: canHardwareConnect(int port, int btr)
 CanOpenStatus  LSS_Master_NET :: canHardwareDisconnect(void)
 {
   return (CanOpenStatus)this->cpp_LSSMaster->canHardwareDisconnect();
+}
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+CanOpenStatus  LSS_Master_NET::canDispatcherPerformance(int sleepNoMessageFromCanInterface, int sleepProcessedCanInterface)
+{
+  return (CanOpenStatus)this->cpp_LSSMaster->canDispatcherPerformance(sleepNoMessageFromCanInterface, sleepProcessedCanInterface); 
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1269,6 +1318,13 @@ CanOpenStatus  LSS_Slave_NET :: canHardwareConnect(int port, int btr)
 CanOpenStatus  LSS_Slave_NET :: canHardwareDisconnect(void)
 {
   return (CanOpenStatus)this->cpp_LSSSlave->canHardwareDisconnect();
+}
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+CanOpenStatus  LSS_Slave_NET::canDispatcherPerformance(int sleepNoMessageFromCanInterface, int sleepProcessedCanInterface)
+{
+  return (CanOpenStatus)this->cpp_LSSSlave->canDispatcherPerformance(sleepNoMessageFromCanInterface, sleepProcessedCanInterface); 
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

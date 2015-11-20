@@ -82,48 +82,54 @@ class CANOPENDLL_API CanInterface
 
     canOpenStatus           canRead(long * id, void * msg, unsigned int * dlc, 
       unsigned int * flags);
-    canOpenStatus            canWrite(long id, void * msg, unsigned int dlc, 
+    canOpenStatus           canWrite(long id, void * msg, unsigned int dlc, 
       unsigned int flags); 
 
-    canOpenStatus            canLibraryInit(void); // wrap CAN initalize library call for example.
+    canOpenStatus           canLibraryInit(void); // wrap CAN initalize library call for example.
 
-    canOpenStatus            canOpenHardwarePort(int port);
-    canOpenStatus            canCloseHardwarePort(int port);
+    canOpenStatus           canOpenHardwarePort(int port);
+    canOpenStatus           canCloseHardwarePort(int port);
 
-    canOpenStatus             canSetBitrate(int bitrate);
+    canOpenStatus           canSetBitrate(int bitrate);
 
-    canOpenStatus             canGetSerialNumber(char *buffer, int bufferLen);
+    canOpenStatus           canGetSerialNumber(char *buffer, int bufferLen);
 
-    canOpenStatus             canFrameDispatcher(
+    canOpenStatus           canFrameDispatcher(
                                 unsigned long id, 
                                 unsigned char *data, 
                                 unsigned int dlc, 
                                 unsigned int flags);
-    canOpenStatus             protocolImplementationDispatcher(DWORD ticks);
-    bool                      is_can_dispatcher_thread_running;
-    char                      adapter_serial_number[50];
+    canOpenStatus           protocolImplementationDispatcher(DWORD ticks);
+    bool                    is_can_dispatcher_thread_running;
+    char                    adapter_serial_number[50];
+
+	canOpenStatus           canDispatcherPerformance(
+                                int sleepNoMessageFromCanInterface,
+                                int sleepProcessedCanInterface);
 
   protected:
   private:
-    static CanInterface       *canInterfaceSingleton[ MAX_CAN_INTERFACES ];
-    DispatcherConfiguration   dispatcherConfiguration[ MAX_PROCESS_MSG_CALLBACKS ];
-    static DWORD WINAPI       canFrameDispatcherThread( PVOID p );
-    HINSTANCE                 hCanLib;
-    HANDLE                    can_frame_dispatcher_thread_handle;
-    bool                      drivers_initialized;
-    static bool               driver_licensed;
-    bool                      can_port_opened;
-    bool                      can_port_bus_on;
+    static CanInterface     *canInterfaceSingleton[ MAX_CAN_INTERFACES ];
+    DispatcherConfiguration dispatcherConfiguration[ MAX_PROCESS_MSG_CALLBACKS ];
+    static DWORD WINAPI     canFrameDispatcherThread( PVOID p );
+    HINSTANCE               hCanLib;
+    HANDLE                  can_frame_dispatcher_thread_handle;
+    bool                    drivers_initialized;
+    static bool             driver_licensed;
+    bool                    can_port_opened;
+    bool                    can_port_bus_on;
+    int                     sleep_no_message_from_can_interface;
+	int                     sleep_processed_can_interface;
 
     
   
-    int               port_index;
-    int               port_users;  // Counter for keeping track on the number of users of the port.
-    HANDLE            port_mutex;
+    int                     port_index;
+    int                     port_users;  // Counter for keeping track on the number of users of the port.
+    HANDLE                  port_mutex;
 
-    HANDLE            can_message_dispatcher_mutex;
-    void              startDispatcherThread(void);
-    void              stopDispatcherThread(void);
+    HANDLE                  can_message_dispatcher_mutex;
+    void                    startDispatcherThread(void);
+    void                    stopDispatcherThread(void);
 };
 
 #endif

@@ -103,6 +103,8 @@ CanInterface :: CanInterface ( int port_index )
     this->canHandle = -1;
     this->port_index = port_index; // To be able to cleanup later.
     this->port_users = 0; // Number of users of this port set to zero.
+
+    this->canDispatcherPerformance(5, 0);
   }
   else
   {
@@ -227,6 +229,15 @@ canOpenStatus  CanInterface :: canFrameDispatcher(unsigned long id,
   }
   ReleaseMutex( this->can_message_dispatcher_mutex );
   return ret;
+}
+
+canOpenStatus  CanInterface :: canDispatcherPerformance(
+                                int sleepNoMessageFromCanInterface,
+                                int sleepProcessedCanInterface)
+{
+    this->sleep_no_message_from_can_interface = sleepNoMessageFromCanInterface;
+    this->sleep_processed_can_interface = sleepProcessedCanInterface;
+    return CANOPEN_OK;
 }
 
 //------------------------------------------------------------------------

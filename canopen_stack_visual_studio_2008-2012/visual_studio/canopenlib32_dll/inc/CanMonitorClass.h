@@ -32,7 +32,7 @@
 
 typedef void ( * RawCanReceiveFunPtr )( void * context, u32 id, u8 *data, u8 dlc, u32 flags );
 
-class CanMonitor : CanConnection
+class CanMonitor : public CanConnection
 {
   public:
     CANOPENDLL_API CanMonitor();
