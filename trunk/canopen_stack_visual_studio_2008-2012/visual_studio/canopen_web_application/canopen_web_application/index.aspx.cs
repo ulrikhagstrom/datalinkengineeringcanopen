@@ -25,14 +25,14 @@ namespace canopen_web_application
 
         private static Queue<CanFrame> frames = new Queue<CanFrame>();
 
-        static CANOPEN_LIB_ERROR.CanOpenStatus nmtCallback(object obj, byte node_id, byte state)
+        static CanOpenStatus nmtCallback(object obj, byte node_id, byte state)
         {
             s_state = state;
-            return CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK;
+            return CanOpenStatus.CANOPEN_OK;
         }
 
 
-        static CANOPEN_LIB_ERROR.CanOpenStatus canReceiveCallback(object obj, uint id, byte[] data, byte dlc, uint flags)
+        static CanOpenStatus canReceiveCallback(object obj, uint id, byte[] data, byte dlc, uint flags)
         {
             StringBuilder tempString = new StringBuilder();
             tempString.AppendFormat("0x{0:X3} {1}: ", id, dlc);
@@ -56,7 +56,7 @@ namespace canopen_web_application
                     frames.Dequeue();
             }
 
-            return CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK;
+            return CanOpenStatus.CANOPEN_OK;
         }
 
         protected void Timer1_Tick(object sender, EventArgs e)
@@ -89,7 +89,7 @@ namespace canopen_web_application
             Console.Beep(100, 500);
 
 
-            CANOPEN_LIB_ERROR.CanOpenStatus stat;
+            CanOpenStatus stat;
 
             if (client_SDO == null || nmt_Master == null || can_monitor == null)
             {
@@ -99,14 +99,14 @@ namespace canopen_web_application
                 can_monitor = new CanMonitor_NET();
 
                 stat = can_monitor.canHardwareConnect(0, 125000);
-                if (stat != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
+                if (stat != CanOpenStatus.CANOPEN_OK)
                 {
                 }
 
                 can_monitor.registerCanReceiveCallback((Object)this, new CanReceiveDelegate(canReceiveCallback));
 
                 stat = client_SDO.canHardwareConnect(0, 125000);
-                if (stat != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
+                if (stat != CanOpenStatus.CANOPEN_OK)
                 {
                 }
                 stat = client_SDO.connect(3);
@@ -114,7 +114,7 @@ namespace canopen_web_application
                 nmt_Master.registerNodeStateCallback(new NMTOperationalStateDelegate(nmtCallback), this);
 
                 stat = nmt_Master.canHardwareConnect(0, 125000);
-                if (stat != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
+                if (stat != CanOpenStatus.CANOPEN_OK)
                 {
                 }
 
