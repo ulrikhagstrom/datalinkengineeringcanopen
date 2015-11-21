@@ -19,8 +19,11 @@ namespace canopen_web_application
     public partial class index : System.Web.UI.Page
     {
         private static ClientSDO_NET client_SDO;
+        private static ClientSDO_NET client_SDO_local;
         private static NMT_Master_NET nmt_Master;
         private static CanMonitor_NET can_monitor;
+        private static ServerSDO_NET server_SDO;
+
         public static byte s_state = 255;
 
         private static Queue<CanFrame> frames = new Queue<CanFrame>();
@@ -35,7 +38,7 @@ namespace canopen_web_application
         static CanOpenStatus canReceiveCallback(object obj, uint id, byte[] data, byte dlc, uint flags)
         {
             StringBuilder tempString = new StringBuilder();
-            tempString.AppendFormat("0x{0:X3} {1}: ", id, dlc);
+            //tempString.AppendFormat("0x{0:X3} {1}: ", id, dlc);
             if ((flags & CanMessageTypes.CAN_MSG_RTR_FLAG) != 0)
             {
                 tempString.Append("RTR");
@@ -50,9 +53,9 @@ namespace canopen_web_application
 
             lock (frames)
             {
-                frames.Enqueue(new CanFrame() { Id = id.ToString(), Data = tempString.ToString(), Dlc = dlc.ToString() });
+                frames.Enqueue(new CanFrame() { Id = String.Format("0x{0:X3}", id.ToString()), Data = tempString.ToString(), Dlc = dlc.ToString() });
 
-                if (frames.Count() > 10)
+                if (frames.Count() > 20)
                     frames.Dequeue();
             }
 
@@ -97,11 +100,32 @@ namespace canopen_web_application
                 client_SDO = new ClientSDO_NET();
                 nmt_Master = new NMT_Master_NET();
                 can_monitor = new CanMonitor_NET();
+                server_SDO = new ServerSDO_NET();
+                client_SDO_local = new ClientSDO_NET();
 
                 stat = can_monitor.canHardwareConnect(0, 125000);
                 if (stat != CanOpenStatus.CANOPEN_OK)
                 {
                 }
+
+                stat = can_monitor.canDispatcherPerformance(5, 5);
+                if (stat != CanOpenStatus.CANOPEN_OK)
+                {
+                }
+
+                stat = server_SDO.canHardwareConnect(0, 125000);
+                if (stat != CanOpenStatus.CANOPEN_OK)
+                {
+                }
+
+                stat = server_SDO.nodeSetId(5);
+                if (stat != CanOpenStatus.CANOPEN_OK)
+                {
+                }
+
+                server_SDO.registerObjectReadCallback(new SrvReadDelegate(canopenReadCallback), (Object)server_SDO);
+                server_SDO.registerObjectWriteCallback(new SrvWriteDelegate(canopenWriteCallback), (Object)server_SDO);
+                server_SDO.registerObjectGetAttributesCallback(new SrvGetAttrDelegate(getAttributesCallback), (Object)server_SDO);
 
                 can_monitor.registerCanReceiveCallback((Object)this, new CanReceiveDelegate(canReceiveCallback));
 
@@ -110,6 +134,12 @@ namespace canopen_web_application
                 {
                 }
                 stat = client_SDO.connect(3);
+
+                stat = client_SDO_local.canHardwareConnect(0, 125000);
+                if (stat != CanOpenStatus.CANOPEN_OK)
+                {
+                }
+                stat = client_SDO_local.connect(5);
 
                 nmt_Master.registerNodeStateCallback(new NMTOperationalStateDelegate(nmtCallback), this);
 
@@ -259,5 +289,124 @@ namespace canopen_web_application
                 lblSoftwareVersion.Text = temp_str;
             }
         }
+
+
+        static CanOpenStatus getAttributesCallback(object anyObject, ushort object_index, byte sub_index, out ushort flags)
+        {
+            flags = 0; // Nor R/W-accessable.
+            switch (object_index)
+            {
+                case 0xA:
+                    if (sub_index == 0xA)
+                        flags = OBJECT_ATTRIBUTES_NET.OBJECT_READABLE;
+                    break;
+                case 0xB0:
+                    if (sub_index == 0xB0)
+                        flags = OBJECT_ATTRIBUTES_NET.OBJECT_READABLE;
+                    break;
+                case 0xC0:
+                    if (sub_index == 0xC0)
+                        flags = OBJECT_ATTRIBUTES_NET.OBJECT_READABLE;
+                    break;
+                case 0xD0:
+                    if (sub_index == 0xD0)
+                        flags = OBJECT_ATTRIBUTES_NET.OBJECT_READABLE;
+                    break;
+                case 0xE0:
+                    if (sub_index == 0x00)
+                        flags = OBJECT_ATTRIBUTES_NET.OBJECT_WRITEABLE;
+                    break;
+                case 0x8000:
+                    flags = OBJECT_ATTRIBUTES_NET.OBJECT_WRITEABLE;
+                    break;
+            }
+
+            return CanOpenStatus.CANOPEN_OK;
+        }
+
+
+
+        static CanOpenStatus canopenReadCallback(object anyObject, ushort objectIndex, byte subIndex, byte[] data, out uint valid, out uint coErrorCode)
+        {
+            Console.BackgroundColor = ConsoleColor.Cyan;
+            Console.WriteLine("CALLBACK: Read from Server SDO ObjIdx: {0:X2}, SubIdx: {1:X2} request!", objectIndex, subIndex);
+            Console.BackgroundColor = ConsoleColor.Black;
+
+            Console.Beep();
+            valid = 0;
+            coErrorCode = 0;
+
+            if (objectIndex == 0xb0 && subIndex == 0xb0)
+            {
+                valid = 40;
+
+                for (byte i = 0; i < valid; i++)
+                    data[i] = i;
+
+                coErrorCode = 0;
+
+                return CanOpenStatus.CANOPEN_OK;
+            }
+
+            if (objectIndex == 0xc0 && subIndex == 0xc0)
+            {
+                valid = 1024;
+
+                for (int i = 0; i < valid; i++)
+                    data[i] = (byte)i;
+
+                coErrorCode = 0;
+
+                return CanOpenStatus.CANOPEN_OK;
+            }
+
+            // Expedited response on Object 10, sub 10.
+            if (objectIndex == 10 && subIndex == 10)
+            {
+                valid = 4;
+                data[0] = 0x10;
+                data[1] = 0x20;
+                data[2] = 0x30;
+                data[3] = 0x40;
+                coErrorCode = 0;
+                return CanOpenStatus.CANOPEN_OK;
+            }
+            return CanOpenStatus.CANOPEN_OK;
+
+        }
+
+
+        static CanOpenStatus canopenWriteCallback(object anyObject, ushort objectIndex, byte subIndex, byte[] data, uint valid, out uint coErrorCode)
+        {
+            Console.BackgroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("SDO SERVER CALLBACK: Write to Server SDO ObjIdx: {0:X2}, SubIdx: {1:X2} request!", objectIndex, subIndex);
+            Console.BackgroundColor = ConsoleColor.Black;
+
+
+            string objectData = String.Empty;
+            for (int i = 0; i < valid; i++)
+            {
+                objectData += String.Format("0x{0:X2} ", data[i]);
+            }
+            Console.WriteLine(objectData);
+            coErrorCode = 0;
+
+            return CanOpenStatus.CANOPEN_OK;
+        }
+
+        protected void DemoSegmentWrite_Click(object sender, EventArgs e)
+        {
+            byte[] tx_buffer = new byte[20];
+
+            for (int i = 0; i < tx_buffer.Length; i++)
+                tx_buffer[i] = (byte)i;
+
+            uint error_code;
+            client_SDO_local.objectWrite(0x8000, 0x1, tx_buffer, (uint)tx_buffer.Length, out error_code);
+
+        }
+
+
+
     }
 }
