@@ -231,6 +231,10 @@ canOpenStatus  CanInterface :: canFrameDispatcher(unsigned long id,
   return ret;
 }
 
+
+//------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------
 canOpenStatus  CanInterface :: canDispatcherPerformance(
                                 int sleepNoMessageFromCanInterface,
                                 int sleepProcessedCanInterface)

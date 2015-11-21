@@ -92,7 +92,7 @@ canOpenStatus CanConnection :: canDispatcherPerformance(
     canOpenStatus ret = CANOPEN_ERROR;
     if ( this->can_interface != NULL )
     {
-      ret = this->can_interface->unregisterCanMessageHandler( this->can_message_handler_index );
+        ret = this->can_interface->canDispatcherPerformance( sleepNoMessageFromCanInterface, sleepProcessedCanInterface );
     }
     return ret;
 }
