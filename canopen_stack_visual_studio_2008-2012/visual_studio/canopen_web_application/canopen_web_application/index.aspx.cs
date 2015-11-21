@@ -21,8 +21,16 @@ namespace canopen_web_application
         private static ClientSDO_NET client_SDO;
         private static NMT_Master_NET nmt_Master;
         private static CanMonitor_NET can_monitor;
+        public static byte s_state = 255;
 
         private static Queue<CanFrame> frames = new Queue<CanFrame>();
+
+        static CANOPEN_LIB_ERROR.CanOpenStatus nmtCallback(object obj, byte node_id, byte state)
+        {
+            s_state = state;
+            return CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK;
+        }
+
 
         static CANOPEN_LIB_ERROR.CanOpenStatus canReceiveCallback(object obj, uint id, byte[] data, byte dlc, uint flags)
         {
@@ -56,6 +64,9 @@ namespace canopen_web_application
             Label1.Text = "Panel refreshed at: " +
             DateTime.Now.ToLongTimeString();
 
+
+            lblOperationalState.Text = String.Format("Node operational state: {0}", s_state.ToString());
+
             lock (frames)
             {
                 CanGrid.DataSource = frames;
@@ -73,6 +84,10 @@ namespace canopen_web_application
         {
             if (IsPostBack == true)
                 return;
+
+
+            Console.Beep(100, 500);
+
 
             CANOPEN_LIB_ERROR.CanOpenStatus stat;
 
@@ -95,6 +110,8 @@ namespace canopen_web_application
                 {
                 }
                 stat = client_SDO.connect(3);
+
+                nmt_Master.registerNodeStateCallback(new NMTOperationalStateDelegate(nmtCallback), this);
 
                 stat = nmt_Master.canHardwareConnect(0, 125000);
                 if (stat != CANOPEN_LIB_ERROR.CanOpenStatus.CANOPEN_OK)
