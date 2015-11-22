@@ -42,6 +42,7 @@ class ReceivePDO : public CanConnection
     CANOPENDLL_API canOpenStatus  registerReceivePdoMessageCallBack(
       void *context, ReceivePdoFunPtr fp);
     CANOPENDLL_API canOpenStatus  setCobid(COBID cobid);
+    CANOPENDLL_API canOpenStatus  requestPDO(u8 dlc);
 
   protected:
   private:

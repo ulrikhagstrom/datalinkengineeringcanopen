@@ -255,10 +255,11 @@ public:
 
     CanOpenStatus    canHardwareConnect(int port, int bitrate);
     CanOpenStatus    canHardwareDisconnect(void);
-    CanOpenStatus  canDispatcherPerformance(int sleepNoMessageFromCanInterface, int sleepProcessedCanInterface);
+    CanOpenStatus    canDispatcherPerformance(int sleepNoMessageFromCanInterface, int sleepProcessedCanInterface);
 
     CanOpenStatus    registerReceivePdoMessageCallBack( System::Object^ obj, ReceivePdoDelegate^ can_receive_delegate );
     CanOpenStatus    setCobid(u32 cobid);
+	CanOpenStatus    requestPDO(u8 dlc);
 
 private:
     canOpenStatus    receivePdoCPP(void * context, u32 id, u8 *data, u8 dlc);

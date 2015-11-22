@@ -455,6 +455,11 @@ CanOpenStatus ReceivePDO_NET::setCobid(u32 cobid)
     return (CanOpenStatus)this->cpp_ReceivePDO->setCobid(cobid);
 }
 
+CanOpenStatus ReceivePDO_NET::requestPDO(u8 dlc)
+{
+	return (CanOpenStatus)this->cpp_ReceivePDO->requestPDO(dlc);
+}
+
 
 /***************
 **
