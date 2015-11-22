@@ -28,6 +28,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 
 
@@ -41,7 +42,7 @@ namespace CANopenDiagnostic
         private NMT_Master_NET nmt_Master;
         private NMT_Slave_NET nmt_slave;
         private CanMonitor_NET can_monitor;
-        private CanInterface_NET can_interface;
+        private ReceivePDO_NET receive_PDO;
 
         LogMessages log;
         
@@ -60,7 +61,7 @@ namespace CANopenDiagnostic
             nmt_Master = new NMT_Master_NET();
             nmt_slave = new NMT_Slave_NET();
             can_monitor = new CanMonitor_NET();
-            can_interface = new CanInterface_NET();
+            receive_PDO = new ReceivePDO_NET();
 
             System.Text.ASCIIEncoding encoding = new System.Text.ASCIIEncoding();
             byte[] file = encoding.GetBytes("C:\\dev\\closed_rep\\trunk\\canopen_stack_and_tools\\visual_studio\\canopenDLL\\Debug\\canopen_lic.txt\0");
@@ -207,6 +208,16 @@ namespace CANopenDiagnostic
                 log.OnLog("Successful connect MNT Master to CAN hardware!");
             }
 
+
+            stat = receive_PDO.canHardwareConnect(can_port, can_bitrate);
+            if (stat != CanOpenStatus.CANOPEN_OK)
+            {
+                log.OnLog("Error connecting RX PDO to CAN hardware!");
+            }
+            else
+            {
+                log.OnLog("Successful connect RX PDO to CAN hardware!");
+            }
             
         }
 
@@ -1220,11 +1231,9 @@ namespace CANopenDiagnostic
 
         private void btnRequestPdo_Click(object sender, EventArgs e)
         {
-            byte[] data = new byte[10];
-
-            can_monitor.canWrite((uint)numRemoteNode.Value +
-                (uint)(0x180 + 0x100 * (numUpDownPdo.Value - 1)), data, 4, CanMessageTypes.CAN_MSG_RTR_FLAG);
-
+            receive_PDO.setCobid((uint)numRemoteNode.Value +
+                (uint)(0x180 + 0x100 * (numUpDownPdo.Value - 1)));
+            receive_PDO.requestPDO(1);
         }
 
         private void btnConfigNodeGuard_Click(object sender, EventArgs e)
