@@ -401,6 +401,9 @@ ReceivePDO_NET::ReceivePDO_NET()
 {
     typedef void(*RawPdoReceiveFunPtr)(void * context, u32 id, u8 *data, u8 dlc);
 
+    this->receive_pdo_delegate = nullptr;
+    this->receive_pdo_delegate_object = nullptr;
+
     this->cpp_ReceivePDO = new ReceivePDO();
     receive_pdo_delegate_CPP = gcnew ReceivePdoDelegate_CPP(this, &ReceivePDO_NET::receivePdoCPP);
     IntPtr p_pdo_receive_delegate_CPP = Marshal::GetFunctionPointerForDelegate(receive_pdo_delegate_CPP);
@@ -439,6 +442,10 @@ CanOpenStatus ReceivePDO_NET::registerReceivePdoMessageCallBack(System::Object^ 
 canOpenStatus ReceivePDO_NET::receivePdoCPP(void *context, u32 id, u8 *data, u8 dlc)
 {
     canOpenStatus ret;
+
+    if (this->receive_pdo_delegate == nullptr)
+        return canOpenStatus::CANOPEN_OK;
+
     array<System::Byte>^ data_cs;
     data_cs = gcnew array<System::Byte>(dlc);
 
