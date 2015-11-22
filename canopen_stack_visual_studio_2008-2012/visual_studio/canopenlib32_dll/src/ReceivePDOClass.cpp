@@ -107,3 +107,25 @@ canOpenStatus ReceivePDO :: setCobid(COBID cobid)
   this->cobid = cobid;
   return CANOPEN_OK;
 }
+
+//------------------------------------------------------------------------
+// 
+//------------------------------------------------------------------------
+
+canOpenStatus ReceivePDO::requestPDO(u8 dlc)
+{
+	canOpenStatus ret = CANOPEN_ERROR;
+	if (this->can_hardware_is_initiated)
+	{
+		if (can_interface != NULL)
+		{
+			return can_interface->canWrite(this->cobid, NULL, dlc, CAN_MSG_RTR);
+		}
+		else
+		{
+			return CANOPEN_ERROR;
+		}
+	}
+	return CANOPEN_ERROR_HW_NOT_CONNECTED;
+	return ret;
+}
