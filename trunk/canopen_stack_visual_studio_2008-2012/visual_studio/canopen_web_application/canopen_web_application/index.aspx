@@ -69,8 +69,10 @@
             <asp:Button ID="btnReadSoftwareVersion" runat="server" onclick="btnReadSoftwareVersion_Click" Text="Read software version" />
             <br />
             <asp:Button ID="btnSetTransmitPdo1Timer" runat="server" onclick="btnSetTransmitPdo1Timer_Click" Text="Set node 3 TPDO 1 timer to 1000ms" Width="228px" />
+            <asp:Button ID="btnResetNode7" runat="server" OnClick="btnResetNode7_Click" Text="Reset node 7" Width="124px" />
             <br />
             <asp:Button ID="btnEnableTPDO1Node3" runat="server" onclick="btnEnableTPDO1Node3_Click" Text="Enable node 3 TPDO 1" />
+            <asp:Button ID="btnResetAllNodes" runat="server" OnClick="btnResetAllNodes_Click" Text="Reset all nodes" Width="179px" />
             <br />
             <asp:Button ID="Button1" runat="server" OnClick="DemoSegmentWrite_Click" Text="Demo segment write 20 bytes" />
             <br />

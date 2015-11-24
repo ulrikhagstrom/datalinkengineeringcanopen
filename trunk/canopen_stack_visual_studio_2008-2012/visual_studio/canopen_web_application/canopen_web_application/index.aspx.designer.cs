@@ -238,6 +238,15 @@ namespace canopen_web_application {
         protected global::System.Web.UI.WebControls.Button btnSetTransmitPdo1Timer;
         
         /// <summary>
+        /// btnResetNode7 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnResetNode7;
+        
+        /// <summary>
         /// btnEnableTPDO1Node3 control.
         /// </summary>
         /// <remarks>
@@ -245,6 +254,15 @@ namespace canopen_web_application {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnEnableTPDO1Node3;
+        
+        /// <summary>
+        /// btnResetAllNodes control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnResetAllNodes;
         
         /// <summary>
         /// Button1 control.
