@@ -39,37 +39,27 @@
         </div>
         <div style="float:left">
         <asp:Label runat="server" Text="Page not refreshed yet." id="Label1"></asp:Label>
-            <br>
-            <br></br>
+            </br>
             <asp:Label ID="lblDeviceName" runat="server" Text="Device name not read"></asp:Label>
-            <br>
-            <br></br>
-            <asp:Label ID="lblSoftwareVersion" runat="server" Text="Node software version not read"></asp:Label>
-            <br>
-            <br></br>
-            <asp:Label ID="lblOperationalState" runat="server" Text="Node software version not read"></asp:Label>
-            <br>
-            <br></br>
-            <asp:Button ID="btnCfgNodeGuardNode3" runat="server" onclick="btnCfgNodeGuardNode3_Click" Text="Configure node guard node 3" />
             <br />
+            <asp:Label ID="lblSoftwareVersion" runat="server" Text="Node software version not read"></asp:Label>
+            <br />
+            <asp:Label ID="lblOperationalState" runat="server" Text="Node software version not read"></asp:Label>
+            </br>
+            <asp:Button ID="btnCfgNodeGuardNode3" runat="server" onclick="btnCfgNodeGuardNode3_Click" Text="Configure node guard node 3" />
             <br />
             <asp:Button ID="btnStartNodeGuardNode3" runat="server" onclick="btnStartNodeGuardNode3_Click" Text="Start node guard node 3" />
             <asp:Button ID="btnStartHeartBeatNode3" runat="server" onclick="btnStartHeartBeatNode3_Click" Text="Start heartbeat node 3" />
             <br />
-            <br />
-            <br />
             <asp:Button ID="btnStopNodeGuardNode3" runat="server" onclick="btnStopNodeGuardNode3_Click" Text="Stop node guard node 3" />
             <asp:Button ID="btnStopHeartBeatNode3" runat="server" onclick="btnStopHeartBeatNode3_Click" Text="Stop heart beat node 3" />
-            <br />
             <br />
             <asp:Button ID="btnResetNode3" runat="server" onclick="btnResetNode3_Click" Text="Reset node 3" />
             <asp:Button ID="btnResetCommunicationNode3" runat="server" onclick="btnResetCommunicationNode3_Click" Text="Reset communication node 3" />
             <br />
-            <br />
             <asp:Button ID="btnStartNode3" runat="server" onclick="btnStartNode3_Click" Text="Start node 3" />
             <asp:Button ID="btnStopNode3" runat="server" onclick="btnStopNode3_Click" Text="Stop node 3" />
             <asp:Button ID="btnEnterPreopNode3" runat="server" onclick="btnEnterPreopNode3_Click" Text="Preoperational node 3" />
-            <br />
             <br />
             <asp:Button ID="btnReadDeviceNameNode3" runat="server" onclick="btnReadDeviceName_Click" Text="Read Device Name node 3" Width="171px" />
             <asp:Button ID="btnReadSoftwareVersion" runat="server" onclick="btnReadSoftwareVersion_Click" Text="Read software version" />
