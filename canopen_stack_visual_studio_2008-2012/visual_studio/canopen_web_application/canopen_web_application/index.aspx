@@ -39,14 +39,18 @@
         </div>
         <div style="float:left">
         <asp:Label runat="server" Text="Page not refreshed yet." id="Label1"></asp:Label>
-            </br>
+            <br />
             <asp:Label ID="lblDeviceName" runat="server" Text="Device name not read"></asp:Label>
             <br />
             <asp:Label ID="lblSoftwareVersion" runat="server" Text="Node software version not read"></asp:Label>
             <br />
             <asp:Label ID="lblOperationalState" runat="server" Text="Node software version not read"></asp:Label>
-            </br>
-            <asp:Button ID="btnCfgNodeGuardNode3" runat="server" onclick="btnCfgNodeGuardNode3_Click" Text="Configure node guard node 3" />
+            <br />
+            <asp:Button ID="btnCfgNodeGuardNode3" runat="server" onclick="btnCfgNodeGuardNode3_Click" Text="Configure node guard node 3" Width="208px" />
+            <asp:Button ID="btnStartNodeGuardNode7" runat="server" OnClick="btnStartNodeGuardNode7_Click" Text="Start node guard node 7" Width="196px" />
+            <br />
+            <asp:Button ID="btnCfgNodeGuardNode4" runat="server" onclick="btnCfgNodeGuardNode7_Click" Text="Configure node guard node 7" Width="208px" />
+            <asp:Button ID="stopNodeGuardNode7" runat="server" OnClick="stopNodeGuardNode7_Click" Text="Stop node guard node 7" Width="195px" />
             <br />
             <asp:Button ID="btnStartNodeGuardNode3" runat="server" onclick="btnStartNodeGuardNode3_Click" Text="Start node guard node 3" />
             <asp:Button ID="btnStartHeartBeatNode3" runat="server" onclick="btnStartHeartBeatNode3_Click" Text="Start heartbeat node 3" />
@@ -64,22 +68,12 @@
             <asp:Button ID="btnReadDeviceNameNode3" runat="server" onclick="btnReadDeviceName_Click" Text="Read Device Name node 3" Width="171px" />
             <asp:Button ID="btnReadSoftwareVersion" runat="server" onclick="btnReadSoftwareVersion_Click" Text="Read software version" />
             <br />
-            <br />
             <asp:Button ID="btnSetTransmitPdo1Timer" runat="server" onclick="btnSetTransmitPdo1Timer_Click" Text="Set node 3 TPDO 1 timer to 1000ms" Width="228px" />
-            <br />
             <br />
             <asp:Button ID="btnEnableTPDO1Node3" runat="server" onclick="btnEnableTPDO1Node3_Click" Text="Enable node 3 TPDO 1" />
             <br />
-            <br />
             <asp:Button ID="Button1" runat="server" OnClick="DemoSegmentWrite_Click" Text="Demo segment write 20 bytes" />
             <br />
-            <br>
-            <br></br>
-            </br>
-            </br>
-            </br>
-            </br>
-        </br>
         </div>
         </ContentTemplate>
         </asp:UpdatePanel>
