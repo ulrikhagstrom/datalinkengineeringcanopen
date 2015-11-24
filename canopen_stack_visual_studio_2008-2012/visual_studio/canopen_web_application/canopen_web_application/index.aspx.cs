@@ -180,6 +180,7 @@ namespace canopen_web_application
                 byte[] receive_buffer = new byte[100];
                 UInt32 error_code;
                 uint valid;
+                client_SDO.connect(3);
                 client_SDO.objectRead(0x1008, 0, receive_buffer, out valid, out error_code);
 
                 string temp_str = "Device name: ";
@@ -198,6 +199,7 @@ namespace canopen_web_application
             uint error_code;
             lock (client_SDO)
             {
+                client_SDO.connect(3);
                 client_SDO.objectWrite(0x1017, 0, (ushort)1000, out error_code);
             }
         }
@@ -269,6 +271,7 @@ namespace canopen_web_application
             lock (client_SDO)
             {
                 uint error_code;
+                client_SDO.connect(3);
                 client_SDO.objectWrite(0x1800, 5, (ushort)1000, out error_code);
             }
 
@@ -279,6 +282,7 @@ namespace canopen_web_application
             lock (client_SDO)
             {
                 uint error_code;
+                client_SDO.connect(3);
                 client_SDO.objectWrite(0x1800, 1, 0x280, out error_code);
             }
         }
@@ -290,6 +294,7 @@ namespace canopen_web_application
                 byte[] receive_buffer = new byte[100];
                 UInt32 error_code;
                 uint valid;
+                client_SDO.connect(3);
                 client_SDO.objectRead(0x100a, 0, receive_buffer, out valid, out error_code);
 
                 string temp_str = "Software version: ";
@@ -431,6 +436,22 @@ namespace canopen_web_application
             lock (nmt_Master)
             {
                 nmt_Master.nodeGuardPollStop(7);
+            }
+        }
+
+        protected void btnResetNode7_Click(object sender, EventArgs e)
+        {
+            lock (nmt_Master)
+            {
+                nmt_Master.nodeReset(7);
+            }
+        }
+
+        protected void btnResetAllNodes_Click(object sender, EventArgs e)
+        {
+            lock (nmt_Master)
+            {
+                nmt_Master.nodeReset(0);
             }
         }
     }
