@@ -239,6 +239,18 @@ namespace canopen_web_application
             uint error_code;
             lock (client_SDO)
             {
+                client_SDO.connect(3);
+                client_SDO.objectWrite(0x100c, 0, (ushort)1000, out error_code);
+                client_SDO.objectWrite(0x100d, 0, (byte)3, out error_code);
+            }
+        }
+
+        protected void btnCfgNodeGuardNode7_Click(object sender, EventArgs e)
+        {
+            uint error_code;
+            lock (client_SDO)
+            {
+                client_SDO.connect(7);
                 client_SDO.objectWrite(0x100c, 0, (ushort)1000, out error_code);
                 client_SDO.objectWrite(0x100d, 0, (byte)3, out error_code);
             }
@@ -406,7 +418,20 @@ namespace canopen_web_application
 
         }
 
+        protected void btnStartNodeGuardNode7_Click(object sender, EventArgs e)
+        {
+            lock (nmt_Master)
+            {
+                nmt_Master.nodeGuardPollStart(7, 1000);
+            }
+        }
 
-
+        protected void stopNodeGuardNode7_Click(object sender, EventArgs e)
+        {
+            lock (nmt_Master)
+            {
+                nmt_Master.nodeGuardPollStop(7);
+            }
+        }
     }
 }

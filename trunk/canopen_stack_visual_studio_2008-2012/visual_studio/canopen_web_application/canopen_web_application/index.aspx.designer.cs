@@ -103,6 +103,33 @@ namespace canopen_web_application {
         protected global::System.Web.UI.WebControls.Button btnCfgNodeGuardNode3;
         
         /// <summary>
+        /// btnStartNodeGuardNode7 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnStartNodeGuardNode7;
+        
+        /// <summary>
+        /// btnCfgNodeGuardNode4 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnCfgNodeGuardNode4;
+        
+        /// <summary>
+        /// stopNodeGuardNode7 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button stopNodeGuardNode7;
+        
+        /// <summary>
         /// btnStartNodeGuardNode3 control.
         /// </summary>
         /// <remarks>
