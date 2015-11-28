@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace CanopenDevices
@@ -108,11 +109,13 @@ namespace CanopenDevices
             byte io_blocks;
             uint canopenErrorCode;
 
+            ret = nmt_mlaster.nodeResetCommunication(node_id);
+
             // Read number of I/O-inputs.
             ret = client_sdo.objectRead(0x2000, 0, out io_blocks, out canopenErrorCode);
             if (ret == CanOpenStatus.CANOPEN_OK)
             {
-                digital_inputs = io_blocks * 8;
+                this.digital_inputs = io_blocks * 8;
             }
 
             ret = client_sdo.objectWrite(0x1A00, 0, 0, out canopenErrorCode);
@@ -122,11 +125,12 @@ namespace CanopenDevices
                 {
                     // Map inputs to transmit PDO.
 
-                    UInt32 val = (UInt32)(0x80000008 + 0x100 * io_blocks);
+                    UInt32 val = (UInt32)(0x60000008 + 0x100 * io_blocks);
 
                     ret = client_sdo.objectWrite(0x1A00, (byte)(1 + io_blocks), val, out canopenErrorCode);
                 }
             }
+
             ret = client_sdo.objectWrite(0x1A00, 0, io_blocks, out canopenErrorCode);
 
             ret = client_sdo.objectWrite(0x1800, 1, (UInt32)(0x00000180 + (node_id)), out canopenErrorCode);
@@ -134,6 +138,33 @@ namespace CanopenDevices
             ret = client_sdo.objectWrite(0x1800, 2, (byte)(254), out canopenErrorCode);
 
             ret = client_sdo.objectWrite(0x1800, 5, (UInt16)(500), out canopenErrorCode);
+
+            ret = client_sdo.objectRead(0x2100, 0, out io_blocks, out canopenErrorCode);
+            if (ret == CanOpenStatus.CANOPEN_OK)
+            {
+                this.digital_outputs = io_blocks * 8;
+            }
+
+            ret = client_sdo.objectWrite(0x1600, 0, 0, out canopenErrorCode);
+            if (ret == CanOpenStatus.CANOPEN_OK)
+            {
+                for (int i = 0; i < io_blocks; i++)
+                {
+                    // Map inputs to transmit PDO.
+
+                    UInt32 val = (UInt32)(0x62000008 + 0x100 * io_blocks);
+
+                    ret = client_sdo.objectWrite(0x1600, (byte)(1 + io_blocks), val, out canopenErrorCode);
+                }
+            }
+
+            ret = client_sdo.objectWrite(0x1600, 0, io_blocks, out canopenErrorCode);
+
+            ret = client_sdo.objectWrite(0x1400, 1, (UInt32)(0x80000200 + (node_id)), out canopenErrorCode);
+
+            ret = client_sdo.objectWrite(0x1400, 2, (byte)(254), out canopenErrorCode);
+
+            ret = client_sdo.objectWrite(0x1400, 5, (UInt16)(500), out canopenErrorCode);
 
             ret = nmt_mlaster.nodeStart(node_id);
 
