@@ -232,7 +232,7 @@ public:
     CanOpenStatus    canWrite( u32 id,  array<Byte>^ data, u8 dlc, u32 flags);
 
 private:
-    canOpenStatus canReceiveCPP(void * context, u32 id, u8 *data, u8 dlc, u32 flags );
+    canOpenStatus    canReceiveCPP(void * context, u32 id, u8 *data, u8 dlc, u32 flags );
 
 };
 
@@ -259,7 +259,8 @@ public:
 
     CanOpenStatus    registerReceivePdoMessageCallBack( System::Object^ obj, ReceivePdoDelegate^ can_receive_delegate );
     CanOpenStatus    setCobid(u32 cobid);
-	CanOpenStatus    requestPDO(u8 dlc);
+    CanOpenStatus    requestPDO(u8 dlc);
+    CanOpenStatus    readPdoData([System::Runtime::InteropServices::Out] u8 %val, u8 index);
 
 private:
     canOpenStatus    receivePdoCPP(void * context, u32 id, u8 *data, u8 dlc);
@@ -284,7 +285,7 @@ public:
 
     CanOpenStatus    canHardwareConnect(int port, int bitrate);
     CanOpenStatus    canHardwareDisconnect(void);
-    CanOpenStatus  canDispatcherPerformance(int sleepNoMessageFromCanInterface, int sleepProcessedCanInterface);
+    CanOpenStatus    canDispatcherPerformance(int sleepNoMessageFromCanInterface, int sleepProcessedCanInterface);
 
     CanOpenStatus    registerSyncMessageCallBack( System::Object^ obj, SyncServerDelegate^ can_receive_delegate );
     CanOpenStatus    setCobid(u32 cobid);
@@ -314,7 +315,7 @@ public:
 
     CanOpenStatus    canHardwareConnect(int port, int bitrate);
     CanOpenStatus    canHardwareDisconnect(void);
-    CanOpenStatus  canDispatcherPerformance(int sleepNoMessageFromCanInterface, int sleepProcessedCanInterface);
+    CanOpenStatus    canDispatcherPerformance(int sleepNoMessageFromCanInterface, int sleepProcessedCanInterface);
 
     CanOpenStatus    registerEmcyServerMessageCallBack( System::Object^ obj, EmcyServerDelegate^ can_receive_delegate );
 
@@ -337,7 +338,7 @@ public:
 
     CanOpenStatus    canHardwareConnect(int port, int bitrate);
     CanOpenStatus    canHardwareDisconnect(void);
-    CanOpenStatus  canDispatcherPerformance(int sleepNoMessageFromCanInterface, int sleepProcessedCanInterface);
+    CanOpenStatus    canDispatcherPerformance(int sleepNoMessageFromCanInterface, int sleepProcessedCanInterface);
 
     CanOpenStatus    setup(u32 id, array<Byte>^ data, u8 dlc);
     CanOpenStatus    transmit(void);
@@ -412,10 +413,10 @@ public:
     void          setReadObjectTimeout(u32 timeout);
     void          setNodeResponseTimeout(u32 timeout);
   
-    bool isObjectWriteResultCallbackEnabled(void);
-    bool isObjectReadResultCallbackEnabled(void);
+    bool          isObjectWriteResultCallbackEnabled(void);
+    bool          isObjectReadResultCallbackEnabled(void);
 
-    CanOpenStatus  objectRead(u16 object_index, 
+    CanOpenStatus objectRead(u16 object_index, 
                                 u8 sub_index, 
                                 array<Byte>^ val,
                                 [System::Runtime::InteropServices::Out] u32 %valid,

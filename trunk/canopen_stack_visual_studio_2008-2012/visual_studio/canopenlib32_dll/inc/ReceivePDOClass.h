@@ -43,6 +43,7 @@ class ReceivePDO : public CanConnection
       void *context, ReceivePdoFunPtr fp);
     CANOPENDLL_API canOpenStatus  setCobid(COBID cobid);
     CANOPENDLL_API canOpenStatus  requestPDO(u8 dlc);
+    CANOPENDLL_API canOpenStatus  readPdoData(u8* pdo_data, u8 index);
 
   protected:
   private:
@@ -62,6 +63,7 @@ class ReceivePDO : public CanConnection
     ReceivePdoFunPtr receive_pdo_callback;
     void              *context;
     u32               cobid;
+    u8                pdo_data[8];
 };
 
 #endif //RECEIVE_PDO_CLASS_H

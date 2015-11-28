@@ -71,17 +71,18 @@ canOpenStatus  ReceivePDO :: canFrameConsumer(unsigned long id,
   {
     if ((u32)id == this->cobid)
     {
-      char databuf[8];
-
       // In case the callback mess up the data contents.
       for (unsigned int i = 0; i < dlc; i++)
-        databuf[i] = data[i];
+      this->pdo_data[i] = data[i];
 
-      this->receive_pdo_callback(
+      if (this->receive_pdo_callback != NULL)
+      {
+        this->receive_pdo_callback(
         this->context,
         this->cobid,
-        (u8*)databuf,
+       this->pdo_data,
         dlc);
+      }
     }
   }
   return ret;
@@ -127,5 +128,19 @@ canOpenStatus ReceivePDO::requestPDO(u8 dlc)
 		}
 	}
 	return CANOPEN_ERROR_HW_NOT_CONNECTED;
-	return ret;
+}
+
+//------------------------------------------------------------------------
+// 
+//------------------------------------------------------------------------
+
+canOpenStatus  ReceivePDO::readPdoData(u8* pdo_data, u8 index)
+{
+  canOpenStatus ret = CANOPEN_ERROR;
+  if (this->can_hardware_is_initiated)
+  {
+    *pdo_data = this->pdo_data[index];
+        return CANOPEN_OK;
+  }
+  return CANOPEN_ERROR_HW_NOT_CONNECTED;
 }

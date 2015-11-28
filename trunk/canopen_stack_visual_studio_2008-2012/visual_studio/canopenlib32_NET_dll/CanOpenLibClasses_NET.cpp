@@ -467,6 +467,14 @@ CanOpenStatus ReceivePDO_NET::requestPDO(u8 dlc)
 	return (CanOpenStatus)this->cpp_ReceivePDO->requestPDO(dlc);
 }
 
+CanOpenStatus ReceivePDO_NET::readPdoData([System::Runtime::InteropServices::Out] u8 %val, u8 index)
+{
+    pin_ptr<u8> valp = &val;
+    u8* nvalp = valp;
+
+	return (CanOpenStatus)this->cpp_ReceivePDO->readPdoData(nvalp, index);
+}
+
 
 /***************
 **
