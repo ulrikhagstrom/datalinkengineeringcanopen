@@ -16,7 +16,7 @@ namespace canopen_device_demo
 
             ioUnit.canHardwareConnect(0, 125000);
 
-            ioUnit.startupNode(3);
+            ioUnit.startupNode(7);
 
             Thread.Sleep(100000);
         }
