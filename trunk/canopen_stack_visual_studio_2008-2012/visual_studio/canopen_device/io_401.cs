@@ -105,9 +105,9 @@ namespace CanopenDevices
             if (ret != CanOpenStatus.CANOPEN_OK)
                 return ret;
 
-            nmt_mlaster.nodeGuardPollStart(nodeId, 3000);
-            if (ret != CanOpenStatus.CANOPEN_OK)
-                return ret;
+            //nmt_mlaster.nodeGuardPollStart(nodeId, 3000);
+            //if (ret != CanOpenStatus.CANOPEN_OK)
+            //    return ret;
 
             ret = receive_pdo.setCobid((uint)0x180 + this.node_id);
             if (ret != CanOpenStatus.CANOPEN_OK)
@@ -121,11 +121,15 @@ namespace CanopenDevices
             if (ret != CanOpenStatus.CANOPEN_OK)
                 return ret;
 
-            ret = nmt_mlaster.nodeResetCommunication(node_id);
+            ret = nmt_mlaster.nodeReset(node_id);
             if (ret != CanOpenStatus.CANOPEN_OK)
                 return ret;
 
-            Thread.Sleep(3000);
+            Thread.Sleep(4000);
+
+            // -----------------------------------------------------------
+            //  INPUTS (TXPDO)
+            // -----------------------------------------------------------
 
             // Read number of I/O-inputs.
             ret = client_sdo.objectRead(0x2000, 0, out io_blocks, out canopenErrorCode);
@@ -154,8 +158,14 @@ namespace CanopenDevices
             if (ret != CanOpenStatus.CANOPEN_OK)
                 return ret;
 
+
+            UInt32 cobid = (UInt32)(0x00000180 + (node_id));
+
+            if (io_blocks == 0)
+                cobid = cobid | 0x80000000; // Disable PDO.
+
             // Set COBID for TPDO to 0x180 + node-id.
-            ret = client_sdo.objectWrite(0x1800, 1, (UInt32)(0x00000180 + (node_id)), out canopenErrorCode);
+            ret = client_sdo.objectWrite(0x1800, 1, cobid, out canopenErrorCode);
             if (ret != CanOpenStatus.CANOPEN_OK)
                 return ret;
 
@@ -172,6 +182,8 @@ namespace CanopenDevices
                     return ret;
             }
 
+            // -----------------------------------------------------------
+            //  OUTPUTS (RXPDO)
             // -----------------------------------------------------------
 
             // Read number of I/O-outputs.
@@ -200,18 +212,18 @@ namespace CanopenDevices
             if (ret != CanOpenStatus.CANOPEN_OK)
                 return ret;
 
+            cobid = (UInt32)(0x00000200 + (node_id));
+
+            if (io_blocks == 0)
+                cobid = cobid | 0x80000000; // Disable PDO.
+
             // Set COBID for RPDO.
-            ret = client_sdo.objectWrite(0x1400, 1, (UInt32)(0x00000200 + (node_id)), out canopenErrorCode);
+            ret = client_sdo.objectWrite(0x1400, 1, cobid, out canopenErrorCode);
             if (ret != CanOpenStatus.CANOPEN_OK)
                 return ret;
 
             // Set transmission type to 254.
             ret = client_sdo.objectWrite(0x1400, 2, (byte)(254), out canopenErrorCode);
-            if (ret != CanOpenStatus.CANOPEN_OK)
-                return ret;
-
-            // Set periodic transmission to 500ms.
-            ret = client_sdo.objectWrite(0x1400, 5, (UInt16)(500), out canopenErrorCode);
             if (ret != CanOpenStatus.CANOPEN_OK)
                 return ret;
 
