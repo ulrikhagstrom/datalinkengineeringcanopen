@@ -22,6 +22,8 @@ namespace CanopenDevices
 
         byte node_id;
 
+        byte[] output_mirror_values;
+
         public IO_401()
         {
 
@@ -30,6 +32,13 @@ namespace CanopenDevices
 
             analogOutputs = 0;
             analogInputs = 0;
+
+            output_mirror_values = new byte[8];
+
+            for (int i = 0; i < output_mirror_values.Length; i++)
+            {
+                output_mirror_values[i] = 0;
+            }
 
             client_sdo = new ClientSDO_NET();
             receive_pdo = new ReceivePDO_NET();
@@ -208,6 +217,28 @@ namespace CanopenDevices
             return CanOpenStatus.CANOPEN_OK;
         }
 
+        public CanOpenStatus setIO(int index, bool value)
+        {
+            byte ioByte = output_mirror_values[index / 8];
+
+            byte bit = 0x1;
+            int shifts = index % 8;
+            ioByte = (byte)(bit << (byte)shifts);
+
+            if (value == true)
+            {
+                output_mirror_values[index / 8] |= ioByte;
+            }
+            else
+            {
+                byte test = (byte)~ioByte;
+                output_mirror_values[index / 8] &= (byte)~ioByte;
+            }
+
+            transmit_pdo.setup((uint)0x200 + this.node_id, this.output_mirror_values, (byte)(this.digital_outputs/8));
+            return transmit_pdo.transmit();
+        }
+
         public CanOpenStatus startupNode(byte nodeId)
         {
             CanOpenStatus ret = CanOpenStatus.CANOPEN_ERROR;
@@ -218,15 +249,15 @@ namespace CanopenDevices
             if (ret != CanOpenStatus.CANOPEN_OK)
                 return ret;
 
-            //nmt_mlaster.nodeGuardPollStart(nodeId, 3000);
-            //if (ret != CanOpenStatus.CANOPEN_OK)
-            //    return ret;
+            nmt_mlaster.nodeGuardPollStart(nodeId, 3000);
+            if (ret != CanOpenStatus.CANOPEN_OK)
+                return ret;
 
             ret = receive_pdo.setCobid((uint)0x180 + this.node_id);
             if (ret != CanOpenStatus.CANOPEN_OK)
                 return ret;
 
-            ret = transmit_pdo.setup((uint)0x200 + this.node_id, new byte[] { 0xff }, 1);
+            ret = transmit_pdo.setup((uint)0x200 + this.node_id, this.output_mirror_values, 1);
             if (ret != CanOpenStatus.CANOPEN_OK)
                 return ret;
 
@@ -244,7 +275,21 @@ namespace CanopenDevices
             if (ret != CanOpenStatus.CANOPEN_OK)
                 return ret;
 
-            return configureIoOutputs();
+            ret = configureIoOutputs();
+            if (ret != CanOpenStatus.CANOPEN_OK)
+                return ret;
+
+            uint canopenErrorCode;
+            ret = client_sdo.objectWrite(0x100c, 0, (ushort)1000, out canopenErrorCode);
+            if (ret != CanOpenStatus.CANOPEN_OK)
+                return ret;
+
+            ret = client_sdo.objectWrite(0x100d, 0, (byte)3, out canopenErrorCode);
+            if (ret != CanOpenStatus.CANOPEN_OK)
+                return ret;
+
+            return ret;
+
         }
     }
 }
