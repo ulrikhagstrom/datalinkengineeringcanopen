@@ -92,83 +92,135 @@ namespace CanopenDevices
             return ret;
         }
 
-        public void setNodeId(byte nodeId)
-        {
-            
-            node_id = nodeId;
-            client_sdo.connect(nodeId);
-            nmt_mlaster.nodeGuardPollStart(nodeId,3000);
-        }
-           
-
-
-        public CanOpenStatus startupNode()
+        public CanOpenStatus startupNode(byte nodeId)
         {
             CanOpenStatus ret = CanOpenStatus.CANOPEN_ERROR;
 
             byte io_blocks;
             uint canopenErrorCode;
 
+            this.node_id = nodeId;
+
+            ret = client_sdo.connect(nodeId);
+            if (ret != CanOpenStatus.CANOPEN_OK)
+                return ret;
+
+            nmt_mlaster.nodeGuardPollStart(nodeId, 3000);
+            if (ret != CanOpenStatus.CANOPEN_OK)
+                return ret;
+
+            ret = receive_pdo.setCobid((uint)0x180 + this.node_id);
+            if (ret != CanOpenStatus.CANOPEN_OK)
+                return ret;
+
+            ret = transmit_pdo.setup((uint)0x200 + this.node_id, new byte[] { 0xff }, 1);
+            if (ret != CanOpenStatus.CANOPEN_OK)
+                return ret;
+
+            ret = transmit_pdo.periodicTransmission(true);
+            if (ret != CanOpenStatus.CANOPEN_OK)
+                return ret;
+
             ret = nmt_mlaster.nodeResetCommunication(node_id);
+            if (ret != CanOpenStatus.CANOPEN_OK)
+                return ret;
+
+            Thread.Sleep(3000);
 
             // Read number of I/O-inputs.
             ret = client_sdo.objectRead(0x2000, 0, out io_blocks, out canopenErrorCode);
-            if (ret == CanOpenStatus.CANOPEN_OK)
-            {
-                this.digital_inputs = io_blocks * 8;
-            }
+            if (ret != CanOpenStatus.CANOPEN_OK)
+                return ret;
 
+            this.digital_inputs = io_blocks * 8;
+
+            // Disable all I/O inputs.
             ret = client_sdo.objectWrite(0x1A00, 0, 0, out canopenErrorCode);
-            if (ret == CanOpenStatus.CANOPEN_OK)
+            if (ret != CanOpenStatus.CANOPEN_OK)
+                return ret;
+
+            // Map input blocks. Signals are located on object index 6000 with subindex 1 -> n which means
+            // represented as Uint32: 0x60000108 -> 0x60000n08
+            for (int i = 0; i < io_blocks; i++)
             {
-                for (int i = 0; i < io_blocks; i++)
-                {
-                    // Map inputs to transmit PDO.
-
-                    UInt32 val = (UInt32)(0x60000008 + 0x100 * io_blocks);
-
-                    ret = client_sdo.objectWrite(0x1A00, (byte)(1 + io_blocks), val, out canopenErrorCode);
-                }
+                UInt32 val = (UInt32)(0x60000008 + 0x100 * io_blocks);
+                ret = client_sdo.objectWrite(0x1A00, (byte)(1 + i), val, out canopenErrorCode);
+                if (ret != CanOpenStatus.CANOPEN_OK)
+                    return ret;
             }
 
+            // Enable all I/O inputs.
             ret = client_sdo.objectWrite(0x1A00, 0, io_blocks, out canopenErrorCode);
+            if (ret != CanOpenStatus.CANOPEN_OK)
+                return ret;
 
+            // Set COBID for TPDO to 0x180 + node-id.
             ret = client_sdo.objectWrite(0x1800, 1, (UInt32)(0x00000180 + (node_id)), out canopenErrorCode);
+            if (ret != CanOpenStatus.CANOPEN_OK)
+                return ret;
 
+            // Set transmission type to 254 for TPDO 
             ret = client_sdo.objectWrite(0x1800, 2, (byte)(254), out canopenErrorCode);
+            if (ret != CanOpenStatus.CANOPEN_OK)
+                return ret;
 
-            ret = client_sdo.objectWrite(0x1800, 5, (UInt16)(500), out canopenErrorCode);
+            // Set periodic tranmission to 500ms for TPDO.
+            if (io_blocks > 0)
+            {
+                ret = client_sdo.objectWrite(0x1800, 5, (UInt16)(500), out canopenErrorCode);
+                if (ret != CanOpenStatus.CANOPEN_OK)
+                    return ret;
+            }
 
+            // -----------------------------------------------------------
+
+            // Read number of I/O-outputs.
             ret = client_sdo.objectRead(0x2100, 0, out io_blocks, out canopenErrorCode);
-            if (ret == CanOpenStatus.CANOPEN_OK)
-            {
-                this.digital_outputs = io_blocks * 8;
-            }
+            if (ret != CanOpenStatus.CANOPEN_OK)
+                return ret;
+                
+            this.digital_outputs = io_blocks * 8;
 
+            // Disable all I/O outputs.
             ret = client_sdo.objectWrite(0x1600, 0, 0, out canopenErrorCode);
-            if (ret == CanOpenStatus.CANOPEN_OK)
+            if (ret != CanOpenStatus.CANOPEN_OK)
+                return ret;
+
+            // Map output blocks. Signals are located on object index 6200 with subindex 1 -> n.
+            for (int i = 0; i < io_blocks; i++)
             {
-                for (int i = 0; i < io_blocks; i++)
-                {
-                    // Map inputs to transmit PDO.
-
-                    UInt32 val = (UInt32)(0x62000008 + 0x100 * io_blocks);
-
-                    ret = client_sdo.objectWrite(0x1600, (byte)(1 + io_blocks), val, out canopenErrorCode);
-                }
+                UInt32 val = (UInt32)(0x62000008 + 0x100 * io_blocks);
+                ret = client_sdo.objectWrite(0x1600, (byte)(1 + io_blocks), val, out canopenErrorCode);
+                if (ret != CanOpenStatus.CANOPEN_OK)
+                    return ret;
             }
 
+            // Enable all I/O outputs.
             ret = client_sdo.objectWrite(0x1600, 0, io_blocks, out canopenErrorCode);
+            if (ret != CanOpenStatus.CANOPEN_OK)
+                return ret;
 
-            ret = client_sdo.objectWrite(0x1400, 1, (UInt32)(0x80000200 + (node_id)), out canopenErrorCode);
+            // Set COBID for RPDO.
+            ret = client_sdo.objectWrite(0x1400, 1, (UInt32)(0x00000200 + (node_id)), out canopenErrorCode);
+            if (ret != CanOpenStatus.CANOPEN_OK)
+                return ret;
 
+            // Set transmission type to 254.
             ret = client_sdo.objectWrite(0x1400, 2, (byte)(254), out canopenErrorCode);
+            if (ret != CanOpenStatus.CANOPEN_OK)
+                return ret;
 
+            // Set periodic transmission to 500ms.
             ret = client_sdo.objectWrite(0x1400, 5, (UInt16)(500), out canopenErrorCode);
+            if (ret != CanOpenStatus.CANOPEN_OK)
+                return ret;
 
+            // Start node.
             ret = nmt_mlaster.nodeStart(node_id);
+            if (ret != CanOpenStatus.CANOPEN_OK)
+                return ret;
 
-            return CanOpenStatus.CANOPEN_ERROR;
+            return CanOpenStatus.CANOPEN_OK;
         }
     }
 }
