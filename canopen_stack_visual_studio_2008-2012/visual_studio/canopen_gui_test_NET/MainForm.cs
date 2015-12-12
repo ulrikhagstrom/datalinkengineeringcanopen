@@ -252,6 +252,16 @@ namespace CANopenDiagnostic
             {
                 log.OnLog("Error disconnecting CAN monitor from CAN hardware!");
             }
+
+            stat = receive_PDO.canHardwareDisconnect();
+            if (stat == CanOpenStatus.CANOPEN_OK)
+            {
+                log.OnLog("Success disconnecting RX PDO from CAN hardware!");
+            }
+            else
+            {
+                log.OnLog("Error disconnecting RX PDO from CAN hardware!");
+            }
         }
 
         static DateTime _callbackLastMessageTime;
