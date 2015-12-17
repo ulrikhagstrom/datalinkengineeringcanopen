@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectName>canopenlib32_hw.dll (Embedded Intelligence, Copley Controls)</ProjectName>
+    <ProjectName>canopenlib32_hw.dll (Embedded Intelligence)</ProjectName>
     <ProjectGuid>{487AE379-0BF5-4E2B-9272-59847D48735F}</ProjectGuid>
     <RootNamespace>canlib32</RootNamespace>
     <Keyword>Win32Proj</Keyword>
