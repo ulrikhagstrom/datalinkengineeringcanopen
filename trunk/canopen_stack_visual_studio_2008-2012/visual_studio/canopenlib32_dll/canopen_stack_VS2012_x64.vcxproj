@@ -152,9 +152,8 @@
       </DataExecutionPrevention>
       <ImportLibrary>
       </ImportLibrary>
-      <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
-      <IgnoreSpecificDefaultLibraries>
-      </IgnoreSpecificDefaultLibraries>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <IgnoreSpecificDefaultLibraries>libcmtd.lib</IgnoreSpecificDefaultLibraries>
     </Link>
     <PostBuildEvent>
       <Command>copy .\lib\CAN_dispatcher_license.txt $(OutDir)CAN_dispatcher_license.txt</Command>
