@@ -59,6 +59,7 @@ class CanMonitor : public CanConnection
     RawCanReceiveFunPtr     application_can_receive_callback;
     void                    *application_context;
 
+    HANDLE            rx_tx_mutex;
 };
 
 #endif

@@ -28,6 +28,7 @@
 //------------------------------------------------------------------------
 CanMonitor :: CanMonitor()
 {
+  this->rx_tx_mutex = rx_tx_mutex = CreateMutex(NULL, FALSE, NULL);
   this->can_hardware_is_initiated = false;
   this->application_can_receive_callback = NULL;
 }
@@ -37,7 +38,10 @@ CanMonitor :: CanMonitor()
 //------------------------------------------------------------------------
 CanMonitor :: ~CanMonitor()
 {
+  WaitForSingleObject(this->rx_tx_mutex, INFINITE);
+  this->application_can_receive_callback = NULL;
   this->canHardwareDisconnect();
+  CloseHandle(this->rx_tx_mutex);
 }
 
 
@@ -58,11 +62,13 @@ canOpenStatus CanMonitor :: canFrameConsumerW(void *can_monitor_object,
 //------------------------------------------------------------------------
 canOpenStatus  CanMonitor :: canFrameConsumer( u32 id, u8 *data, u8 dlc,  u32 flags)
 {
+  WaitForSingleObject(this->rx_tx_mutex, INFINITE);
   if (this->application_can_receive_callback != NULL)
   {
     (void)this->application_can_receive_callback( 
       this->application_context, id, data, dlc, flags);
   }
+  ReleaseMutex(this->rx_tx_mutex);
   return CANOPEN_MSG_NOT_PROCESSED;
 }
 
