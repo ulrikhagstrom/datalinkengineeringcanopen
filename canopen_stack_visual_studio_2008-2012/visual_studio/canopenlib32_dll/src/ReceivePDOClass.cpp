@@ -29,6 +29,7 @@
 //------------------------------------------------------------------------
 ReceivePDO :: ReceivePDO (void)
 {
+  this->rx_tx_mutex = rx_tx_mutex = CreateMutex(NULL, FALSE, NULL);
   this->receive_pdo_callback = NULL;
   this->can_interface = NULL;
   this->can_message_handler_index = -1;
@@ -39,6 +40,9 @@ ReceivePDO :: ReceivePDO (void)
 //------------------------------------------------------------------------
 ReceivePDO :: ~ReceivePDO (void)
 {
+  WaitForSingleObject(this->rx_tx_mutex, INFINITE);
+  this->receive_pdo_callback = NULL;
+  CloseHandle(this->rx_tx_mutex);
   (void)this->canHardwareDisconnect();
 }
 
@@ -67,6 +71,7 @@ canOpenStatus  ReceivePDO :: canFrameConsumer(unsigned long id,
   unsigned char *data, unsigned int dlc, unsigned int flags)
 {
   canOpenStatus ret = CANOPEN_MSG_NOT_PROCESSED;
+  WaitForSingleObject(this->rx_tx_mutex, INFINITE);
   if (receive_pdo_callback != NULL) // Perform callback if configured to do so.
   {
     if ((u32)id == this->cobid)
@@ -80,11 +85,12 @@ canOpenStatus  ReceivePDO :: canFrameConsumer(unsigned long id,
         this->receive_pdo_callback(
         this->context,
         this->cobid,
-       this->pdo_data,
+        this->pdo_data,
         dlc);
       }
     }
   }
+  ReleaseMutex(this->rx_tx_mutex);
   return ret;
 }
 
