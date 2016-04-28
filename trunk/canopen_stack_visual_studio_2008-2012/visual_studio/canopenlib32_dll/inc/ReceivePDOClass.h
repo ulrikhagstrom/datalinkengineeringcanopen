@@ -64,6 +64,8 @@ class ReceivePDO : public CanConnection
     void              *context;
     u32               cobid;
     u8                pdo_data[8];
+
+    HANDLE            rx_tx_mutex;
 };
 
 #endif //RECEIVE_PDO_CLASS_H
