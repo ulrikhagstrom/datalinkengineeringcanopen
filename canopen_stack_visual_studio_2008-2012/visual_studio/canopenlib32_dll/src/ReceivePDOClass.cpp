@@ -42,8 +42,8 @@ ReceivePDO :: ~ReceivePDO (void)
 {
   WaitForSingleObject(this->rx_tx_mutex, INFINITE);
   this->receive_pdo_callback = NULL;
-  CloseHandle(this->rx_tx_mutex);
   (void)this->canHardwareDisconnect();
+  CloseHandle(this->rx_tx_mutex);
 }
 
 //------------------------------------------------------------------------
