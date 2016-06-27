@@ -68,6 +68,10 @@
       this.btnDeviceType = new System.Windows.Forms.Button();
       this.btnDeviceName = new System.Windows.Forms.Button();
       this.tabPDO = new System.Windows.Forms.TabPage();
+      this.btnSyncTrType = new System.Windows.Forms.Button();
+      this.btnStartSync = new System.Windows.Forms.Button();
+      this.btnSendPdoClearAll = new System.Windows.Forms.Button();
+      this.btnSendPdo50 = new System.Windows.Forms.Button();
       this.btnSendPdo = new System.Windows.Forms.Button();
       this.btnRequestPdo = new System.Windows.Forms.Button();
       this.btnMap64bits = new System.Windows.Forms.Button();
@@ -88,7 +92,7 @@
       this.label1 = new System.Windows.Forms.Label();
       this.linkClick = new System.Windows.Forms.LinkLabel();
       this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
-      this.btnSendPdo50 = new System.Windows.Forms.Button();
+      this.btnEnableSync = new System.Windows.Forms.Button();
       this.tabControl1.SuspendLayout();
       this.tabSettings.SuspendLayout();
       this.grpHardwareSetup.SuspendLayout();
@@ -522,6 +526,10 @@
       // 
       // tabPDO
       // 
+      this.tabPDO.Controls.Add(this.btnEnableSync);
+      this.tabPDO.Controls.Add(this.btnSyncTrType);
+      this.tabPDO.Controls.Add(this.btnStartSync);
+      this.tabPDO.Controls.Add(this.btnSendPdoClearAll);
       this.tabPDO.Controls.Add(this.btnSendPdo50);
       this.tabPDO.Controls.Add(this.btnSendPdo);
       this.tabPDO.Controls.Add(this.btnRequestPdo);
@@ -543,6 +551,46 @@
       this.tabPDO.TabIndex = 4;
       this.tabPDO.Text = "PDO";
       this.tabPDO.UseVisualStyleBackColor = true;
+      // 
+      // btnSyncTrType
+      // 
+      this.btnSyncTrType.Location = new System.Drawing.Point(10, 185);
+      this.btnSyncTrType.Name = "btnSyncTrType";
+      this.btnSyncTrType.Size = new System.Drawing.Size(117, 25);
+      this.btnSyncTrType.TabIndex = 17;
+      this.btnSyncTrType.Text = "TransType 10";
+      this.btnSyncTrType.UseVisualStyleBackColor = true;
+      this.btnSyncTrType.Click += new System.EventHandler(this.button2_Click);
+      // 
+      // btnStartSync
+      // 
+      this.btnStartSync.Location = new System.Drawing.Point(234, 129);
+      this.btnStartSync.Name = "btnStartSync";
+      this.btnStartSync.Size = new System.Drawing.Size(132, 23);
+      this.btnStartSync.TabIndex = 16;
+      this.btnStartSync.Text = "Start Sync";
+      this.btnStartSync.UseVisualStyleBackColor = true;
+      this.btnStartSync.Click += new System.EventHandler(this.btnStartSync_Click);
+      // 
+      // btnSendPdoClearAll
+      // 
+      this.btnSendPdoClearAll.Location = new System.Drawing.Point(234, 99);
+      this.btnSendPdoClearAll.Name = "btnSendPdoClearAll";
+      this.btnSendPdoClearAll.Size = new System.Drawing.Size(133, 23);
+      this.btnSendPdoClearAll.TabIndex = 15;
+      this.btnSendPdoClearAll.Text = "Send PDO (0% set)";
+      this.btnSendPdoClearAll.UseVisualStyleBackColor = true;
+      this.btnSendPdoClearAll.Click += new System.EventHandler(this.btnSendPdoClearAll_Click);
+      // 
+      // btnSendPdo50
+      // 
+      this.btnSendPdo50.Location = new System.Drawing.Point(234, 70);
+      this.btnSendPdo50.Name = "btnSendPdo50";
+      this.btnSendPdo50.Size = new System.Drawing.Size(133, 23);
+      this.btnSendPdo50.TabIndex = 14;
+      this.btnSendPdo50.Text = "Send PDO (50% set)";
+      this.btnSendPdo50.UseVisualStyleBackColor = true;
+      this.btnSendPdo50.Click += new System.EventHandler(this.btnSendPdo50_Click);
       // 
       // btnSendPdo
       // 
@@ -761,15 +809,15 @@
       // 
       this.errorProvider1.ContainerControl = this;
       // 
-      // btnSendPdo50
+      // btnEnableSync
       // 
-      this.btnSendPdo50.Location = new System.Drawing.Point(234, 70);
-      this.btnSendPdo50.Name = "btnSendPdo50";
-      this.btnSendPdo50.Size = new System.Drawing.Size(133, 23);
-      this.btnSendPdo50.TabIndex = 14;
-      this.btnSendPdo50.Text = "Send PDO (50% set)";
-      this.btnSendPdo50.UseVisualStyleBackColor = true;
-      this.btnSendPdo50.Click += new System.EventHandler(this.btnSendPdo50_Click);
+      this.btnEnableSync.Location = new System.Drawing.Point(133, 185);
+      this.btnEnableSync.Name = "btnEnableSync";
+      this.btnEnableSync.Size = new System.Drawing.Size(94, 27);
+      this.btnEnableSync.TabIndex = 18;
+      this.btnEnableSync.Text = "Enable sync";
+      this.btnEnableSync.UseVisualStyleBackColor = true;
+      this.btnEnableSync.Click += new System.EventHandler(this.btnEnableSync_Click);
       // 
       // MainForm
       // 
@@ -871,6 +919,10 @@
         private System.Windows.Forms.Button btnConfHeartBeat;
     private System.Windows.Forms.Button btnSendPdo;
     private System.Windows.Forms.Button btnSendPdo50;
+    private System.Windows.Forms.Button btnSendPdoClearAll;
+    private System.Windows.Forms.Button btnStartSync;
+    private System.Windows.Forms.Button btnSyncTrType;
+    private System.Windows.Forms.Button btnEnableSync;
   }
 }
 
