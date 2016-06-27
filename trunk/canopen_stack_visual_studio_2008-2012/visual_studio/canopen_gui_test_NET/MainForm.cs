@@ -43,6 +43,7 @@ namespace CANopenDiagnostic
         private NMT_Slave_NET nmt_slave;
         private CanMonitor_NET can_monitor;
         private ReceivePDO_NET receive_PDO;
+        private TransmitPDO_NET transmit_PDO;
 
         LogMessages log;
         
@@ -62,6 +63,8 @@ namespace CANopenDiagnostic
             nmt_slave = new NMT_Slave_NET();
             can_monitor = new CanMonitor_NET();
             receive_PDO = new ReceivePDO_NET();
+            transmit_PDO = new TransmitPDO_NET();
+
 
             System.Text.ASCIIEncoding encoding = new System.Text.ASCIIEncoding();
             byte[] file = encoding.GetBytes("C:\\dev\\closed_rep\\trunk\\canopen_stack_and_tools\\visual_studio\\canopenDLL\\Debug\\canopen_lic.txt\0");
@@ -114,6 +117,12 @@ namespace CANopenDiagnostic
 
             nmt_slave.Dispose();
             nmt_slave = null;
+
+            receive_PDO.Dispose();
+            receive_PDO = null;
+
+            transmit_PDO.Dispose();
+            transmit_PDO = null;
         }
 
         private delegate void consolePrintDelegate(string message);
@@ -218,8 +227,18 @@ namespace CANopenDiagnostic
             {
                 log.OnLog("Successful connect RX PDO to CAN hardware!");
             }
-            
-        }
+
+            stat = transmit_PDO.canHardwareConnect(can_port, can_bitrate);
+            if (stat != CanOpenStatus.CANOPEN_OK)
+            {
+              log.OnLog("Error connecting TX PDO to CAN hardware!");
+            }
+            else
+            {
+              log.OnLog("Successful connect TX PDO to CAN hardware!");
+            }
+
+    }
 
         private void btnDisconnect_Click(object sender, EventArgs e)
         {
@@ -262,7 +281,17 @@ namespace CANopenDiagnostic
             {
                 log.OnLog("Error disconnecting RX PDO from CAN hardware!");
             }
-        }
+
+            stat = transmit_PDO.canHardwareDisconnect();
+            if (stat == CanOpenStatus.CANOPEN_OK)
+            {
+              log.OnLog("Success disconnecting TX PDO from CAN hardware!");
+            }
+            else
+            {
+              log.OnLog("Error disconnecting TX PDO from CAN hardware!");
+            }
+    }
 
         static DateTime _callbackLastMessageTime;
         static long _callbackCountOfMissedMessages;
@@ -1351,6 +1380,12 @@ namespace CANopenDiagnostic
                 log.OnLog("Heartbeat configured!");
             }
 
+        }
+
+        private void btnSendPdo_Click(object sender, EventArgs e)
+        {
+            transmit_PDO.setup((uint)0x180 + Convert.ToUInt32(numRemoteNode.Value), new byte[]{ 0xFF, 0xFF}, 2);
+            transmit_PDO.transmit();
         }
     }
 }
