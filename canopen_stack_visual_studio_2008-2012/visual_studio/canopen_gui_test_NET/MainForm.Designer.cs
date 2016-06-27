@@ -68,6 +68,7 @@
       this.btnDeviceType = new System.Windows.Forms.Button();
       this.btnDeviceName = new System.Windows.Forms.Button();
       this.tabPDO = new System.Windows.Forms.TabPage();
+      this.btnSendPdo = new System.Windows.Forms.Button();
       this.btnRequestPdo = new System.Windows.Forms.Button();
       this.btnMap64bits = new System.Windows.Forms.Button();
       this.btnMap32bits = new System.Windows.Forms.Button();
@@ -87,7 +88,7 @@
       this.label1 = new System.Windows.Forms.Label();
       this.linkClick = new System.Windows.Forms.LinkLabel();
       this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
-      this.btnSendPdo = new System.Windows.Forms.Button();
+      this.btnSendPdo50 = new System.Windows.Forms.Button();
       this.tabControl1.SuspendLayout();
       this.tabSettings.SuspendLayout();
       this.grpHardwareSetup.SuspendLayout();
@@ -521,6 +522,7 @@
       // 
       // tabPDO
       // 
+      this.tabPDO.Controls.Add(this.btnSendPdo50);
       this.tabPDO.Controls.Add(this.btnSendPdo);
       this.tabPDO.Controls.Add(this.btnRequestPdo);
       this.tabPDO.Controls.Add(this.btnMap64bits);
@@ -541,6 +543,16 @@
       this.tabPDO.TabIndex = 4;
       this.tabPDO.Text = "PDO";
       this.tabPDO.UseVisualStyleBackColor = true;
+      // 
+      // btnSendPdo
+      // 
+      this.btnSendPdo.Location = new System.Drawing.Point(233, 41);
+      this.btnSendPdo.Name = "btnSendPdo";
+      this.btnSendPdo.Size = new System.Drawing.Size(133, 23);
+      this.btnSendPdo.TabIndex = 13;
+      this.btnSendPdo.Text = "Send PDO (100% set)";
+      this.btnSendPdo.UseVisualStyleBackColor = true;
+      this.btnSendPdo.Click += new System.EventHandler(this.btnSendPdo_Click);
       // 
       // btnRequestPdo
       // 
@@ -749,15 +761,15 @@
       // 
       this.errorProvider1.ContainerControl = this;
       // 
-      // btnSendPdo
+      // btnSendPdo50
       // 
-      this.btnSendPdo.Location = new System.Drawing.Point(233, 9);
-      this.btnSendPdo.Name = "btnSendPdo";
-      this.btnSendPdo.Size = new System.Drawing.Size(133, 23);
-      this.btnSendPdo.TabIndex = 13;
-      this.btnSendPdo.Text = "Send PDO";
-      this.btnSendPdo.UseVisualStyleBackColor = true;
-      this.btnSendPdo.Click += new System.EventHandler(this.btnSendPdo_Click);
+      this.btnSendPdo50.Location = new System.Drawing.Point(234, 70);
+      this.btnSendPdo50.Name = "btnSendPdo50";
+      this.btnSendPdo50.Size = new System.Drawing.Size(133, 23);
+      this.btnSendPdo50.TabIndex = 14;
+      this.btnSendPdo50.Text = "Send PDO (50% set)";
+      this.btnSendPdo50.UseVisualStyleBackColor = true;
+      this.btnSendPdo50.Click += new System.EventHandler(this.btnSendPdo50_Click);
       // 
       // MainForm
       // 
@@ -858,6 +870,7 @@
         private System.Windows.Forms.Button btnConfigNodeGuard;
         private System.Windows.Forms.Button btnConfHeartBeat;
     private System.Windows.Forms.Button btnSendPdo;
+    private System.Windows.Forms.Button btnSendPdo50;
   }
 }
 

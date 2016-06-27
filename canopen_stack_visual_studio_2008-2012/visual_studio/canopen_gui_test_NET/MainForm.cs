@@ -969,7 +969,7 @@ namespace CANopenDiagnostic
             else
                 obj_idx = (ushort)((ushort)(numUpDownPdo.Value - 1) + object_dictionary_offset);
 
-            stat = client_SDO.objectWrite( obj_idx, 5, (ushort)100, out error_code);
+            stat = client_SDO.objectWrite( obj_idx, 5, (ushort)500, out error_code);
             if (stat != CanOpenStatus.CANOPEN_OK)
             {
                 if (stat == CanOpenStatus.CANOPEN_ERROR_HW_NOT_CONNECTED)
@@ -1387,5 +1387,11 @@ namespace CANopenDiagnostic
             transmit_PDO.setup((uint)0x200 + Convert.ToUInt32(numRemoteNode.Value), new byte[]{ 0xFF }, 1);
             transmit_PDO.transmit();
         }
+
+    private void btnSendPdo50_Click(object sender, EventArgs e)
+    {
+      transmit_PDO.setup((uint)0x200 + Convert.ToUInt32(numRemoteNode.Value), new byte[] { 0xAA }, 1);
+      transmit_PDO.transmit();
     }
+  }
 }
