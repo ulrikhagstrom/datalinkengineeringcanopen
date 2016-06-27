@@ -1384,7 +1384,7 @@ namespace CANopenDiagnostic
 
         private void btnSendPdo_Click(object sender, EventArgs e)
         {
-            transmit_PDO.setup((uint)0x180 + Convert.ToUInt32(numRemoteNode.Value), new byte[]{ 0xFF, 0xFF}, 2);
+            transmit_PDO.setup((uint)0x200 + Convert.ToUInt32(numRemoteNode.Value), new byte[]{ 0xFF }, 1);
             transmit_PDO.transmit();
         }
     }
