@@ -154,9 +154,8 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <ProjectReference Include="..\canopenlib32_NET_dll\canopenlib32_NET.vcxproj">
+    <ProjectReference Include="..\canopenlib32_NET_dll\canopenlib32_NET_VS2012.vcxproj">
       <Project>{54ddacc0-e19b-41d4-8235-6da310f4d670}</Project>
       <Name>canopenlib32_NET.dll %28C++ to C Sharp wrapper%29</Name>
     </ProjectReference>
