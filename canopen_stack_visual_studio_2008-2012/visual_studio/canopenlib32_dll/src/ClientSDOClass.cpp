@@ -1362,24 +1362,28 @@ canOpenStatus  ClientSDO :: clientSDOStateMachine(void)
   canOpenStatus ret = CANOPEN_ERROR;
   if (this->state == SENDING_DOWNLOAD_BLOCK)
   {
-    if (this->block_size <= this->block_transfer_segment_count)
+    do // Performance fix 161218: Send as many blocks that as possible that fits in the CAN-TX-buffer.
     {
-      this->state = WAIT_DOWNLOAD_BLOCK_RESPONSE;
-    }
-    ret = this->setBlkSegData();
+        if (this->block_size <= this->block_transfer_segment_count)
+        {
+          this->state = WAIT_DOWNLOAD_BLOCK_RESPONSE;
+        }
+        ret = this->setBlkSegData();
 
-    if (this->getRestAppBuffer() == 0)
-    {
-      this->state = WAIT_DOWNLOAD_BLOCK_RESPONSE;
+        if (this->getRestAppBuffer() == 0)
+        {
+          this->state = WAIT_DOWNLOAD_BLOCK_RESPONSE;
+        }
+        if (ret == CANOPEN_OK)
+        {
+          ret = this->writeToCanBus();
+          if (ret == CANOPEN_OK)
+          {
+            this->setLatestEventTimestamp();
+          }
+        }
     }
-    if (ret == CANOPEN_OK)
-    {
-      ret = this->writeToCanBus();
-      if (ret == CANOPEN_OK)
-      {
-        this->setLatestEventTimestamp();
-      }
-    }
+    while (this->state == SENDING_DOWNLOAD_BLOCK && ret == CANOPEN_OK);
   }
   else 
   {
