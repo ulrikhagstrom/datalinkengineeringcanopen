@@ -241,7 +241,8 @@ DWORD WINAPI canUsbRxThread(void *can_port_data)
               &bytes_read ) == CANOPEN_OK ) {
               // unsigned char can_data[8];
               int data_byte;
-              for ( unsigned int i=0; i < can_frame.dlc; i++ ) {
+              unsigned int dlc = can_frame.dlc > 8 ? 8 : can_frame.dlc;
+              for ( unsigned int i=0; i < dlc; i++ ) {
                 sscanf_s( &rx_buf[i*2], "%2x", &data_byte );
                 can_frame.data[i] = (char)data_byte;
               }
@@ -538,7 +539,7 @@ CANOPENLIB_HW_API   canOpenStatus    __stdcall canPortOpen( int port,
   DWORD res;
   canOpenStatus err = comPortOpen ( port, handle );
   if ( err == CANOPEN_OK ) {
-    char version_cmd[] = { 0x0d, 0x0d, 0x0d, 'V', 0x0d };
+    char version_cmd[] = { 'C', 0x0d, 'V', 0x0d }; // Go bus off and then get version.
     ResetEvent( can_port_data_devices[*handle].version_result_event );
     err = comPortWrite( &can_port_data_devices[*handle], version_cmd, 
       sizeof( version_cmd ) );
@@ -560,6 +561,7 @@ CANOPENLIB_HW_API   canOpenStatus    __stdcall canPortOpen( int port,
 
 CANOPENLIB_HW_API   canOpenStatus    __stdcall canPortClose( canPortHandle handle )
 {
+  (void)canPortGoBusOff( handle );
   // Go bus off etc ?
   return comPortClose( handle );
 }
