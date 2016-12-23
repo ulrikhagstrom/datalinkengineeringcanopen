@@ -11,7 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectName>canopenlib32_hw.dll (LAWICEL CAN232)</ProjectName>
+    <ProjectName>canopenlib32_hw.dll (CAN232 and USBTIN)</ProjectName>
     <ProjectGuid>{C49DF85E-552D-42AE-8DEA-C4DB5AC419F1}</ProjectGuid>
     <RootNamespace>canlib32</RootNamespace>
     <Keyword>Win32Proj</Keyword>
