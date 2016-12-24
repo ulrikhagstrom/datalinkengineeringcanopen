@@ -802,7 +802,7 @@
       this.linkClick.Size = new System.Drawing.Size(122, 13);
       this.linkClick.TabIndex = 3;
       this.linkClick.TabStop = true;
-      this.linkClick.Text = "http://www.canopen.nu";
+      this.linkClick.Text = "http://www.datalink.se";
       this.linkClick.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkClick_LinkClicked);
       // 
       // errorProvider1
