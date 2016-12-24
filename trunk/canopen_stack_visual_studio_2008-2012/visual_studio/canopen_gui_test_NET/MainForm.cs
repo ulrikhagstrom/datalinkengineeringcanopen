@@ -141,9 +141,16 @@ namespace CANopenDiagnostic
             }
             try
             {
-                consoleTextBox.AppendText(message + "\n");
-                consoleTextBox.SelectionStart = consoleTextBox.TextLength;
-                consoleTextBox.ScrollToCaret();
+                if (consoleTextBox.TextLength < 10000)
+                {
+                    consoleTextBox.AppendText(message + "\n");
+                    consoleTextBox.SelectionStart = consoleTextBox.TextLength;
+                    consoleTextBox.ScrollToCaret();
+                }
+                else
+                {
+                    consoleTextBox.Text = "CLEARED";
+                }
             }
             catch 
             {
@@ -306,6 +313,16 @@ namespace CANopenDiagnostic
             else
             {
               log.OnLog("Error disconnecting TX PDO from CAN hardware!");
+            }
+
+            stat = sync_producer.canHardwareDisconnect();
+            if (stat == CanOpenStatus.CANOPEN_OK)
+            {
+                log.OnLog("Success disconnecting SYNC PRODUCER from CAN hardware!");
+            }
+            else
+            {
+                log.OnLog("Error disconnecting SYNC PRODUCER from CAN hardware!");
             }
     }
 
@@ -793,7 +810,7 @@ namespace CANopenDiagnostic
 
         private void linkClick_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start("IExplore", " http://www.canopen.nu");
+            //System.Diagnostics.Process.Start("IExplore", " http://www.datalink.se");
         }
 
         private void numRemoteNode_ValueChanged(object sender, EventArgs e)

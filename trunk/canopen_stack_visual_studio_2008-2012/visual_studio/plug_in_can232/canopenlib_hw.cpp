@@ -217,11 +217,12 @@ DWORD WINAPI canUsbRxThread(void *can_port_data)
             sscanf_s( rx_buf, "%03x", &can_frame.id);
             sscanf_s( &rx_buf[3], "%1x", &can_frame.dlc);
             // Get the CAN data.
-            if ( comPortRead(p, (can_frame.dlc*2+1), (2*8+1), 
+            unsigned int dlc = can_frame.dlc > 8 ? 8 : can_frame.dlc;
+            if ( comPortRead(p, (dlc*2+1), (2*8+1), 
               rx_buf, &bytes_read ) == CANOPEN_OK ) {
               //unsigned char can_data[8];
               int data_byte;
-              for ( unsigned int i = 0; i < can_frame.dlc; i++ ) {
+              for ( unsigned int i = 0; i < dlc; i++ ) {
                 sscanf_s( &rx_buf[i*2], "%2x", &data_byte );
                 can_frame.data[i] = (char)data_byte;
               }
@@ -237,11 +238,11 @@ DWORD WINAPI canUsbRxThread(void *can_port_data)
             sscanf_s( rx_buf, "%08x", &can_frame.id);
             sscanf_s( &rx_buf[8], "%1x", &can_frame.dlc);
             // Get the CAN data.
-            if ( comPortRead(p, (can_frame.dlc*2+1), (2*8+1), rx_buf, 
+            unsigned int dlc = can_frame.dlc > 8 ? 8 : can_frame.dlc;
+            if ( comPortRead(p, (dlc*2+1), (2*8+1), rx_buf, 
               &bytes_read ) == CANOPEN_OK ) {
               // unsigned char can_data[8];
               int data_byte;
-              unsigned int dlc = can_frame.dlc > 8 ? 8 : can_frame.dlc;
               for ( unsigned int i=0; i < dlc; i++ ) {
                 sscanf_s( &rx_buf[i*2], "%2x", &data_byte );
                 can_frame.data[i] = (char)data_byte;
