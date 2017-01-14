@@ -334,6 +334,7 @@
     <ClCompile Include="src\CanMonitorClass.cpp" />
     <ClCompile Include="src\CANopenLibHelper.cpp" />
     <ClCompile Include="src\ClientSDOClass.cpp" />
+    <ClCompile Include="src\DCFFileClass.cpp" />
     <ClCompile Include="src\EmcyClientClass.cpp" />
     <ClCompile Include="src\EmcyServerClass.cpp" />
     <ClCompile Include="src\LSSMasterClass.cpp" />
@@ -361,6 +362,7 @@
     <ClInclude Include="inc\CANopenLibDefines.h" />
     <ClInclude Include="inc\CANopenLibHelper.h" />
     <ClInclude Include="inc\ClientSDOClass.h" />
+    <ClInclude Include="inc\DCFFileClass.h" />
     <ClInclude Include="inc\EmcyClientClass.h" />
     <ClInclude Include="inc\EmcyServerClass.h" />
     <ClInclude Include="inc\License.h" />
