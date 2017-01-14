@@ -164,6 +164,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="DCFFileClass.cpp" />
     <ClCompile Include="src\CanConnectionClass.cpp" />
     <ClCompile Include="src\CanInterfaceClass.cpp" />
     <ClCompile Include="src\CanMonitorClass.cpp" />
@@ -196,6 +197,7 @@
     <ClInclude Include="inc\CANopenLibDefines.h" />
     <ClInclude Include="inc\CANopenLibHelper.h" />
     <ClInclude Include="inc\ClientSDOClass.h" />
+    <ClInclude Include="inc\DCFFileClass.h" />
     <ClInclude Include="inc\EmcyClientClass.h" />
     <ClInclude Include="inc\EmcyServerClass.h" />
     <ClInclude Include="inc\License.h" />

@@ -32,6 +32,7 @@ using System.Threading;
 using System.Windows.Forms;
 
 using DatalinkEngineering.CANopen;
+using System.IO;
 
 namespace CANopenDiagnostic
 {
@@ -1530,8 +1531,32 @@ namespace CANopenDiagnostic
       {
         log.OnLog("Nodeguard configured!");
       }
+    }
 
+    private void button2_Click_1(object sender, EventArgs e)
+    {
+        openDcfFileDialog.Title = "Open DCF File";
+        openDcfFileDialog.Filter = "DCF files|*.dcf";
+        openDcfFileDialog.InitialDirectory = Directory.GetCurrentDirectory();
+        if (openDcfFileDialog.ShowDialog() == DialogResult.OK)
+        {
+            MessageBox.Show(openDcfFileDialog.FileName.ToString());
+        }
 
+        ushort failingObjIndex;
+        byte failingSubIndex;
+        uint canopenErrorCode;
+
+        CanOpenStatus ret = client_SDO.sendConfigurationData(openDcfFileDialog.FileName.ToString(), out failingObjIndex, out failingSubIndex, out canopenErrorCode);
+
+        if (ret != CanOpenStatus.CANOPEN_OK)
+        {
+            log.OnLog(String.Format("Dcf file download failed! (ret = 0x{0}, objIndex = 0x{1:X}, subIndex = 0x{2:X}, Error code:0x{3:X})", ret, failingObjIndex, failingSubIndex, canopenErrorCode));
+        }
+        else
+        {
+            log.OnLog(String.Format("Dcf file download success!"));
+        }
     }
   }
 }

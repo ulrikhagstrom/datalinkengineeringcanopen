@@ -1235,7 +1235,7 @@ canOpenStatus  ClientSDO :: canFrameConsumer(unsigned long id,
   canOpenStatus ret = CANOPEN_ERROR;
   if (id == this->cobid_rx)
   {
-	WaitForSingleObject( this->sync_mutex, INFINITE);
+    WaitForSingleObject( this->sync_mutex, INFINITE);
     ret = this->setLatestEventTimestamp();
     if (ret == CANOPEN_OK)
     {
@@ -1649,7 +1649,7 @@ canOpenStatus   ClientSDO :: synchronize(unsigned long timeout, Direction direct
     if (this->isTransferTimeout())
     {
       DebugLogToFile("synchronize timeout\n");
-	  this->state = UNACTIVE;
+      this->state = UNACTIVE;
       this->transfer_result = CANOPEN_TIMEOUT; 
       transfer_timeout = TRUE;
     }
@@ -1657,7 +1657,7 @@ canOpenStatus   ClientSDO :: synchronize(unsigned long timeout, Direction direct
     if (this->remote_node_error_code != 0)
     {
       DebugLogToFile("synchronize failed #1\n");
-	  this->state = UNACTIVE;
+      this->state = UNACTIVE;
       remote_aborted = true;
       this->transfer_result = CANOPEN_REMOTE_NODE_ABORT;
     }
@@ -1809,7 +1809,7 @@ void ClientSDO :: setReadObjectTimeout(unsigned int timeout)
    this->read_object_timeout = timeout;
 }
 
- //------------------------------------------------------------------------
+//------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------
 
@@ -1818,3 +1818,62 @@ void ClientSDO :: setNodeResponseTimeout(unsigned int timeout)
   this->node_response_timeout = timeout;
 }
 
+//------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------
+
+canOpenStatus  ClientSDO :: sendConfigurationData(char *dcfFile, u16 *failing_object_index, u8 *failing_sub_index, CanOpenErrorCode *errCode)
+{
+    canOpenStatus ret = CANOPEN_ERROR;
+    DCFFile file(dcfFile);
+    file.GetObjectsToConfigureFromFile();
+
+    for(int i = 0; i < file.dcfItemsCount; i++)
+    {
+        // These special objects are marked in the EDS and DCF files. 
+        // The object description sections may contain an entry ObjFlags with an unsigned32 content: 
+        // The lowest bit shall be a boolean value (0=false, 1=true) for "Refuse write on download", 
+        // the second bit shall be a boolean value for "Refuse read on scan".
+
+        if (file.dcfItems[i].objFlags & 0x1)
+            continue;
+
+        if (file.dcfItems[i].data != NULL && (file.dcfItems[i].accessType == WRITE_ONLY || file.dcfItems[i].accessType == READ_AND_WRITE))  
+        {
+            if (file.dcfItems[i].dataType >= 2 && file.dcfItems[i].dataType <= 7)
+            {
+                char *buf = new char[file.dcfItems[i].dataLen];
+                u32 value = 0;
+
+                if (strncmp("$NODEID+", (char*)file.dcfItems[i].data, 8) == 0)
+                {
+                    value = (u32)strtoul((char *)file.dcfItems[i].data + 8, NULL, 16) + this->node_id;
+                }
+                else
+                {
+                    value = (u32)strtoul((char *)file.dcfItems[i].data, NULL, 16);
+                }
+                val2buf(value, (u8*)buf, file.dcfItems[i].dataTypeToLen);
+                ret = this->objectWrite(file.dcfItems[i].objectIndex, file.dcfItems[i].subIndex, (u8*)buf, file.dcfItems[i].dataTypeToLen, errCode);
+                if (ret != CANOPEN_OK)
+                {
+                    *failing_object_index = file.dcfItems[i].objectIndex;
+                    *failing_sub_index = file.dcfItems[i].subIndex;
+                    break;
+                }
+            }
+            else
+            {
+                ret = this->objectWrite(file.dcfItems[i].objectIndex, file.dcfItems[i].subIndex, file.dcfItems[i].data, file.dcfItems[i].dataLen, errCode);
+                if (ret != CANOPEN_OK)
+                {
+                    *failing_object_index = file.dcfItems[i].objectIndex;
+                    *failing_sub_index = file.dcfItems[i].subIndex;
+                    break;
+                }
+            }
+        }
+    }
+
+    return ret;
+}

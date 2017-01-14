@@ -657,6 +657,26 @@ namespace DatalinkEngineering
       return (CanOpenStatus)this->cpp_ClientSDO->unregisterObjectReadWriteResultCallbacks();
     }
 
+    CanOpenStatus ClientSDO_NET::sendConfigurationData(String^ filePath,
+        [System::Runtime::InteropServices::Out] u16 %object_index,
+        [System::Runtime::InteropServices::Out] u8 %sub_index,		
+        [System::Runtime::InteropServices::Out] CanOpenErrorCode %coErrorCode)
+    {
+        pin_ptr<u32> coErrorCodep = &coErrorCode;
+        u32* ncoErrorCodep = coErrorCodep;
+
+        pin_ptr<u16> coObjectIndexP = &object_index;
+        u16* ncoObjectIndex = coObjectIndexP;
+
+        pin_ptr<u8> coSubIndexP = &sub_index;
+        u8* ncoSubIndexP = coSubIndexP;
+
+        return (CanOpenStatus)this->cpp_ClientSDO->sendConfigurationData(
+            (char*) (Marshal::StringToHGlobalAnsi(filePath)).ToPointer(),
+            ncoObjectIndex, ncoSubIndexP,
+            ncoErrorCodep);
+    }
+
     void ClientSDO_NET::setWriteObjectTimeout(u32 timeout)
     {
       this->cpp_ClientSDO->setWriteObjectTimeout(timeout);
