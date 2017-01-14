@@ -20,7 +20,7 @@
     <ClCompile Include="src\LSSSlaveClass.cpp" />
     <ClCompile Include="src\PeriodicTransmitterClass.cpp" />
     <ClCompile Include="src\SyncProducerClass.cpp" />
-    <ClCompile Include="DCFFileClass.cpp" />
+    <ClCompile Include="src\DCFFileClass.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inc\CanConnectionClass.h">
