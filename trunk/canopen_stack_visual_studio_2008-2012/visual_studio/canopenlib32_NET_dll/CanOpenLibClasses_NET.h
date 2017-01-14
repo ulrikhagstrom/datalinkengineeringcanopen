@@ -55,6 +55,7 @@ using namespace System::Runtime::InteropServices;
 #include "SyncProducerClass.h"
 #include "LSSMasterClass.h"
 #include "LSSSlaveClass.h"
+#include "DCFFileClass.h"
 
 namespace DatalinkEngineering
 {
@@ -411,6 +412,10 @@ namespace DatalinkEngineering
       CanOpenStatus registerObjectReadResultCallback(CliReadResultDelegate^ readDelegate, System::Object^ obj);
       CanOpenStatus registerObjectWriteResultCallback(CliWriteResultDelegate^ writeDelegate, System::Object^ obj);
       CanOpenStatus unregisterObjectReadWriteResultCallbacks(void);
+      CanOpenStatus sendConfigurationData(String^ filePath,
+            [System::Runtime::InteropServices::Out] u16 %object_index,
+            [System::Runtime::InteropServices::Out] u8 %sub_index,		
+            [System::Runtime::InteropServices::Out] CanOpenErrorCode %coErrorCode);
 
       void          setWriteObjectTimeout(u32 timeout);
       void          setReadObjectTimeout(u32 timeout);

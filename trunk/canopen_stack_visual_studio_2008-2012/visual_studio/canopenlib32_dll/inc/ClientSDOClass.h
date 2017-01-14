@@ -27,7 +27,7 @@
 #include <stdio.h>
 #include "SDOClass.h"
 #include "CANopenLibHelper.h"
-
+#include "DCFFileClass.h"
 
 #define WRITE_OBJ_TIMEOUT     200000
 #define READ_OBJ_TIMEOUT      400000
@@ -110,6 +110,8 @@ class ClientSDO : public SDO
     CANOPENDLL_API void setWriteObjectTimeout(unsigned int timeout);
     CANOPENDLL_API void setReadObjectTimeout(unsigned int timeout);
     CANOPENDLL_API void setNodeResponseTimeout(unsigned int timeout);
+
+    CANOPENDLL_API canOpenStatus sendConfigurationData(char *dcfFile, u16 *failing_object_index, u8 *failing_sub_index, CanOpenErrorCode *errCode);
 
   protected:
   private:
