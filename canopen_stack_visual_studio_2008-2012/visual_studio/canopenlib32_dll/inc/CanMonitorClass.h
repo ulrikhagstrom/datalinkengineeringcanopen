@@ -39,8 +39,6 @@ class CanMonitor : public CanConnection
     CANOPENDLL_API ~CanMonitor();
 
     CANOPENDLL_API canOpenStatus  canHardwareConnect(u8 port, u32 bitrate);
-    CANOPENDLL_API canOpenStatus  canHardwareDisconnect(void);
-
     CANOPENDLL_API canOpenStatus  registerCanReceiveCallback( void *context, RawCanReceiveFunPtr raw_can_receive_function );
     CANOPENDLL_API canOpenStatus  canWrite( u32 id,  u8 *data, u8 dlc, u32 flags);
 

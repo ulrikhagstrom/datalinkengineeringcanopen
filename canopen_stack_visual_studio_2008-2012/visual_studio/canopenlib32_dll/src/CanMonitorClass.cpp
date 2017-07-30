@@ -28,7 +28,7 @@
 //------------------------------------------------------------------------
 CanMonitor :: CanMonitor()
 {
-  this->rx_tx_mutex = rx_tx_mutex = CreateMutex(NULL, FALSE, NULL);
+  this->rx_tx_mutex = CreateMutex(NULL, FALSE, NULL);
   this->can_hardware_is_initiated = false;
   this->application_can_receive_callback = NULL;
 }
@@ -80,30 +80,6 @@ canOpenStatus  CanMonitor :: canHardwareConnect(u8 port, u32 bitrate)
   return CanConnection :: canHardwareInit(port, bitrate, canFrameConsumerW, NULL);
 }
 
-//------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------
-canOpenStatus  CanMonitor :: canHardwareDisconnect(void)
-{
-  canOpenStatus ret = CANOPEN_ERROR;
-  if ( this->can_hardware_is_initiated == false )
-  {
-    ret = CANOPEN_ERROR_HW_NOT_CONNECTED;
-  }
-  else
-  {
-    if ( this->can_interface != NULL )
-    {
-      can_interface->unregisterCanMessageHandler( can_message_handler_index );
-      ret = can_interface->canClosePort();
-    }
-    this->can_message_handler_index = - 1;
-    this->can_hardware_is_initiated = false;
-    this->can_interface = NULL;
-    ret = CANOPEN_OK;
-  }  
-  return ret;
-}
 
 //------------------------------------------------------------------------
 //
