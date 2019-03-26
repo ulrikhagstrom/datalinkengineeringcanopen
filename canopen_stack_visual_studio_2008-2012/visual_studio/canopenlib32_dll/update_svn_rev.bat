@@ -1,0 +1,1 @@
+SubWCRev.exe .\ canopen_resource.tmplrc canopen_resource.rc

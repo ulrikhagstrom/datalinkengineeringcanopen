@@ -1,0 +1,1 @@
+SubWCRev.exe .\ app.tmplrc app.rc
