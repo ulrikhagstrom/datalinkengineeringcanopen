@@ -174,11 +174,7 @@ CANOPENLIB_HW_API   canOpenStatus    __stdcall canPortOpen( int port, canPortHan
     can_port_data_devices[port].port = port + PCAN_USBBUS1;
 #endif
 
-	TPCANStatus res = CAN_Reset(can_port_data_devices[port].port);
-	if (res != PCAN_ERROR_OK )
-	{
-      canopen_res = CANOPEN_OK;
-	}
+    canopen_res = CANOPEN_OK;
   }
   return canopen_res;
 }
@@ -189,7 +185,12 @@ CANOPENLIB_HW_API   canOpenStatus    __stdcall canPortOpen( int port, canPortHan
 
 CANOPENLIB_HW_API   canOpenStatus    __stdcall canPortClose( canPortHandle handle )
 {
-  canOpenStatus ret = CANOPEN_ERROR_CAN_LAYER ;
+  canOpenStatus ret = CANOPEN_OK;
+  DWORD res = CAN_Uninitialize((TPCANHandle)can_port_data_devices[ handle ].port);
+  if ( res == PCAN_ERROR_OK ) {
+    can_port_data_devices[ handle ].can_bus_on = false;
+    ret = CANOPEN_OK;
+  }
   return ret;
 }
 
@@ -200,7 +201,6 @@ CANOPENLIB_HW_API   canOpenStatus    __stdcall canPortClose( canPortHandle handl
 CANOPENLIB_HW_API   canOpenStatus    __stdcall canPortBitrateSet( canPortHandle handle, int bitrate )
 {
   canOpenStatus canopen_res = CANOPEN_ERROR;
-  DWORD res;
   switch ( bitrate ) 
   {
     case 5000:
@@ -277,8 +277,12 @@ CANOPENLIB_HW_API   canOpenStatus    __stdcall canPortGoBusOn( canPortHandle han
 
   if ( res == PCAN_ERROR_OK )
   {
-    can_port_data_devices[ handle ].can_bus_on = true;
-    canopen_res = CANOPEN_OK;
+    TPCANStatus res = CAN_Reset(can_port_data_devices[handle].port);
+    if ( res == PCAN_ERROR_OK )
+    {
+      can_port_data_devices[ handle ].can_bus_on = true;
+      canopen_res = CANOPEN_OK;
+    }
   }
   return canopen_res;
 }
