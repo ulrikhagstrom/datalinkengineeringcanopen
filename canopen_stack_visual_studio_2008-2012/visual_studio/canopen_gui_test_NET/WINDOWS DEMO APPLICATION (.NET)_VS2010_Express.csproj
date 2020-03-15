@@ -71,8 +71,9 @@
     <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="canopenlib32_NET">
-      <HintPath>..\bin\Release\canopenlib32_NET.dll</HintPath>
+    <Reference Include="canopenlib32_NET, Version=1.0.6308.15295, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\bin\Debug\canopenlib32_NET.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml.Linq">
