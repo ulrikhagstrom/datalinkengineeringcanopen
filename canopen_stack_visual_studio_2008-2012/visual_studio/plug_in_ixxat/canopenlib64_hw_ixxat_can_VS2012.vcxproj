@@ -10,9 +10,15 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\canopenlib_hw.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="lib\x64\vcisdk.lib" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectName>canopenlib64_hw.dll (KVASER CANlib)</ProjectName>
-    <ProjectGuid>{87506536-AB5E-4D66-8288-2961FCECF3B8}</ProjectGuid>
+    <ProjectName>canopenlib64_hw.dll (IXXAT)</ProjectName>
+    <ProjectGuid>{95BAA5BA-4E99-41EB-8206-707420AE192B}</ProjectGuid>
     <RootNamespace>canlib32</RootNamespace>
     <Keyword>Win32Proj</Keyword>
   </PropertyGroup>
@@ -54,7 +60,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\canopenlib32_dll\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\inc;..\canopenlib32_dll\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN64;_DEBUG;_WINDOWS;_USRDLL;CANLIB32_EXPORTS;PUMA_WRAPPER;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -67,7 +73,7 @@
     </ClCompile>
     <Link>
       <OutputFile>..\bin\Debug\canopenlib64_hw.dll</OutputFile>
-      <ModuleDefinitionFile>canopenlib_hw.def</ModuleDefinitionFile>
+      <ModuleDefinitionFile>src\canopenlib_hw.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
@@ -75,10 +81,14 @@
       </DataExecutionPrevention>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
+    <PreBuildEvent>
+      <Command>
+      </Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>..\canopenlib32_dll\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\inc;..\canopenlib32_dll\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN64;NDEBUG;_WINDOWS;_USRDLL;CANLIB32_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader>
@@ -89,7 +99,7 @@
     </ClCompile>
     <Link>
       <OutputFile>..\bin\Release\canopenlib64_hw.dll</OutputFile>
-      <ModuleDefinitionFile>canopenlib_hw.def</ModuleDefinitionFile>
+      <ModuleDefinitionFile>src\canopenlib_hw.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
@@ -101,14 +111,11 @@
     <PostBuildEvent>
       <Command>copy ..\bin\Release\canopenlib64_hw.dll ..\bin\Release\zip\dlls\Kvaser\canopenlib64_hw.dll</Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>
+      </Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="canopenlib_hw.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="canlib32_dyn_load.h" />
-    <ClInclude Include="..\..\proj_src\canopen_stack\inc\canopenlib_hw.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
