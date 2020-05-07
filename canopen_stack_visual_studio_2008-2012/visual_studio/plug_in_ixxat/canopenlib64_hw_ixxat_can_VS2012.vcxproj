@@ -73,7 +73,7 @@
     </ClCompile>
     <Link>
       <OutputFile>..\bin\Debug\canopenlib64_hw.dll</OutputFile>
-      <ModuleDefinitionFile>canopenlib_hw.def</ModuleDefinitionFile>
+      <ModuleDefinitionFile>src\canopenlib_hw.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
