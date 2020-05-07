@@ -157,7 +157,7 @@
       <AdditionalDependencies>.\lib\2010\can_dispatcher_x64.lib;libcmt.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>..\bin\Release\canopenlib64.dll</OutputFile>
       <SuppressStartupBanner>false</SuppressStartupBanner>
-      <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
       <ProgramDatabaseFile>..\bin\Release\canopenlib64.pdb</ProgramDatabaseFile>
