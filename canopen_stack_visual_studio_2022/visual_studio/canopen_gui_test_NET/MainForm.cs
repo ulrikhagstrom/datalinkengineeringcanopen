@@ -22,17 +22,11 @@
 */
 
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Threading;
-using System.Windows.Forms;
-
 using DatalinkEngineering.CANopen;
+using System;
 using System.IO;
+using System.Text;
+using System.Windows.Forms;
 
 namespace CANopenDiagnostic
 {
@@ -48,7 +42,7 @@ namespace CANopenDiagnostic
         private SyncProducer_NET sync_producer;
 
         LogMessages log;
-        
+
         public MainForm()
         {
             InitializeComponent();
@@ -57,7 +51,7 @@ namespace CANopenDiagnostic
 
             //
             log = new LogMessages();
-            log.Log += new LogMessages.LogHandler( consolePrint );
+            log.Log += new LogMessages.LogHandler(consolePrint);
 
             client_SDO = new ClientSDO_NET();
             server_SDO = new ServerSDO_NET();
@@ -153,7 +147,7 @@ namespace CANopenDiagnostic
                     consoleTextBox.Text = "CLEARED";
                 }
             }
-            catch 
+            catch
             {
                 ;
             }
@@ -244,27 +238,27 @@ namespace CANopenDiagnostic
             stat = transmit_PDO.canHardwareConnect(can_port, can_bitrate);
             if (stat != CanOpenStatus.CANOPEN_OK)
             {
-              log.OnLog("Error connecting TX PDO to CAN hardware!");
+                log.OnLog("Error connecting TX PDO to CAN hardware!");
             }
             else
             {
-              log.OnLog("Successful connect TX PDO to CAN hardware!");
+                log.OnLog("Successful connect TX PDO to CAN hardware!");
             }
 
             stat = sync_producer.canHardwareConnect(can_port, can_bitrate);
             if (stat != CanOpenStatus.CANOPEN_OK)
             {
-              log.OnLog("Error connecting sync producer to CAN hardware!");
+                log.OnLog("Error connecting sync producer to CAN hardware!");
             }
             else
             {
-              log.OnLog("Successful connect sync producer to CAN hardware!");
+                log.OnLog("Successful connect sync producer to CAN hardware!");
             }
 
 
-    }
+        }
 
-    private void btnDisconnect_Click(object sender, EventArgs e)
+        private void btnDisconnect_Click(object sender, EventArgs e)
         {
             CanOpenStatus stat;
             stat = client_SDO.canHardwareDisconnect();
@@ -309,11 +303,11 @@ namespace CANopenDiagnostic
             stat = transmit_PDO.canHardwareDisconnect();
             if (stat == CanOpenStatus.CANOPEN_OK)
             {
-              log.OnLog("Success disconnecting TX PDO from CAN hardware!");
+                log.OnLog("Success disconnecting TX PDO from CAN hardware!");
             }
             else
             {
-              log.OnLog("Error disconnecting TX PDO from CAN hardware!");
+                log.OnLog("Error disconnecting TX PDO from CAN hardware!");
             }
 
             stat = sync_producer.canHardwareDisconnect();
@@ -325,7 +319,7 @@ namespace CANopenDiagnostic
             {
                 log.OnLog("Error disconnecting SYNC PRODUCER from CAN hardware!");
             }
-    }
+        }
 
         static DateTime _callbackLastMessageTime;
         static long _callbackCountOfMissedMessages;
@@ -379,7 +373,7 @@ namespace CANopenDiagnostic
         static CanOpenStatus node_state_callback(object any, byte node_id, byte state)
         {
             MainForm form = (MainForm)any;
-            form.consolePrint( String.Format("Node State result : node_id: {0}, state: {1}", node_id, state));
+            form.consolePrint(String.Format("Node State result : node_id: {0}, state: {1}", node_id, state));
             return CanOpenStatus.CANOPEN_OK;
         }
 
@@ -653,7 +647,7 @@ namespace CANopenDiagnostic
             total_string += temp_str + "\n";
             log.OnLog(total_string);
         }
-       
+
 
         private void printReadResult(ushort object_index, byte sub_index, string parameterName, byte[] data, ushort valid, bool readable)
         {
@@ -690,17 +684,17 @@ namespace CANopenDiagnostic
 
         private void btnHardwareVersion_Click(object sender, EventArgs e)
         {
-            readVisibleString( 0x1009, 0, "Hardware version", true);
+            readVisibleString(0x1009, 0, "Hardware version", true);
         }
 
         private void btnSoftwareVersion_Click(object sender, EventArgs e)
         {
-            readVisibleString( 0x100a, 0, "Software version", true);
+            readVisibleString(0x100a, 0, "Software version", true);
         }
 
         private void btnDeviceName_Click(object sender, EventArgs e)
         {
-            readVisibleString( 0x1008, 0, "Device Name", true);
+            readVisibleString(0x1008, 0, "Device Name", true);
         }
 
         private void btnErrorRegister_Click(object sender, EventArgs e)
@@ -912,7 +906,7 @@ namespace CANopenDiagnostic
             {
                 log.OnLog(String.Format("PDO event timer: {0:x8} ", pdo_data));
             }
-        
+
         }
 
         private void btnEnablePdo_Click(object sender, EventArgs e)
@@ -942,8 +936,8 @@ namespace CANopenDiagnostic
                 obj_idx = (ushort)((ushort)(numUpDownPdo.Value - 1) + object_dictionary_offset);
 
             if (cbPdoRx.Checked)
-                stat = client_SDO.objectWrite(obj_idx, 1, (uint)numRemoteNode.Value + 
-                    (uint)(0x200 + 0x100 * (numUpDownPdo.Value-1)), out error_code);
+                stat = client_SDO.objectWrite(obj_idx, 1, (uint)numRemoteNode.Value +
+                    (uint)(0x200 + 0x100 * (numUpDownPdo.Value - 1)), out error_code);
             else
                 stat = client_SDO.objectWrite(obj_idx, 1, (uint)numRemoteNode.Value +
                     (uint)(0x180 + 0x100 * (numUpDownPdo.Value - 1)), out error_code);
@@ -1003,7 +997,7 @@ namespace CANopenDiagnostic
             else
                 obj_idx = (ushort)((ushort)(numUpDownPdo.Value - 1) + object_dictionary_offset);
 
-            stat = client_SDO.objectWrite( obj_idx, 5, (ushort)500, out error_code);
+            stat = client_SDO.objectWrite(obj_idx, 5, (ushort)500, out error_code);
             if (stat != CanOpenStatus.CANOPEN_OK)
             {
                 if (stat == CanOpenStatus.CANOPEN_ERROR_HW_NOT_CONNECTED)
@@ -1134,7 +1128,7 @@ namespace CANopenDiagnostic
                     log.OnLog(String.Format("Default map object {0}: {1:x8} ", i, pdo_data));
                 }
             }
-        
+
         }
 
         private void btnMap8bits_Click(object sender, EventArgs e)
@@ -1418,145 +1412,145 @@ namespace CANopenDiagnostic
 
         private void btnSendPdo_Click(object sender, EventArgs e)
         {
-            transmit_PDO.setup((uint)0x200 + Convert.ToUInt32(numRemoteNode.Value), new byte[]{ 0xFF }, 1);
+            transmit_PDO.setup((uint)0x200 + Convert.ToUInt32(numRemoteNode.Value), new byte[] { 0xFF }, 1);
             transmit_PDO.transmit();
         }
 
-    private void btnSendPdo50_Click(object sender, EventArgs e)
-    {
-      transmit_PDO.setup((uint)0x200 + Convert.ToUInt32(numRemoteNode.Value), new byte[] { 0xAA }, 1);
-      transmit_PDO.transmit();
+        private void btnSendPdo50_Click(object sender, EventArgs e)
+        {
+            transmit_PDO.setup((uint)0x200 + Convert.ToUInt32(numRemoteNode.Value), new byte[] { 0xAA }, 1);
+            transmit_PDO.transmit();
+        }
+
+        private void btnSendPdoClearAll_Click(object sender, EventArgs e)
+        {
+            transmit_PDO.setup((uint)0x200 + Convert.ToUInt32(numRemoteNode.Value), new byte[] { 0x00 }, 1);
+            transmit_PDO.transmit();
+        }
+
+        private void btnStartSync_Click(object sender, EventArgs e)
+        {
+            sync_producer.setSyncCOBID(0x80);
+            sync_producer.startPeriodicTransmission(true);
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            CanOpenStatus stat;
+            uint error_code;
+            // Read number of stored errors
+            stat = client_SDO.connect((byte)this.numRemoteNode.Value);
+            if (stat != CanOpenStatus.CANOPEN_OK)
+            {
+                log.OnLog(String.Format("Could not assign client SDO to comm with node {0}",
+                    this.numRemoteNode.Value.ToString()));
+            }
+
+            ushort object_dictionary_offset;
+            if (cbPdoRx.Checked)
+                object_dictionary_offset = 0x1400;
+            else
+                object_dictionary_offset = 0x1800;
+
+
+
+            ushort obj_idx = (ushort)(numUpDownPdo.Value - 1);
+            if (cbPdoRx.Checked)
+                obj_idx = (ushort)((ushort)(numUpDownPdo.Value - 1) + object_dictionary_offset);
+            else
+                obj_idx = (ushort)((ushort)(numUpDownPdo.Value - 1) + object_dictionary_offset);
+
+            stat = client_SDO.objectWrite(obj_idx, 2, (byte)10, out error_code);
+            if (stat != CanOpenStatus.CANOPEN_OK)
+            {
+                if (stat == CanOpenStatus.CANOPEN_ERROR_HW_NOT_CONNECTED)
+                {
+                    log.OnLog("CAN hardware not connected!");
+                }
+                else
+                {
+                    if (stat == CanOpenStatus.CANOPEN_TIMEOUT)
+                    {
+                        log.OnLog(String.Format("Protocol write timeout from node {0}!",
+                            this.numRemoteNode.Value.ToString()));
+                    }
+                    else
+                    {
+                        log.OnLog(String.Format("Could not write from node {0}, CANopen error: 0x{1:x8}",
+                            this.numRemoteNode.Value.ToString(), error_code));
+                    }
+                }
+            }
+            else
+            {
+                log.OnLog("Transmission type 30 set!");
+            }
+
+        }
+
+        private void btnEnableSync_Click(object sender, EventArgs e)
+        {
+            CanOpenStatus stat;
+            uint error_code;
+            // Read number of stored errors
+            stat = client_SDO.connect((byte)this.numRemoteNode.Value);
+            if (stat != CanOpenStatus.CANOPEN_OK)
+            {
+                log.OnLog(String.Format("Could not assign client SDO to comm with node {0}",
+                    this.numRemoteNode.Value.ToString()));
+            }
+
+            stat = client_SDO.objectWrite(0x1005, 0, (uint)0x80, out error_code);
+            if (stat != CanOpenStatus.CANOPEN_OK)
+            {
+                if (stat == CanOpenStatus.CANOPEN_ERROR_HW_NOT_CONNECTED)
+                {
+                    log.OnLog("CAN hardware not connected!");
+                }
+                else
+                {
+                    if (stat == CanOpenStatus.CANOPEN_TIMEOUT)
+                    {
+                        log.OnLog(String.Format("Protocol write timeout from node {0}!",
+                            this.numRemoteNode.Value.ToString()));
+                    }
+                    else
+                    {
+                        log.OnLog(String.Format("Could not write from node {0}, CANopen error: 0x{1:x8}",
+                            this.numRemoteNode.Value.ToString(), error_code));
+                    }
+                }
+            }
+            else
+            {
+                log.OnLog("Nodeguard configured!");
+            }
+        }
+
+        private void button2_Click_1(object sender, EventArgs e)
+        {
+            openDcfFileDialog.Title = "Open DCF File";
+            openDcfFileDialog.Filter = "DCF files|*.dcf";
+            openDcfFileDialog.InitialDirectory = Directory.GetCurrentDirectory();
+            if (openDcfFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                MessageBox.Show(openDcfFileDialog.FileName.ToString());
+            }
+
+            ushort failingObjIndex;
+            byte failingSubIndex;
+            uint canopenErrorCode;
+
+            CanOpenStatus ret = client_SDO.sendConfigurationData(openDcfFileDialog.FileName.ToString(), out failingObjIndex, out failingSubIndex, out canopenErrorCode);
+
+            if (ret != CanOpenStatus.CANOPEN_OK)
+            {
+                log.OnLog(String.Format("Dcf file download failed! (ret = 0x{0}, objIndex = 0x{1:X}, subIndex = 0x{2:X}, Error code:0x{3:X})", ret, failingObjIndex, failingSubIndex, canopenErrorCode));
+            }
+            else
+            {
+                log.OnLog(String.Format("Dcf file download success!"));
+            }
+        }
     }
-
-    private void btnSendPdoClearAll_Click(object sender, EventArgs e)
-    {
-      transmit_PDO.setup((uint)0x200 + Convert.ToUInt32(numRemoteNode.Value), new byte[] { 0x00 }, 1);
-      transmit_PDO.transmit();
-    }
-
-    private void btnStartSync_Click(object sender, EventArgs e)
-    {
-      sync_producer.setSyncCOBID(0x80);
-      sync_producer.startPeriodicTransmission(true);
-    }
-
-    private void button2_Click(object sender, EventArgs e)
-    {
-      CanOpenStatus stat;
-      uint error_code;
-      // Read number of stored errors
-      stat = client_SDO.connect((byte)this.numRemoteNode.Value);
-      if (stat != CanOpenStatus.CANOPEN_OK)
-      {
-        log.OnLog(String.Format("Could not assign client SDO to comm with node {0}",
-            this.numRemoteNode.Value.ToString()));
-      }
-
-      ushort object_dictionary_offset;
-      if (cbPdoRx.Checked)
-        object_dictionary_offset = 0x1400;
-      else
-        object_dictionary_offset = 0x1800;
-
-
-
-      ushort obj_idx = (ushort)(numUpDownPdo.Value - 1);
-      if (cbPdoRx.Checked)
-        obj_idx = (ushort)((ushort)(numUpDownPdo.Value - 1) + object_dictionary_offset);
-      else
-        obj_idx = (ushort)((ushort)(numUpDownPdo.Value - 1) + object_dictionary_offset);
-
-      stat = client_SDO.objectWrite(obj_idx, 2, (byte)10, out error_code);
-      if (stat != CanOpenStatus.CANOPEN_OK)
-      {
-        if (stat == CanOpenStatus.CANOPEN_ERROR_HW_NOT_CONNECTED)
-        {
-          log.OnLog("CAN hardware not connected!");
-        }
-        else
-        {
-          if (stat == CanOpenStatus.CANOPEN_TIMEOUT)
-          {
-            log.OnLog(String.Format("Protocol write timeout from node {0}!",
-                this.numRemoteNode.Value.ToString()));
-          }
-          else
-          {
-            log.OnLog(String.Format("Could not write from node {0}, CANopen error: 0x{1:x8}",
-                this.numRemoteNode.Value.ToString(), error_code));
-          }
-        }
-      }
-      else
-      {
-        log.OnLog("Transmission type 30 set!");
-      }
-
-    }
-
-    private void btnEnableSync_Click(object sender, EventArgs e)
-    {
-      CanOpenStatus stat;
-      uint error_code;
-      // Read number of stored errors
-      stat = client_SDO.connect((byte)this.numRemoteNode.Value);
-      if (stat != CanOpenStatus.CANOPEN_OK)
-      {
-        log.OnLog(String.Format("Could not assign client SDO to comm with node {0}",
-            this.numRemoteNode.Value.ToString()));
-      }
-
-      stat = client_SDO.objectWrite(0x1005, 0, (uint)0x80, out error_code);
-      if (stat != CanOpenStatus.CANOPEN_OK)
-      {
-        if (stat == CanOpenStatus.CANOPEN_ERROR_HW_NOT_CONNECTED)
-        {
-          log.OnLog("CAN hardware not connected!");
-        }
-        else
-        {
-          if (stat == CanOpenStatus.CANOPEN_TIMEOUT)
-          {
-            log.OnLog(String.Format("Protocol write timeout from node {0}!",
-                this.numRemoteNode.Value.ToString()));
-          }
-          else
-          {
-            log.OnLog(String.Format("Could not write from node {0}, CANopen error: 0x{1:x8}",
-                this.numRemoteNode.Value.ToString(), error_code));
-          }
-        }
-      }
-      else
-      {
-        log.OnLog("Nodeguard configured!");
-      }
-    }
-
-    private void button2_Click_1(object sender, EventArgs e)
-    {
-        openDcfFileDialog.Title = "Open DCF File";
-        openDcfFileDialog.Filter = "DCF files|*.dcf";
-        openDcfFileDialog.InitialDirectory = Directory.GetCurrentDirectory();
-        if (openDcfFileDialog.ShowDialog() == DialogResult.OK)
-        {
-            MessageBox.Show(openDcfFileDialog.FileName.ToString());
-        }
-
-        ushort failingObjIndex;
-        byte failingSubIndex;
-        uint canopenErrorCode;
-
-        CanOpenStatus ret = client_SDO.sendConfigurationData(openDcfFileDialog.FileName.ToString(), out failingObjIndex, out failingSubIndex, out canopenErrorCode);
-
-        if (ret != CanOpenStatus.CANOPEN_OK)
-        {
-            log.OnLog(String.Format("Dcf file download failed! (ret = 0x{0}, objIndex = 0x{1:X}, subIndex = 0x{2:X}, Error code:0x{3:X})", ret, failingObjIndex, failingSubIndex, canopenErrorCode));
-        }
-        else
-        {
-            log.OnLog(String.Format("Dcf file download success!"));
-        }
-    }
-  }
 }

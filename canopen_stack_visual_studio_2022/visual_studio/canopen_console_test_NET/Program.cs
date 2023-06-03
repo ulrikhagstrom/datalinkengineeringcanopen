@@ -20,13 +20,9 @@
     *             Copyright (C) 2009-2010 Ulrik Hagström.             *
     *******************************************************************/
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-
 using DatalinkEngineering.CANopen;
+using System;
+using System.Threading;
 
 namespace canopen_demo_kvaser
 {
@@ -158,7 +154,7 @@ namespace canopen_demo_kvaser
                 Console.WriteLine("activateBitTimingParameters failed");
                 Console.ReadLine();
             }
-            Thread.Sleep(25+25); // The activate call does not wait, leaving devices 25ms to stop and 25ms time to start with new rate
+            Thread.Sleep(25 + 25); // The activate call does not wait, leaving devices 25ms to stop and 25ms time to start with new rate
 
             if (lss_master.storeConfiguration(out errorCode, out specError) != CanOpenStatus.CANOPEN_OK)
             {
@@ -206,7 +202,7 @@ namespace canopen_demo_kvaser
             }
 
 
-            
+
 
             nmt_Slave1.nodeSetId(3);
             nmt_Slave1.canHardwareConnect(1, 250000);
@@ -234,7 +230,7 @@ namespace canopen_demo_kvaser
             nmt_Master.nodeGuardPollStop(5);
             nmt_Master.nodeGuardPollStop(66);
             Thread.Sleep(2000);
-            
+
             Console.WriteLine("************************************************");
             Console.WriteLine("* Press return do EMERGENCY RX/TX              *");
             Console.WriteLine("************************************************");
@@ -243,7 +239,7 @@ namespace canopen_demo_kvaser
 
             EmcyClient_NET emcyClient = new EmcyClient_NET();
             emcyClient.canHardwareConnect(0, 250000);
-            
+
             EmcyServer_NET emcyServer = new EmcyServer_NET();
             emcyServer.canHardwareConnect(1, 250000);
 
@@ -305,7 +301,7 @@ namespace canopen_demo_kvaser
             Console.WriteLine("************************************************");
             Console.WriteLine("* Press return do EXPEITED READ (test 1/2)!    *");
             Console.WriteLine("************************************************");
-            
+
 
             Console.ReadLine();
             client_SDO.setReadObjectTimeout(500000);
@@ -423,7 +419,7 @@ namespace canopen_demo_kvaser
             Console.WriteLine("***************************************************");
             Console.ReadLine();
 
-            if ((client_SDO.objectWrite( 0xE0, 0x00, (ushort)0x1234, out responseErrorCode)) != CanOpenStatus.CANOPEN_OK)
+            if ((client_SDO.objectWrite(0xE0, 0x00, (ushort)0x1234, out responseErrorCode)) != CanOpenStatus.CANOPEN_OK)
             {
                 Console.WriteLine("ERROR!");
                 Console.ReadLine();
@@ -435,7 +431,7 @@ namespace canopen_demo_kvaser
             Console.WriteLine("***************************************************");
             Console.ReadLine();
 
-            if ((client_SDO.objectWrite( 0xE0, 0x00, (uint)0x12345678, out responseErrorCode)) != CanOpenStatus.CANOPEN_OK)
+            if ((client_SDO.objectWrite(0xE0, 0x00, (uint)0x12345678, out responseErrorCode)) != CanOpenStatus.CANOPEN_OK)
             {
                 Console.WriteLine("ERROR!");
                 Console.ReadLine();
@@ -487,7 +483,7 @@ namespace canopen_demo_kvaser
                 tx_buffer[i] = (byte)i;
 
 
-            if ((stat = client_SDO.objectWriteBlock( 0xE0, 0x00, 0, tx_buffer, (ushort)10000, out responseErrorCode)) != CanOpenStatus.CANOPEN_OK)
+            if ((stat = client_SDO.objectWriteBlock(0xE0, 0x00, 0, tx_buffer, (ushort)10000, out responseErrorCode)) != CanOpenStatus.CANOPEN_OK)
             {
                 Console.WriteLine("ERROR!");
                 Console.ReadLine();
