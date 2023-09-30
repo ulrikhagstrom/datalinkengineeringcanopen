@@ -1,17 +1,17 @@
-/*             _____        _        _      _       _    
-              |  __ \      | |      | |    (_)     | |   
+/*             _____        _        _      _       _
+              |  __ \      | |      | |    (_)     | |
               | |  | | __ _| |_ __ _| |     _ _ __ | | __
               | |  | |/ _` | __/ _` | |    | | '_ \| |/ /
-              | |__| | (_| | || (_| | |____| | | | |   < 
+              | |__| | (_| | || (_| | |____| | | | |   <
               |_____/ \__,_|\__\__,_|______|_|_| |_|_|\_\
-         ______             _                      _             
-        |  ____|           (_)                    (_)            
-        | |__   _ __   __ _ _ _ __   ___  ___ _ __ _ _ __   __ _ 
+         ______             _                      _
+        |  ____|           (_)                    (_)
+        | |__   _ __   __ _ _ _ __   ___  ___ _ __ _ _ __   __ _
         |  __| | '_ \ / _` | | '_ \ / _ \/ _ \ '__| | '_ \ / _` |
         | |____| | | | (_| | | | | |  __/  __/ |  | | | | | (_| |
         |______|_| |_|\__, |_|_| |_|\___|\___|_|  |_|_| |_|\__, |
                        __/ |                                __/ |
-                      |___/                                |___/ 
+                      |___/                                |___/
 
       Web: http://www.datalink.se E-mail: ulrik.hagstrom@datalink.se
 
@@ -27,7 +27,7 @@
 //------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------
-TransmitPDO :: TransmitPDO (void)
+TransmitPDO::TransmitPDO(void)
 {
   this->remote_node_id = 0;
   this->can_interface = NULL;
@@ -37,24 +37,24 @@ TransmitPDO :: TransmitPDO (void)
   // Register a timer to be used for doing the node-guard polling.
   //
   timer = TimeClass::getTimeInterface();
-  timer->registerPeriodicCallback((TimeClass::TimeHandlerFuncPtr)timerCallbackHandler, 
+  timer->registerPeriodicCallback((TimeClass::TimeHandlerFuncPtr)timerCallbackHandler,
     this, 1000, &periodic_timer_index);
 }
 
 //------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------
-TransmitPDO :: ~TransmitPDO (void)
+TransmitPDO :: ~TransmitPDO(void)
 {
-  timer->unregisterPeriodicCallback( this->periodic_timer_index );
-  timer->removeTimeInterface(); 
+  timer->unregisterPeriodicCallback(this->periodic_timer_index);
+  timer->removeTimeInterface();
   (void)this->canHardwareDisconnect();
 }
 
 //------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------
-void TransmitPDO :: timerCallbackHandler(void *transmit_pdo_context)
+void TransmitPDO::timerCallbackHandler(void* transmit_pdo_context)
 {
   if (((TransmitPDO*)transmit_pdo_context)->can_hardware_is_initiated)
   {
@@ -68,7 +68,7 @@ void TransmitPDO :: timerCallbackHandler(void *transmit_pdo_context)
 //------------------------------------------------------------------------
 // 
 //------------------------------------------------------------------------
-canOpenStatus  TransmitPDO :: setData(COBID cobid, u8* data, u8 len)
+canOpenStatus  TransmitPDO::setData(COBID cobid, u8* data, u8 len)
 {
   canOpenStatus ret = CANOPEN_ERROR;
   if (len > 8 || len < 0)
@@ -88,15 +88,15 @@ canOpenStatus  TransmitPDO :: setData(COBID cobid, u8* data, u8 len)
 //------------------------------------------------------------------------
 // 
 //------------------------------------------------------------------------
-canOpenStatus  TransmitPDO :: transmitPdo(void)
+canOpenStatus  TransmitPDO::transmitPdo(void)
 {
   canOpenStatus ret = CANOPEN_ERROR;
-  if ( this->can_hardware_is_initiated )
+  if (this->can_hardware_is_initiated)
   {
-    if ( can_interface != NULL )
+    if (can_interface != NULL)
     {
-      return can_interface->canWrite( this->tPdo_cobid, this->tPdo_data, this->tPdo_len, 0 );
-    } 
+      return can_interface->canWrite(this->tPdo_cobid, this->tPdo_data, this->tPdo_len, 0);
+    }
     else
     {
       return CANOPEN_ERROR;
@@ -109,7 +109,7 @@ canOpenStatus  TransmitPDO :: transmitPdo(void)
 //------------------------------------------------------------------------
 // 
 //------------------------------------------------------------------------
-canOpenStatus  TransmitPDO :: periodicTransmission(bool value)
+canOpenStatus  TransmitPDO::periodicTransmission(bool value)
 {
   canOpenStatus ret = CANOPEN_ERROR;
   this->tPdo_periodic_transmission = value;

@@ -1,17 +1,17 @@
-/*             _____        _        _      _       _    
-              |  __ \      | |      | |    (_)     | |   
+/*             _____        _        _      _       _
+              |  __ \      | |      | |    (_)     | |
               | |  | | __ _| |_ __ _| |     _ _ __ | | __
               | |  | |/ _` | __/ _` | |    | | '_ \| |/ /
-              | |__| | (_| | || (_| | |____| | | | |   < 
+              | |__| | (_| | || (_| | |____| | | | |   <
               |_____/ \__,_|\__\__,_|______|_|_| |_|_|\_\
-         ______             _                      _             
-        |  ____|           (_)                    (_)            
-        | |__   _ __   __ _ _ _ __   ___  ___ _ __ _ _ __   __ _ 
+         ______             _                      _
+        |  ____|           (_)                    (_)
+        | |__   _ __   __ _ _ _ __   ___  ___ _ __ _ _ __   __ _
         |  __| | '_ \ / _` | | '_ \ / _ \/ _ \ '__| | '_ \ / _` |
         | |____| | | | (_| | | | | |  __/  __/ |  | | | | | (_| |
         |______|_| |_|\__, |_|_| |_|\___|\___|_|  |_|_| |_|\__, |
                        __/ |                                __/ |
-                      |___/                                |___/ 
+                      |___/                                |___/
 
       Web: http://www.datalink.se E-mail: ulrik.hagstrom@datalink.se
 
@@ -26,10 +26,10 @@
 //------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------
-ClientSDO :: ClientSDO()
+ClientSDO::ClientSDO()
 {
   DebugLogToFile("ClientSDO() entered\n");
-  this->sync_mutex = CreateMutex( NULL, FALSE, NULL);
+  this->sync_mutex = CreateMutex(NULL, FALSE, NULL);
   this->state = UNACTIVE;
   this->object_read_callback = NULL;
   this->object_write_callback = NULL;
@@ -56,10 +56,10 @@ ClientSDO :: ~ClientSDO()
 //  (see CiA DS301, 9.4.3 Pre-Defined Connection Set)
 //  for more details.
 //------------------------------------------------------------------------
-canOpenStatus  ClientSDO :: connect(u8 node_id)
+canOpenStatus  ClientSDO::connect(u8 node_id)
 {
   DebugLogToFile("connect(u8 node_id) entered\n");
-  canOpenStatus ret = CANOPEN_ERROR;  
+  canOpenStatus ret = CANOPEN_ERROR;
   if (node_id < 128)
   {
     this->node_id = node_id;
@@ -78,10 +78,10 @@ canOpenStatus  ClientSDO :: connect(u8 node_id)
 //  With this method the user can connect to any SDO with any
 //  COBID (for more advanced users).
 //------------------------------------------------------------------------
-canOpenStatus  ClientSDO :: connect(COBID cobid_tx, COBID cobid_rx)
+canOpenStatus  ClientSDO::connect(COBID cobid_tx, COBID cobid_rx)
 {
   DebugLogToFile("connect(COBID cobid_tx, COBID cobid_rx) entered\n");
-  canOpenStatus ret = CANOPEN_ERROR;  
+  canOpenStatus ret = CANOPEN_ERROR;
   this->cobid_tx = 0x600 + node_id;
   this->cobid_rx = 0x580 + node_id;
   ret = CANOPEN_OK;
@@ -93,17 +93,17 @@ canOpenStatus  ClientSDO :: connect(COBID cobid_tx, COBID cobid_rx)
 //9.2.2.2.2 Initiate SDO Download Protocol
 //------------------------------------------------------------------------
 
-canOpenStatus  ClientSDO ::  setCliCmdSpcInitDnReq(u8 valid, u8 e, u8 s)
+canOpenStatus  ClientSDO::setCliCmdSpcInitDnReq(u8 valid, u8 e, u8 s)
 {
   DebugLogToFile("setCliCmdSpcInitDnReq(u8 valid, u8 e, u8 s) entered\n");
   canOpenStatus ret = CANOPEN_ERROR;
   u8 n = 4 - valid;
   if ((n <= 3) && (e <= 1) && (s <= 1))
   {
-    u8 temp   =   (1 << 5); // ccs == 1.
-    temp     |=   (n << 2); // n
-    temp     |=   (e << 1); // e
-    temp     |=   (s << 0); // s
+    u8 temp = (1 << 5); // ccs == 1.
+    temp |= (n << 2); // n
+    temp |= (e << 1); // e
+    temp |= (s << 0); // s
     this->can_data_tx[0] = temp;
     ret = CANOPEN_OK;
   }
@@ -120,7 +120,7 @@ canOpenStatus  ClientSDO ::  setCliCmdSpcInitDnReq(u8 valid, u8 e, u8 s)
 //9.2.2.2.3 Download SDO Segment Protocol
 //------------------------------------------------------------------------
 
-canOpenStatus  ClientSDO ::  setCliCmdSpcDnSegReq(u8 valid, u8 c)
+canOpenStatus  ClientSDO::setCliCmdSpcDnSegReq(u8 valid, u8 c)
 {
   DebugLogToFile("setCliCmdSpcDnSegReq(u8 valid, u8 c) entered\n");
   canOpenStatus ret = CANOPEN_ERROR;
@@ -128,13 +128,13 @@ canOpenStatus  ClientSDO ::  setCliCmdSpcDnSegReq(u8 valid, u8 c)
   u8 _t = this->t;
   if ((n <= 7) && (t <= 1) && (c <= 1))
   {
-    u8 temp   =   (0  << 5); // ccs == 0
-    temp     |=   (_t << 4); // t
-    temp     |=   (n  << 1); // n
-    temp     |=   (c  << 0); // c
+    u8 temp = (0 << 5); // ccs == 0
+    temp |= (_t << 4); // t
+    temp |= (n << 1); // n
+    temp |= (c << 0); // c
     this->can_data_tx[0] = temp;
     ret = CANOPEN_OK;
-  } 
+  }
   else
   {
     DebugLogToFile("setCliCmdSpcDnSegReq failed.\n");
@@ -149,10 +149,10 @@ canOpenStatus  ClientSDO ::  setCliCmdSpcDnSegReq(u8 valid, u8 c)
 //9.2.2.2.5 Initiate SDO Upload Protocol 
 //------------------------------------------------------------------------
 
-canOpenStatus  ClientSDO ::  setCliCmdSpcInitUpReq(void)  
+canOpenStatus  ClientSDO::setCliCmdSpcInitUpReq(void)
 {
   DebugLogToFile("setCliCmdSpcInitUpReq(void) entered\n");
-  canOpenStatus ret = CANOPEN_ERROR;  
+  canOpenStatus ret = CANOPEN_ERROR;
   this->can_data_tx[0] = (2 << 5); // ccs == 2.
   ret = CANOPEN_OK;
   DebugLogToFile("setCliCmdSpcInitUpReq(void) exit\n");
@@ -164,13 +164,13 @@ canOpenStatus  ClientSDO ::  setCliCmdSpcInitUpReq(void)
 //9.2.2.2.6 Upload SDO Segment Protocol
 //------------------------------------------------------------------------
 
-canOpenStatus  ClientSDO ::  setCliCmdSpcUpSegReq(void) 
+canOpenStatus  ClientSDO::setCliCmdSpcUpSegReq(void)
 {
   DebugLogToFile("setCliCmdSpcUpSegReq(void) entered\n");
-  canOpenStatus ret = CANOPEN_ERROR;  
-  u8 temp         =   (3 << 5); // ccs == 0
-  temp           |=   (this->t << 4); // t
-  can_data_tx[0]  =   temp; 
+  canOpenStatus ret = CANOPEN_ERROR;
+  u8 temp = (3 << 5); // ccs == 0
+  temp |= (this->t << 4); // t
+  can_data_tx[0] = temp;
   ret = CANOPEN_OK;
   DebugLogToFile("setCliCmdSpcUpSegReq(void) exit\n");
   return DebugExitErrorValueLogToFile(ret);
@@ -179,7 +179,7 @@ canOpenStatus  ClientSDO ::  setCliCmdSpcUpSegReq(void)
 //------------------------------------------------------------------------
 //9.2.2.2.2 Initiate SDO Download Protocol
 //------------------------------------------------------------------------
-canOpenStatus  ClientSDO ::  getSrvCmdSpcInitDnResp(void)
+canOpenStatus  ClientSDO::getSrvCmdSpcInitDnResp(void)
 {
   DebugLogToFile("getSrvCmdSpcInitDnResp(void) entered\n");
   canOpenStatus ret = CANOPEN_ERROR;
@@ -200,10 +200,10 @@ canOpenStatus  ClientSDO ::  getSrvCmdSpcInitDnResp(void)
 //9.2.2.2.3 Download SDO Segment Protocol
 //------------------------------------------------------------------------
 
-canOpenStatus  ClientSDO ::  getSrvCmdSpcDnSegResp(u8 *t) 
+canOpenStatus  ClientSDO::getSrvCmdSpcDnSegResp(u8* t)
 {
   DebugLogToFile("getSrvCmdSpcDnSegResp(u8 *t) entered\n");
-  canOpenStatus ret = CANOPEN_ERROR;  
+  canOpenStatus ret = CANOPEN_ERROR;
   u8   scs = this->getSrvCmdSpc();
   if (scs == 1)
   {
@@ -221,10 +221,10 @@ canOpenStatus  ClientSDO ::  getSrvCmdSpcDnSegResp(u8 *t)
 //------------------------------------------------------------------------
 // 9.2.2.2.9 Initiate SDO Block Download Protocol
 //------------------------------------------------------------------------
-canOpenStatus  ClientSDO ::  getSrvCmdSpcInitBlockDnResp(u8 *cs) 
+canOpenStatus  ClientSDO::getSrvCmdSpcInitBlockDnResp(u8* cs)
 {
   DebugLogToFile("getSrvCmdSpcInitBlockDnResp(u8 *cs) entered\n");
-  canOpenStatus ret = CANOPEN_ERROR;  
+  canOpenStatus ret = CANOPEN_ERROR;
   u8   scs = this->getSrvCmdSpc();
   if (scs == 5)
   {
@@ -233,7 +233,7 @@ canOpenStatus  ClientSDO ::  getSrvCmdSpcInitBlockDnResp(u8 *cs)
       *cs = ((this->can_data_rx[0] >> 2) & 1);
       ret = CANOPEN_OK;
     }
-    else 
+    else
     {
       DebugLogToFile("getSrvCmdSpcInitBlockDnResp failed.\n");
       ret = CANOPEN_UNEXPECTED_SCS;
@@ -252,7 +252,7 @@ canOpenStatus  ClientSDO ::  getSrvCmdSpcInitBlockDnResp(u8 *cs)
 //9.2.2.2.5 Initiate SDO Upload Protocol
 //------------------------------------------------------------------------
 
-canOpenStatus  ClientSDO ::  getSrvCmdSpcInitUpResp(u8 *n, u8 *e, u8 *s) 
+canOpenStatus  ClientSDO::getSrvCmdSpcInitUpResp(u8* n, u8* e, u8* s)
 {
   DebugLogToFile("getSrvCmdSpcInitUpResp(u8 *n, u8 *e, u8 *s) entered\n");
   canOpenStatus ret = CANOPEN_ERROR;
@@ -276,10 +276,10 @@ canOpenStatus  ClientSDO ::  getSrvCmdSpcInitUpResp(u8 *n, u8 *e, u8 *s)
 //------------------------------------------------------------------------
 //9.2.2.2.6 Upload SDO Segment Protocol
 //------------------------------------------------------------------------
-canOpenStatus  ClientSDO ::  getSrvCmdSpcUpSegResp(u8 *t, u8 *n, u8 *c) 
+canOpenStatus  ClientSDO::getSrvCmdSpcUpSegResp(u8* t, u8* n, u8* c)
 {
   DebugLogToFile("getSrvCmdSpcUpSegResp(u8 *t, u8 *n, u8 *c) entered\n");
-  canOpenStatus ret = CANOPEN_ERROR;  
+  canOpenStatus ret = CANOPEN_ERROR;
   u8   scs = this->getSrvCmdSpc();
   if (scs == 0)
   {
@@ -299,17 +299,17 @@ canOpenStatus  ClientSDO ::  getSrvCmdSpcUpSegResp(u8 *t, u8 *n, u8 *c)
 //------------------------------------------------------------------------
 //9.2.2.2.10 Download SDO Block Segment Protocol
 //------------------------------------------------------------------------
-canOpenStatus  ClientSDO ::  getSrvCmdSpcBlkDnResp(u8 *ss, u8 *ack_sequence, 
-                                                   u8 *block_size)
+canOpenStatus  ClientSDO::getSrvCmdSpcBlkDnResp(u8* ss, u8* ack_sequence,
+  u8* block_size)
 {
   DebugLogToFile("getSrvCmdSpcBlkDnResp(u8 *ss, u8 *ack_sequence, u8 *block_size) entered\n");
   canOpenStatus ret = CANOPEN_ERROR;
   u8 flags = this->can_data_rx[0];
   u8 scs = 0;
-  scs = (flags >> 5) & 7; 
-  *ss  = flags & 3;
+  scs = (flags >> 5) & 7;
+  *ss = flags & 3;
   if (scs == 5) // expected scs == 5, block download.
-  {    
+  {
     *ack_sequence = ::getU8Val(this->can_data_rx, 1); // Get from CAN.
     *block_size = ::getU8Val(this->can_data_rx, 2);
     ret = CANOPEN_OK;
@@ -325,13 +325,13 @@ canOpenStatus  ClientSDO ::  getSrvCmdSpcBlkDnResp(u8 *ss, u8 *ack_sequence,
 //------------------------------------------------------------------------
 // 9.2.2.2.11 End SDO Block Download Protocol
 //------------------------------------------------------------------------
-canOpenStatus  ClientSDO :: getSrvCmdSpcEndBlkDnResp(void)
+canOpenStatus  ClientSDO::getSrvCmdSpcEndBlkDnResp(void)
 {
   DebugLogToFile("getSrvCmdSpcEndBlkDnResp(void) entered\n");
   canOpenStatus ret = CANOPEN_ERROR;
   u8 flags = this->can_data_rx[0];
   u8 scs = (flags >> 5) & 7;
-  u8 ss  = flags & 3;
+  u8 ss = flags & 3;
   if (scs == 5 && ss == 1)
   {
     ret = CANOPEN_OK;
@@ -346,16 +346,16 @@ canOpenStatus  ClientSDO :: getSrvCmdSpcEndBlkDnResp(void)
 //------------------------------------------------------------------------
 //9.2.2.2.9 Initiate SDO Block Download Protocol
 //------------------------------------------------------------------------
-canOpenStatus  ClientSDO ::  setCliCmdSpcInitBlockDnReq(u8 cc, u8 s)
+canOpenStatus  ClientSDO::setCliCmdSpcInitBlockDnReq(u8 cc, u8 s)
 {
   DebugLogToFile("setCliCmdSpcInitBlockDnReq(u8 cc, u8 s) entered\n");
   canOpenStatus ret = CANOPEN_ERROR;
   if ((cc <= 1) && (s <= 1))
   {
-    u8 temp   =   (6 << 5); // ccs == 6.  // Block download.
-    temp     |=   (cc << 2); // cc - client crc support.
-    temp     |=   (s << 1); // s - size.
-    temp     |=   (0 << 0); // initiate download request (client subcommand)
+    u8 temp = (6 << 5); // ccs == 6.  // Block download.
+    temp |= (cc << 2); // cc - client crc support.
+    temp |= (s << 1); // s - size.
+    temp |= (0 << 0); // initiate download request (client subcommand)
     this->can_data_tx[0] = temp;
     ret = CANOPEN_OK;
   }
@@ -370,7 +370,7 @@ canOpenStatus  ClientSDO ::  setCliCmdSpcInitBlockDnReq(u8 cc, u8 s)
 //------------------------------------------------------------------------
 //  Collects the server command specifier from a received message.
 //------------------------------------------------------------------------
-u8 ClientSDO ::  getSrvCmdSpc(void)
+u8 ClientSDO::getSrvCmdSpc(void)
 {
   return ((this->can_data_rx[0] >> 5) & 7);  // scs.
 }
@@ -378,14 +378,14 @@ u8 ClientSDO ::  getSrvCmdSpc(void)
 //------------------------------------------------------------------------
 // 9.2.2.2.11 End SDO Block Download Protocol
 //------------------------------------------------------------------------
-canOpenStatus ClientSDO :: setCliCmdSpcEndBlkDnReq(u8 n, u16 crc)
+canOpenStatus ClientSDO::setCliCmdSpcEndBlkDnReq(u8 n, u16 crc)
 {
   DebugLogToFile("setCliCmdSpcEndBlkDnReq(u8 n, u16 crc) entered\n");
   canOpenStatus ret = CANOPEN_ERROR;
   if (n >= 0 && n <= 7)
   {
     u8 temp = 0;
-    temp  = (6 << 5); // ccs = 6.
+    temp = (6 << 5); // ccs = 6.
     temp |= (n << 2); // n (0...7)
     temp |= (1 << 0); // cs = 1.
     this->can_data_tx[0] = temp;
@@ -403,8 +403,8 @@ canOpenStatus ClientSDO :: setCliCmdSpcEndBlkDnReq(u8 n, u16 crc)
 // This method is being used for reading U8:s from the object 
 // dictionary of a remote node.
 //------------------------------------------------------------------------
-canOpenStatus  ClientSDO :: objectRead(u16 object_index, u8 sub_index, 
-  u8  *val, CanOpenErrorCode *error_code)
+canOpenStatus  ClientSDO::objectRead(u16 object_index, u8 sub_index,
+  u8* val, CanOpenErrorCode* error_code)
 {
   DebugLogToFile("objectRead(u16 object_index, u8 sub_index, u8  *val, CanOpenErrorCode *error_code) entered\n");
   CanOpenErrorCode coErrorCode = 0;
@@ -419,7 +419,7 @@ canOpenStatus  ClientSDO :: objectRead(u16 object_index, u8 sub_index,
   }
   else
   {
-    ret = this->objectRead(object_index, sub_index, 
+    ret = this->objectRead(object_index, sub_index,
       buf, 1, &valid, error_code);
     if (ret == CANOPEN_OK)
     {
@@ -435,7 +435,7 @@ canOpenStatus  ClientSDO :: objectRead(u16 object_index, u8 sub_index,
     }
     else
     {
-        DebugLogToFile("objectRead-u8 failed #2.\n");
+      DebugLogToFile("objectRead-u8 failed #2.\n");
     }
   }
   return DebugExitErrorValueLogToFile(ret);
@@ -446,8 +446,8 @@ canOpenStatus  ClientSDO :: objectRead(u16 object_index, u8 sub_index,
 // This method is being used for reading U16:s from the object dictionary 
 // of a remote node.
 //------------------------------------------------------------------------
-canOpenStatus  ClientSDO :: objectRead(u16 object_index, u8 sub_index, 
-  u16  *val, CanOpenErrorCode *error_code)
+canOpenStatus  ClientSDO::objectRead(u16 object_index, u8 sub_index,
+  u16* val, CanOpenErrorCode* error_code)
 {
   DebugLogToFile("objectRead(u16 object_index, u8 sub_index, u16 *val, CanOpenErrorCode *error_code) entered\n");
   CanOpenErrorCode coErrorCode = 0;
@@ -487,8 +487,8 @@ canOpenStatus  ClientSDO :: objectRead(u16 object_index, u8 sub_index,
 // This method is being used for reading U32:s from the object dictionary 
 // of a remote node.
 //------------------------------------------------------------------------
-canOpenStatus  ClientSDO :: objectRead(u16 object_index, u8 sub_index, 
-                                       u32  *val, CanOpenErrorCode *error_code)
+canOpenStatus  ClientSDO::objectRead(u16 object_index, u8 sub_index,
+  u32* val, CanOpenErrorCode* error_code)
 {
   DebugLogToFile("objectRead(u16 object_index, u8 sub_index, u32  *val, CanOpenErrorCode *error_code) entered\n");
   CanOpenErrorCode coErrorCode = 0;
@@ -553,7 +553,7 @@ canOpenStatus  ClientSDO :: objectRead(u16 object_index, u8 sub_index,
 // This method is being used for reading U64:s from the object dictionary of a remote node.
 //------------------------------------------------------------------------
 #ifdef HAS_LONG_LONG
-canOpenStatus  ClientSDO :: objectRead(u16 object_index, u8 sub_index, u64  *val, CanOpenErrorCode *error_code)
+canOpenStatus  ClientSDO::objectRead(u16 object_index, u8 sub_index, u64* val, CanOpenErrorCode* error_code)
 {
   CanOpenErrorCode coErrorCode = 0;
   u32 valid = 0;
@@ -578,23 +578,23 @@ canOpenStatus  ClientSDO :: objectRead(u16 object_index, u8 sub_index, u64  *val
 // This method is being used for reading any object type from the object 
 // dictionary of a remote node.
 //------------------------------------------------------------------------
-canOpenStatus  ClientSDO :: objectRead(u16 object_index, u8 sub_index, 
-  u8 *buf, u32 buffer_size, u32 *valid, CanOpenErrorCode *error_code)
+canOpenStatus  ClientSDO::objectRead(u16 object_index, u8 sub_index,
+  u8* buf, u32 buffer_size, u32* valid, CanOpenErrorCode* error_code)
 {
-  WaitForSingleObject( this->rx_tx_mutex, INFINITE);
+  WaitForSingleObject(this->rx_tx_mutex, INFINITE);
   DebugLogToFile("objectRead(u16 object_index, u8 sub_index, u8 *buf, u32 buffer_size, u32 *valid, CanOpenErrorCode *error_code) entered\n");
-  this->application_object_index       = object_index;
-  this->application_sub_index          = sub_index;
-  this->application_buffer_length      = buffer_size;
-  this->application_buffer_offset      = 0; // Initiate the buffer pointer.
-  this->application_buffer             = buf;
-  this->application_valid_bytes        = valid;
+  this->application_object_index = object_index;
+  this->application_sub_index = sub_index;
+  this->application_buffer_length = buffer_size;
+  this->application_buffer_offset = 0; // Initiate the buffer pointer.
+  this->application_buffer = buf;
+  this->application_valid_bytes = valid;
   this->application_canopen_error_code = error_code;
-  this->remote_node_error_code         = 0;
-  *error_code                          = 0;
-  *valid                               = 0;
+  this->remote_node_error_code = 0;
+  *error_code = 0;
+  *valid = 0;
 
-  canOpenStatus ret = CANOPEN_ERROR;  
+  canOpenStatus ret = CANOPEN_ERROR;
 
   ret = this->setCliCmdSpcInitUpReq();
   if (ret == CANOPEN_OK)
@@ -638,7 +638,7 @@ canOpenStatus  ClientSDO :: objectRead(u16 object_index, u8 sub_index,
 //------------------------------------------------------------------------
 // 9.2.2.2.5 Initiate SDO Upload Protocol
 //------------------------------------------------------------------------
-canOpenStatus  ClientSDO :: hndlInitUpResp(void)
+canOpenStatus  ClientSDO::hndlInitUpResp(void)
 {
   DebugLogToFile("hndlInitUpResp(void) entered\n");
   canOpenStatus ret = CANOPEN_ERROR;
@@ -680,9 +680,9 @@ canOpenStatus  ClientSDO :: hndlInitUpResp(void)
               this->object_read_callback(this->object_read_callback_context,
                 this->transfer_result,
                 this->node_id,
-                this->application_object_index, 
-                this->application_sub_index, 
-                this->application_buffer, 
+                this->application_object_index,
+                this->application_sub_index,
+                this->application_buffer,
                 *(this->application_valid_bytes),
                 *(this->application_canopen_error_code));
             }
@@ -703,12 +703,12 @@ canOpenStatus  ClientSDO :: hndlInitUpResp(void)
                     this->state = WAIT_UPLOAD_SEGMENT_RESPONSE;
                     ret = this->writeToCanBus();
                   }
-                  else 
+                  else
                   {
                     DebugLogToFile("hndlInitUpResp failed #2\n");
                   }
                 }
-                else 
+                else
                 {
                   DebugLogToFile("hndlInitUpResp failed #3\n");
                 }
@@ -717,7 +717,7 @@ canOpenStatus  ClientSDO :: hndlInitUpResp(void)
               {
                 // Rx buffer size too small.
                 DebugLogToFile("hndlInitUpResp failed #4\n");
-                ret = this->setCliSrvAbortTransfer(this->application_object_index, 
+                ret = this->setCliSrvAbortTransfer(this->application_object_index,
                   this->application_sub_index, OUT_OF_MEMORY);
                 if (ret == CANOPEN_OK)
                 {
@@ -725,34 +725,34 @@ canOpenStatus  ClientSDO :: hndlInitUpResp(void)
                   this->is_transfer_stopped_or_finished = TRUE;
                   this->transfer_result = CANOPEN_BUFFER_TOO_SMALL;
                 }
-                else 
+                else
                 {
                   DebugLogToFile("hndlInitUpResp failed #5\n");
                 }
               }
             }
-            else 
+            else
             {
               DebugLogToFile("hndlInitUpResp failed #6\n");
             }
           }
         }
-        else 
+        else
         {
           DebugLogToFile("hndlInitUpResp failed #7\n");
         }
       }
-      else 
+      else
       {
         DebugLogToFile("hndlInitUpResp failed #8\n");
       }
     }
-    else 
+    else
     {
       DebugLogToFile("hndlInitUpResp failed #9\n");
     }
   }
-  else 
+  else
   {
     DebugLogToFile("hndlInitUpResp failed #10\n");
   }
@@ -763,10 +763,10 @@ canOpenStatus  ClientSDO :: hndlInitUpResp(void)
 //------------------------------------------------------------------------
 // 9.2.2.2.6 Upload SDO Segment Protocol
 //------------------------------------------------------------------------
-canOpenStatus  ClientSDO ::hndlSegmUpResp(void)
+canOpenStatus  ClientSDO::hndlSegmUpResp(void)
 {
   DebugLogToFile("hndlSegmUpResp(void) entered\n");
-  canOpenStatus ret = CANOPEN_ERROR;  
+  canOpenStatus ret = CANOPEN_ERROR;
   u8 t;
   u8 n;
   u8 c;
@@ -783,20 +783,20 @@ canOpenStatus  ClientSDO ::hndlSegmUpResp(void)
         u32 calc_valid = application_buffer_offset + valid; // calc valid data so far, 
         if (calc_valid <= this->application_buffer_length)
         {
-          memcpy(this->application_buffer + this->application_buffer_offset, segment_data, valid); 
+          memcpy(this->application_buffer + this->application_buffer_offset, segment_data, valid);
           this->application_buffer_offset = calc_valid;
           this->transfer_result = CANOPEN_OK;
           if (c == 1) // No more segments.
           {
-            *(this->application_valid_bytes) = calc_valid;   
+            *(this->application_valid_bytes) = calc_valid;
             if (this->object_read_callback != NULL)
             {
               this->object_read_callback(this->object_read_callback_context,
                 this->transfer_result,
                 this->node_id,
-                this->application_object_index, 
-                this->application_sub_index, 
-                this->application_buffer, 
+                this->application_object_index,
+                this->application_sub_index,
+                this->application_buffer,
                 *(this->application_valid_bytes),
                 *(this->application_canopen_error_code));
             }
@@ -838,7 +838,7 @@ canOpenStatus  ClientSDO ::hndlSegmUpResp(void)
       ret = CANOPEN_TOGGLE;
     }
   }
-  else 
+  else
   {
     DebugLogToFile("hndlSegmUpResp failed #5\n");
   }
@@ -851,23 +851,23 @@ canOpenStatus  ClientSDO ::hndlSegmUpResp(void)
       this->object_read_callback(this->object_read_callback_context,
         this->transfer_result,
         this->node_id,
-        this->application_object_index, 
-        this->application_sub_index, 
-        this->application_buffer, 
+        this->application_object_index,
+        this->application_sub_index,
+        this->application_buffer,
         *(this->application_valid_bytes),
         *(this->application_canopen_error_code));
     }
   }
-  return DebugExitErrorValueLogToFile(ret);  
+  return DebugExitErrorValueLogToFile(ret);
 }
 
 //------------------------------------------------------------------------
 // 9.2.2.2.2 Initiate SDO Download Protocol
 //------------------------------------------------------------------------
-canOpenStatus  ClientSDO ::hndlInitDlResp(void)
+canOpenStatus  ClientSDO::hndlInitDlResp(void)
 {
   DebugLogToFile("hndlInitDlResp(void) entered\n");
-  canOpenStatus ret = CANOPEN_ERROR;  
+  canOpenStatus ret = CANOPEN_ERROR;
 
   ret = this->getSrvCmdSpcInitDnResp();
   if (ret == CANOPEN_OK)
@@ -923,12 +923,12 @@ canOpenStatus  ClientSDO ::hndlInitDlResp(void)
             DebugLogToFile("hndlInitDlResp failed #2\n");
           }
         }
-        else 
+        else
         {
           // A proper expedited write success acknowledge has been 
           // received from the server. Shut down this transfer.
           this->state = UNACTIVE;
-          this->is_transfer_stopped_or_finished = TRUE; 
+          this->is_transfer_stopped_or_finished = TRUE;
           this->transfer_result = CANOPEN_OK;
           *(this->application_canopen_error_code) = 0;
           if (this->object_write_callback != NULL)
@@ -936,13 +936,13 @@ canOpenStatus  ClientSDO ::hndlInitDlResp(void)
             this->object_write_callback(this->object_write_callback_context,
               this->transfer_result,
               this->node_id,
-              this->application_object_index, 
-              this->application_sub_index, 
+              this->application_object_index,
+              this->application_sub_index,
               *(this->application_canopen_error_code));
           }
         }
       }
-      else 
+      else
       {
         DebugLogToFile("hndlInitDlResp failed #3\n");
         ret = CANOPEN_OBJECT_MISSMATCH;
@@ -955,10 +955,10 @@ canOpenStatus  ClientSDO ::hndlInitDlResp(void)
 //------------------------------------------------------------------------
 // 9.2.2.2.3 Download SDO Segment Protocol
 //------------------------------------------------------------------------
-canOpenStatus  ClientSDO ::hndlSegDlResp(void)
+canOpenStatus  ClientSDO::hndlSegDlResp(void)
 {
-  DebugLogToFile("hndlSegDlResp(void) entered\n");  
-  canOpenStatus ret = CANOPEN_ERROR;  
+  DebugLogToFile("hndlSegDlResp(void) entered\n");
+  canOpenStatus ret = CANOPEN_ERROR;
   u8 t;
 
   ret = this->getSrvCmdSpcDnSegResp(&t);
@@ -976,13 +976,13 @@ canOpenStatus  ClientSDO ::hndlSegDlResp(void)
           bytes_in_current_segment = 7;  // Max 7 bytes in one segment.
           c = 0; // more segments to be downloaded
         }
-        else 
+        else
         {
           bytes_in_current_segment = (u8)remaining_in_buffer;
           c = 1;  // no more segments to be downloaded
         }
         this->toggle();
-        ret = this->setSegData( bytes_in_current_segment );
+        ret = this->setSegData(bytes_in_current_segment);
         if (ret == CANOPEN_OK)
         {
           ret = this->setCliCmdSpcDnSegReq(bytes_in_current_segment, c);
@@ -990,7 +990,7 @@ canOpenStatus  ClientSDO ::hndlSegDlResp(void)
           {
             ret = this->writeToCanBus();
           }
-          else 
+          else
           {
             DebugLogToFile("hndlSegDlResp failed #1\n");
           }
@@ -1006,8 +1006,8 @@ canOpenStatus  ClientSDO ::hndlSegDlResp(void)
           this->object_write_callback(this->object_write_callback_context,
             this->transfer_result,
             this->node_id,
-            this->application_object_index, 
-            this->application_sub_index, 
+            this->application_object_index,
+            this->application_sub_index,
             *(this->application_canopen_error_code));
         }
       }
@@ -1018,18 +1018,18 @@ canOpenStatus  ClientSDO ::hndlSegDlResp(void)
       ret = CANOPEN_TOGGLE;
     }
   }
-  else 
+  else
   {
     DebugLogToFile("hndlSegDlResp failed #3\n");
   }
-  return DebugExitErrorValueLogToFile(ret);  
+  return DebugExitErrorValueLogToFile(ret);
 }
 
 
 //------------------------------------------------------------------------
 // 9.2.2.2.9 Initiate SDO Block Download Protocol
 //------------------------------------------------------------------------
-canOpenStatus  ClientSDO :: hndlInitBlkDlResp(void)
+canOpenStatus  ClientSDO::hndlInitBlkDlResp(void)
 {
   DebugLogToFile("hndlInitBlkDlResp(void) entered\n");
   canOpenStatus ret = CANOPEN_ERROR;
@@ -1084,7 +1084,7 @@ canOpenStatus  ClientSDO :: hndlInitBlkDlResp(void)
       }
     }
   }
-  else 
+  else
   {
     DebugLogToFile("hndlInitBlkDlResp failed #4\n");
   }
@@ -1095,13 +1095,13 @@ canOpenStatus  ClientSDO :: hndlInitBlkDlResp(void)
 //------------------------------------------------------------------------
 // 9.2.2.2.10 Download SDO Block Segment Protocol
 //------------------------------------------------------------------------
-canOpenStatus  ClientSDO :: hndlDlBlkResp(void)
+canOpenStatus  ClientSDO::hndlDlBlkResp(void)
 {
   DebugLogToFile("hndlDlBlkResp(void) entered\n");
   canOpenStatus ret = CANOPEN_ERROR;
-  u8 ss             = 0;
-  u8 ack_sequence   = 0;
-  u8 block_size     = 0;
+  u8 ss = 0;
+  u8 ack_sequence = 0;
+  u8 block_size = 0;
   ret = getSrvCmdSpcBlkDnResp(&ss, &ack_sequence, &block_size);
   if (ret == CANOPEN_OK && ss == 2)
   {
@@ -1109,14 +1109,14 @@ canOpenStatus  ClientSDO :: hndlDlBlkResp(void)
     this->block_size = block_size;
     if (block_transfer_segment_count && (ack_sequence < (block_transfer_segment_count - 1)))
     {
-      u16 blocks_to_retransmit  = 0;
+      u16 blocks_to_retransmit = 0;
       u32 bytes_to_retransmit = 0;
       blocks_to_retransmit = ((block_transfer_segment_count - 1) - ack_sequence);
       if (left_in_application_buffer != 0)
       {
         bytes_to_retransmit = blocks_to_retransmit * 7;
       }
-      else 
+      else
       {
         if (this->application_buffer_length % 7)
         {
@@ -1148,7 +1148,7 @@ canOpenStatus  ClientSDO :: hndlDlBlkResp(void)
         // Calculate the number of bytes in the last block frame that was not valid 
         // == n here : 9.2.2.2.11 End SDO Block Download Protocol.
         // Bytes [8-n, 7] do not contain segment data.
-        
+
         // 7 valid bytes (no invalid) : n = 0 [8,7], n = 1 [7,7] ?
         // 6 valid bytes (1 invalid) : n = 2 [6,7].
         // 5 valid bytes (2 invalid) : n = 3 [5,7].
@@ -1176,7 +1176,7 @@ canOpenStatus  ClientSDO :: hndlDlBlkResp(void)
         this->state = SENDING_DOWNLOAD_BLOCK;
       }
     }
-    else 
+    else
     {
       DebugLogToFile("hndlDlBlkResp failed #3\n");
       ret = CANOPEN_INTERNAL_STATE_ERROR; // Should never happen.
@@ -1194,7 +1194,7 @@ canOpenStatus  ClientSDO :: hndlDlBlkResp(void)
 //------------------------------------------------------------------------
 // 9.2.2.2.11 End SDO Block Download Protocol
 //------------------------------------------------------------------------
-canOpenStatus ClientSDO :: hndlEndBlkDnResp(void)
+canOpenStatus ClientSDO::hndlEndBlkDnResp(void)
 {
   DebugLogToFile("hndlEndBlkDnResp(void) entered\n");
   canOpenStatus ret = CANOPEN_ERROR;
@@ -1208,8 +1208,8 @@ canOpenStatus ClientSDO :: hndlEndBlkDnResp(void)
       this->object_write_callback(this->object_write_callback_context,
         this->transfer_result,
         this->node_id,
-        this->application_object_index, 
-        this->application_sub_index, 
+        this->application_object_index,
+        this->application_sub_index,
         *(this->application_canopen_error_code));
     }
   }
@@ -1219,23 +1219,23 @@ canOpenStatus ClientSDO :: hndlEndBlkDnResp(void)
 //------------------------------------------------------------------------
 // Wrapper for being able to setup callbacks to non-static funcs.
 //------------------------------------------------------------------------
-canOpenStatus ClientSDO :: canFrameConsumerW(void *ClientSDOcontext, 
-  unsigned long id, unsigned char *data, unsigned int dlc, unsigned int flags)
+canOpenStatus ClientSDO::canFrameConsumerW(void* ClientSDOcontext,
+  unsigned long id, unsigned char* data, unsigned int dlc, unsigned int flags)
 {
-  ClientSDO *cliSDO = (ClientSDO*) ClientSDOcontext;
+  ClientSDO* cliSDO = (ClientSDO*)ClientSDOcontext;
   return cliSDO->canFrameConsumer(id, data, dlc, flags);
 }
 
 //------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------
-canOpenStatus  ClientSDO :: canFrameConsumer(unsigned long id, 
-  unsigned char *data, unsigned int dlc, unsigned int flags)
+canOpenStatus  ClientSDO::canFrameConsumer(unsigned long id,
+  unsigned char* data, unsigned int dlc, unsigned int flags)
 {
   canOpenStatus ret = CANOPEN_ERROR;
   if (id == this->cobid_rx)
   {
-    WaitForSingleObject( this->sync_mutex, INFINITE);
+    WaitForSingleObject(this->sync_mutex, INFINITE);
     ret = this->setLatestEventTimestamp();
     if (ret == CANOPEN_OK)
     {
@@ -1244,42 +1244,42 @@ canOpenStatus  ClientSDO :: canFrameConsumer(unsigned long id,
       {
         switch (this->state)
         {
-          case WAIT_INITIATE_UPLOAD_RESPONSE:
-            DebugLogToFile("calling hndlInitUpResp()\n");
-            ret = hndlInitUpResp(); // 9.2.2.2.5 Initiate SDO Upload Protocol
-            break;
-          case WAIT_UPLOAD_SEGMENT_RESPONSE:
-            DebugLogToFile("calling hndlSegmUpResp()\n");
-            ret = hndlSegmUpResp(); // 9.2.2.2.6 Upload SDO Segment Protocol
-            break;
-          case WAIT_INITIATE_DOWNLOAD_RESPONSE:
-            DebugLogToFile("calling hndlInitDlResp()\n");
-            ret = hndlInitDlResp(); // 9.2.2.2.2 Initiate SDO Download Protocol
-            break;
-          case WAIT_DOWNLOAD_SEGMENT_RESPONSE:
-            DebugLogToFile("calling hndlSegDlResp()\n");
-            ret = hndlSegDlResp(); // 9.2.2.2.3 Download SDO Segment Protocol
-            break;
-          case WAIT_INITIATE_DOWNLOAD_BLOCK_RESPONSE:
-            DebugLogToFile("calling hndlInitBlkDlResp()\n");
-            ret = hndlInitBlkDlResp(); // 9.2.2.2.9 Initiate SDO Block Download Protocol
-            break;
-          case SENDING_DOWNLOAD_BLOCK:  // Fall-thru is OK since remote node maybe sends us retransmit request.
-          case WAIT_DOWNLOAD_BLOCK_RESPONSE:
-            DebugLogToFile("calling hndlDlBlkResp()\n");
-            ret = hndlDlBlkResp(); // 9.2.2.2.10 Download SDO Block Segment Protocol
-            break;
-          case WAIT_DOWNLOAD_BLOCK_END:  //9.2.2.2.11 End SDO Block Download Protocol
-            DebugLogToFile("calling hndlEndBlkDnResp()\n");
-            ret = hndlEndBlkDnResp(); 
-            break;
-          case UNACTIVE:
-            ret = CANOPEN_MSG_NOT_PROCESSED;
-            break;
-          default:
-            DebugLogToFile("canFrameConsumer failed #1\n\n");
-            ret = CANOPEN_INTERNAL_STATE_ERROR;
-            break;
+        case WAIT_INITIATE_UPLOAD_RESPONSE:
+          DebugLogToFile("calling hndlInitUpResp()\n");
+          ret = hndlInitUpResp(); // 9.2.2.2.5 Initiate SDO Upload Protocol
+          break;
+        case WAIT_UPLOAD_SEGMENT_RESPONSE:
+          DebugLogToFile("calling hndlSegmUpResp()\n");
+          ret = hndlSegmUpResp(); // 9.2.2.2.6 Upload SDO Segment Protocol
+          break;
+        case WAIT_INITIATE_DOWNLOAD_RESPONSE:
+          DebugLogToFile("calling hndlInitDlResp()\n");
+          ret = hndlInitDlResp(); // 9.2.2.2.2 Initiate SDO Download Protocol
+          break;
+        case WAIT_DOWNLOAD_SEGMENT_RESPONSE:
+          DebugLogToFile("calling hndlSegDlResp()\n");
+          ret = hndlSegDlResp(); // 9.2.2.2.3 Download SDO Segment Protocol
+          break;
+        case WAIT_INITIATE_DOWNLOAD_BLOCK_RESPONSE:
+          DebugLogToFile("calling hndlInitBlkDlResp()\n");
+          ret = hndlInitBlkDlResp(); // 9.2.2.2.9 Initiate SDO Block Download Protocol
+          break;
+        case SENDING_DOWNLOAD_BLOCK:  // Fall-thru is OK since remote node maybe sends us retransmit request.
+        case WAIT_DOWNLOAD_BLOCK_RESPONSE:
+          DebugLogToFile("calling hndlDlBlkResp()\n");
+          ret = hndlDlBlkResp(); // 9.2.2.2.10 Download SDO Block Segment Protocol
+          break;
+        case WAIT_DOWNLOAD_BLOCK_END:  //9.2.2.2.11 End SDO Block Download Protocol
+          DebugLogToFile("calling hndlEndBlkDnResp()\n");
+          ret = hndlEndBlkDnResp();
+          break;
+        case UNACTIVE:
+          ret = CANOPEN_MSG_NOT_PROCESSED;
+          break;
+        default:
+          DebugLogToFile("canFrameConsumer failed #1\n\n");
+          ret = CANOPEN_INTERNAL_STATE_ERROR;
+          break;
         }
       }
       else
@@ -1302,24 +1302,24 @@ canOpenStatus  ClientSDO :: canFrameConsumer(unsigned long id,
               this->object_write_callback(this->object_write_callback_context,
                 this->transfer_result,
                 this->node_id,
-                this->application_object_index, 
-                this->application_sub_index, 
+                this->application_object_index,
+                this->application_sub_index,
                 this->remote_node_error_code);
-                this->is_transfer_stopped_or_finished = TRUE;
-                this->state = UNACTIVE;
+              this->is_transfer_stopped_or_finished = TRUE;
+              this->state = UNACTIVE;
             }
             else if (this->transfer_direction == READ_SESSION && object_read_callback != NULL)
             {
               this->object_read_callback(this->object_read_callback_context,
                 this->transfer_result,
                 this->node_id,
-                this->application_object_index, 
-                this->application_sub_index, 
-                NULL, 
+                this->application_object_index,
+                this->application_sub_index,
+                NULL,
                 0,
                 this->remote_node_error_code);
-                this->is_transfer_stopped_or_finished = TRUE;
-                this->state = UNACTIVE;
+              this->is_transfer_stopped_or_finished = TRUE;
+              this->state = UNACTIVE;
             }
           }
           else
@@ -1333,7 +1333,7 @@ canOpenStatus  ClientSDO :: canFrameConsumer(unsigned long id,
     {
       DebugLogToFile("canFrameConsumer failed #4\n");
     }
-    ReleaseMutex( this->sync_mutex );
+    ReleaseMutex(this->sync_mutex);
   }
   else
   {
@@ -1345,10 +1345,10 @@ canOpenStatus  ClientSDO :: canFrameConsumer(unsigned long id,
 //------------------------------------------------------------------------
 // Wrapper for being able to setup callbacks to non-static funcs.
 //------------------------------------------------------------------------
-canOpenStatus ClientSDO :: clientSDOStateMachineW(void *ClientSDOcontext)
+canOpenStatus ClientSDO::clientSDOStateMachineW(void* ClientSDOcontext)
 {
   canOpenStatus ret = CANOPEN_ERROR;
-  ClientSDO *cliSDO = (ClientSDO*) ClientSDOcontext;
+  ClientSDO* cliSDO = (ClientSDO*)ClientSDOcontext;
   ret = cliSDO->clientSDOStateMachine();
   return ret;
 }
@@ -1356,7 +1356,7 @@ canOpenStatus ClientSDO :: clientSDOStateMachineW(void *ClientSDOcontext)
 //------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------
-canOpenStatus  ClientSDO :: clientSDOStateMachine(void)
+canOpenStatus  ClientSDO::clientSDOStateMachine(void)
 {
   bool transfer_timeout = FALSE;
   canOpenStatus ret = CANOPEN_ERROR;
@@ -1364,44 +1364,43 @@ canOpenStatus  ClientSDO :: clientSDOStateMachine(void)
   {
     do // Performance fix 161218: Send as many blocks that as possible that fits in the CAN-TX-buffer.
     {
-        if (this->block_size <= this->block_transfer_segment_count)
-        {
-          this->state = WAIT_DOWNLOAD_BLOCK_RESPONSE;
-        }
-        ret = this->setBlkSegData();
+      if (this->block_size <= this->block_transfer_segment_count)
+      {
+        this->state = WAIT_DOWNLOAD_BLOCK_RESPONSE;
+      }
+      ret = this->setBlkSegData();
 
-        if (this->getRestAppBuffer() == 0)
-        {
-          this->state = WAIT_DOWNLOAD_BLOCK_RESPONSE;
-        }
+      if (this->getRestAppBuffer() == 0)
+      {
+        this->state = WAIT_DOWNLOAD_BLOCK_RESPONSE;
+      }
+      if (ret == CANOPEN_OK)
+      {
+        ret = this->writeToCanBus();
         if (ret == CANOPEN_OK)
         {
-          ret = this->writeToCanBus();
-          if (ret == CANOPEN_OK)
-          {
-            this->setLatestEventTimestamp();
-          }
+          this->setLatestEventTimestamp();
         }
-    }
-    while (this->state == SENDING_DOWNLOAD_BLOCK && ret == CANOPEN_OK);
+      }
+    } while (this->state == SENDING_DOWNLOAD_BLOCK && ret == CANOPEN_OK);
   }
-  else 
+  else
   {
     ret = CANOPEN_OK;
   }
 
   // Need to implement timeout control since synchronization not done
   // if callbacks are configured.
-  if (this->isTransferTimeout() == TRUE && 
-      this->is_transfer_stopped_or_finished == FALSE &&
-      this->state != UNACTIVE &&
-      (this->object_write_callback != NULL || this->object_read_callback != NULL))
+  if (this->isTransferTimeout() == TRUE &&
+    this->is_transfer_stopped_or_finished == FALSE &&
+    this->state != UNACTIVE &&
+    (this->object_write_callback != NULL || this->object_read_callback != NULL))
   {
     this->transfer_result = CANOPEN_TIMEOUT;
     if (this->transfer_direction == WRITE_SESSION &&
-        this->object_write_callback != NULL)
+      this->object_write_callback != NULL)
     {
-      this->object_write_callback( this->object_write_callback_context,
+      this->object_write_callback(this->object_write_callback_context,
         this->transfer_result,
         this->node_id,
         this->application_object_index,
@@ -1409,9 +1408,9 @@ canOpenStatus  ClientSDO :: clientSDOStateMachine(void)
         0);
     }
     else if (this->transfer_direction == READ_SESSION &&
-             this->object_read_callback != NULL)
+      this->object_read_callback != NULL)
     {
-      this->object_read_callback( this->object_read_callback_context,
+      this->object_read_callback(this->object_read_callback_context,
         this->transfer_result,
         this->node_id,
         this->application_object_index,
@@ -1429,8 +1428,8 @@ canOpenStatus  ClientSDO :: clientSDOStateMachine(void)
 //------------------------------------------------------------------------
 //  U8 write to remote node.
 //------------------------------------------------------------------------
-canOpenStatus  ClientSDO :: objectWrite(u16 object_index, u8 sub_index, 
-  u8 val, CanOpenErrorCode *error_code)
+canOpenStatus  ClientSDO::objectWrite(u16 object_index, u8 sub_index,
+  u8 val, CanOpenErrorCode* error_code)
 {
   DebugLogToFile("objectWrite(u16 object_index, u8 sub_index, u8 val, CanOpenErrorCode *error_code) entered\n");
   canOpenStatus ret = CANOPEN_ERROR;
@@ -1452,8 +1451,8 @@ canOpenStatus  ClientSDO :: objectWrite(u16 object_index, u8 sub_index,
 //------------------------------------------------------------------------
 // U16 write to remote node.
 //------------------------------------------------------------------------
-canOpenStatus  ClientSDO :: objectWrite(u16 object_index, u8 sub_index, 
-  u16 val, CanOpenErrorCode *error_code)
+canOpenStatus  ClientSDO::objectWrite(u16 object_index, u8 sub_index,
+  u16 val, CanOpenErrorCode* error_code)
 {
   DebugLogToFile("objectWrite(u16 object_index, u8 sub_index, u16 val, CanOpenErrorCode *error_code) entered\n");
   canOpenStatus ret = CANOPEN_ERROR;
@@ -1478,8 +1477,8 @@ canOpenStatus  ClientSDO :: objectWrite(u16 object_index, u8 sub_index,
 //------------------------------------------------------------------------
 // U32 write to remote node.
 //------------------------------------------------------------------------
-canOpenStatus  ClientSDO :: objectWrite(u16 object_index, u8 sub_index, 
-  u32 val, CanOpenErrorCode *error_code)
+canOpenStatus  ClientSDO::objectWrite(u16 object_index, u8 sub_index,
+  u32 val, CanOpenErrorCode* error_code)
 {
   DebugLogToFile("objectWrite(u16 object_index, u8 sub_index, u32 val, CanOpenErrorCode *error_code) entered\n");
   canOpenStatus ret = CANOPEN_ERROR;
@@ -1505,7 +1504,7 @@ canOpenStatus  ClientSDO :: objectWrite(u16 object_index, u8 sub_index,
 //  U64 write to remote node.
 //
 #ifdef HAS_LONG_LONG
-canOpenStatus  ClientSDO :: objectWrite(u16 object_index, u8 sub_index, u64 val, CanOpenErrorCode *error_code)
+canOpenStatus  ClientSDO::objectWrite(u16 object_index, u8 sub_index, u64 val, CanOpenErrorCode* error_code)
 {
   u8 u64Buf[8];
   ::setU64Val(val, u64Buf, 0);
@@ -1516,20 +1515,20 @@ canOpenStatus  ClientSDO :: objectWrite(u16 object_index, u8 sub_index, u64 val,
 //------------------------------------------------------------------------
 //  This metod uses block transfer protocol.
 //------------------------------------------------------------------------
-canOpenStatus  ClientSDO :: objectWriteBlock(u16 object_index, u8 sub_index, 
-  u16 crc, u8 *buf, u32 valid, CanOpenErrorCode *error_code)
+canOpenStatus  ClientSDO::objectWriteBlock(u16 object_index, u8 sub_index,
+  u16 crc, u8* buf, u32 valid, CanOpenErrorCode* error_code)
 {
   DebugLogToFile("objectWriteBlock(u16 object_index, u8 sub_index, u16 crc, u8 *buf, u32 valid, CanOpenErrorCode *error_code) entered\n");
-  canOpenStatus ret                     = CANOPEN_ERROR;
-  this->application_object_index        = object_index;
-  this->application_sub_index           = sub_index;
-  this->application_buffer              = buf;
-  this->application_buffer_length       = valid;
-  this->application_buffer_offset       = 0;
-  this->application_canopen_error_code  = error_code;
-  this->crc                             = crc;
-  this->remote_node_error_code          = 0;
-  *error_code                           = 0;
+  canOpenStatus ret = CANOPEN_ERROR;
+  this->application_object_index = object_index;
+  this->application_sub_index = sub_index;
+  this->application_buffer = buf;
+  this->application_buffer_length = valid;
+  this->application_buffer_offset = 0;
+  this->application_canopen_error_code = error_code;
+  this->crc = crc;
+  this->remote_node_error_code = 0;
+  *error_code = 0;
 
   ret = setCliCmdSpcInitBlockDnReq(crc ? 1 : 0, 1);
   if (ret == CANOPEN_OK)
@@ -1557,20 +1556,20 @@ canOpenStatus  ClientSDO :: objectWriteBlock(u16 object_index, u8 sub_index,
 //------------------------------------------------------------------------
 // Any opbject type write to remote node.
 //------------------------------------------------------------------------
-canOpenStatus  ClientSDO :: objectWrite(u16 object_index, u8 sub_index, 
-  u8 *buf, u32 valid, CanOpenErrorCode *error_code)
+canOpenStatus  ClientSDO::objectWrite(u16 object_index, u8 sub_index,
+  u8* buf, u32 valid, CanOpenErrorCode* error_code)
 {
   WaitForSingleObject(rx_tx_mutex, INFINITE);
   DebugLogToFile("objectWrite(u16 object_index, u8 sub_index, u8 *buf, u32 valid, CanOpenErrorCode *error_code) entered\n");
-  canOpenStatus ret = CANOPEN_ERROR; 
+  canOpenStatus ret = CANOPEN_ERROR;
 
-  this->application_object_index        = object_index;
-  this->application_sub_index           = sub_index;
-  this->application_buffer              = buf;
-  this->application_buffer_length       = valid;
-  this->application_buffer_offset       = 0;
-  this->application_canopen_error_code  = error_code;
-  this->remote_node_error_code          = 0;
+  this->application_object_index = object_index;
+  this->application_sub_index = sub_index;
+  this->application_buffer = buf;
+  this->application_buffer_length = valid;
+  this->application_buffer_offset = 0;
+  this->application_canopen_error_code = error_code;
+  this->remote_node_error_code = 0;
 
   if (valid <= 4)
   {
@@ -1617,13 +1616,13 @@ canOpenStatus  ClientSDO :: objectWrite(u16 object_index, u8 sub_index,
 //------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------
-canOpenStatus   ClientSDO :: synchronize(unsigned long timeout, Direction direction)
+canOpenStatus   ClientSDO::synchronize(unsigned long timeout, Direction direction)
 {
   DebugLogToFile("synchronize(unsigned long timeout, Direction direction) entered\n");
   bool transfer_timeout = FALSE;
   bool remote_aborted = FALSE;
 
-  WaitForSingleObject( this->sync_mutex, INFINITE); 
+  WaitForSingleObject(this->sync_mutex, INFINITE);
   this->operation_timeout = timeout;
   this->transfer_direction = direction;
   this->setLatestEventTimestamp(); // Init.
@@ -1637,20 +1636,20 @@ canOpenStatus   ClientSDO :: synchronize(unsigned long timeout, Direction direct
     }
   }
   ReleaseMutex(this->sync_mutex);
-  
-  while ( ((direction == WRITE_SESSION && object_write_callback == NULL) || // Do not sync if callback configured.
-           (direction == READ_SESSION && object_read_callback == NULL)) &&  // Do not sync if callback configured.
-          this->is_transfer_stopped_or_finished == FALSE && 
-          transfer_timeout == FALSE && 
-          remote_aborted == FALSE) 
+
+  while (((direction == WRITE_SESSION && object_write_callback == NULL) || // Do not sync if callback configured.
+    (direction == READ_SESSION && object_read_callback == NULL)) &&  // Do not sync if callback configured.
+    this->is_transfer_stopped_or_finished == FALSE &&
+    transfer_timeout == FALSE &&
+    remote_aborted == FALSE)
   {
-    WaitForSingleObject( this->sync_mutex, INFINITE);
+    WaitForSingleObject(this->sync_mutex, INFINITE);
 
     if (this->isTransferTimeout())
     {
       DebugLogToFile("synchronize timeout\n");
       this->state = UNACTIVE;
-      this->transfer_result = CANOPEN_TIMEOUT; 
+      this->transfer_result = CANOPEN_TIMEOUT;
       transfer_timeout = TRUE;
     }
 
@@ -1667,7 +1666,7 @@ canOpenStatus   ClientSDO :: synchronize(unsigned long timeout, Direction direct
   }
 
   if ((direction == WRITE_SESSION && object_write_callback != NULL) || // Do not sync if callback configured.
-      (direction == READ_SESSION && object_read_callback != NULL))
+    (direction == READ_SESSION && object_read_callback != NULL))
   {
     DebugLogToFile("synchronize CANOPEN_ASYNC_TRANSFER\n");
     this->transfer_result = CANOPEN_ASYNC_TRANSFER;
@@ -1681,7 +1680,7 @@ canOpenStatus   ClientSDO :: synchronize(unsigned long timeout, Direction direct
 //
 //------------------------------------------------------------------------
 
-bool ClientSDO :: isTransferTimeout(void)
+bool ClientSDO::isTransferTimeout(void)
 {
   bool transfer_timeout = FALSE;
   unsigned long now = TimeClass::readTimer();
@@ -1690,14 +1689,14 @@ bool ClientSDO :: isTransferTimeout(void)
 
   if (now > (latestTimeStamp + this->operation_timeout))
   {
-    this->transfer_result = CANOPEN_TIMEOUT; 
+    this->transfer_result = CANOPEN_TIMEOUT;
     transfer_timeout = TRUE;
   }
   if (now > (latestTimeStamp + this->node_response_timeout))
   {
     if (this->state != WAIT_DOWNLOAD_BLOCK_END)
     {
-      this->transfer_result = CANOPEN_TIMEOUT; 
+      this->transfer_result = CANOPEN_TIMEOUT;
       transfer_timeout = TRUE;
     }
   }
@@ -1707,18 +1706,18 @@ bool ClientSDO :: isTransferTimeout(void)
 //------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------
-canOpenStatus ClientSDO :: canHardwareConnect(u8 port, u32 bitrate)
+canOpenStatus ClientSDO::canHardwareConnect(u8 port, u32 bitrate)
 {
   /*
   MessageBox(NULL, "This application is using a unregistred (demo) version of CANopenLib.dll \
-           \n\nContact info@canopen.nu for more information.", 
+           \n\nContact info@canopen.nu for more information.",
            "Demo version of CANopenLib.DLL in use.", MB_OK);
   */
-  return SDO :: canHardwareInit(
-    port, 
-    bitrate, 
-    (DispatcherCanFuncPtr)canFrameConsumerW, 
-    (ProtocolImplementationStateMachineFuncPtr) 
+  return SDO::canHardwareInit(
+    port,
+    bitrate,
+    (DispatcherCanFuncPtr)canFrameConsumerW,
+    (ProtocolImplementationStateMachineFuncPtr)
     clientSDOStateMachineW);
 }
 
@@ -1726,7 +1725,7 @@ canOpenStatus ClientSDO :: canHardwareConnect(u8 port, u32 bitrate)
 //
 //------------------------------------------------------------------------
 
-canOpenStatus ClientSDO ::  registerObjectReadResultCallback( CliReadFuncPtr function_pointer, void *context)
+canOpenStatus ClientSDO::registerObjectReadResultCallback(CliReadFuncPtr function_pointer, void* context)
 {
   DebugLogToFile(" registerObjectReadResultCallback entered\n");
   this->object_read_callback = function_pointer;
@@ -1739,7 +1738,7 @@ canOpenStatus ClientSDO ::  registerObjectReadResultCallback( CliReadFuncPtr fun
 //
 //------------------------------------------------------------------------
 
-canOpenStatus ClientSDO :: registerObjectWriteResultCallback(CliWriteFuncPtr function_pointer, void *context)
+canOpenStatus ClientSDO::registerObjectWriteResultCallback(CliWriteFuncPtr function_pointer, void* context)
 {
   DebugLogToFile("registerObjectReadResultCallback( CliReadFuncPtr function_pointer, void *context) entered\n");
   this->object_write_callback = function_pointer;
@@ -1751,7 +1750,7 @@ canOpenStatus ClientSDO :: registerObjectWriteResultCallback(CliWriteFuncPtr fun
 //
 //------------------------------------------------------------------------
 
-canOpenStatus ClientSDO :: unregisterObjectReadWriteResultCallbacks(void)
+canOpenStatus ClientSDO::unregisterObjectReadWriteResultCallbacks(void)
 {
   DebugLogToFile("unregisterObjectReadWriteResultCallbacks(void) entered\n");
   this->object_write_callback = NULL;
@@ -1765,7 +1764,7 @@ canOpenStatus ClientSDO :: unregisterObjectReadWriteResultCallbacks(void)
 //
 //------------------------------------------------------------------------
 
-bool ClientSDO :: isObjectWriteResultCallbackEnabled(void)
+bool ClientSDO::isObjectWriteResultCallbackEnabled(void)
 {
   DebugLogToFile("isObjectWriteResultCallbackEnabled(void) entered\n");
   bool ret = false;
@@ -1780,7 +1779,7 @@ bool ClientSDO :: isObjectWriteResultCallbackEnabled(void)
 //
 //------------------------------------------------------------------------
 
-bool ClientSDO :: isObjectReadResultCallbackEnabled(void)
+bool ClientSDO::isObjectReadResultCallbackEnabled(void)
 {
   DebugLogToFile("isObjectReadResultCallbackEnabled(void) entered\n");
   bool ret = false;
@@ -1795,25 +1794,25 @@ bool ClientSDO :: isObjectReadResultCallbackEnabled(void)
 //
 //------------------------------------------------------------------------
 
-void ClientSDO :: setWriteObjectTimeout(unsigned int timeout)
+void ClientSDO::setWriteObjectTimeout(unsigned int timeout)
 {
-   this->write_object_timeout = timeout;
+  this->write_object_timeout = timeout;
 }
 
 //------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------
 
-void ClientSDO :: setReadObjectTimeout(unsigned int timeout)
+void ClientSDO::setReadObjectTimeout(unsigned int timeout)
 {
-   this->read_object_timeout = timeout;
+  this->read_object_timeout = timeout;
 }
 
 //------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------
 
-void ClientSDO :: setNodeResponseTimeout(unsigned int timeout)
+void ClientSDO::setNodeResponseTimeout(unsigned int timeout)
 {
   this->node_response_timeout = timeout;
 }
@@ -1822,58 +1821,58 @@ void ClientSDO :: setNodeResponseTimeout(unsigned int timeout)
 //
 //------------------------------------------------------------------------
 
-canOpenStatus  ClientSDO :: sendConfigurationData(char *dcfFile, u16 *failing_object_index, u8 *failing_sub_index, CanOpenErrorCode *errCode)
+canOpenStatus  ClientSDO::sendConfigurationData(char* dcfFile, u16* failing_object_index, u8* failing_sub_index, CanOpenErrorCode* errCode)
 {
-    canOpenStatus ret = CANOPEN_ERROR;
-    DCFFile file(dcfFile);
-    file.GetObjectsToConfigureFromFile();
+  canOpenStatus ret = CANOPEN_ERROR;
+  DCFFile file(dcfFile);
+  file.GetObjectsToConfigureFromFile();
 
-    for(int i = 0; i < file.dcfItemsCount; i++)
+  for (int i = 0; i < file.dcfItemsCount; i++)
+  {
+    // These special objects are marked in the EDS and DCF files. 
+    // The object description sections may contain an entry ObjFlags with an unsigned32 content: 
+    // The lowest bit shall be a boolean value (0=false, 1=true) for "Refuse write on download", 
+    // the second bit shall be a boolean value for "Refuse read on scan".
+
+    if (file.dcfItems[i].objFlags & 0x1)
+      continue;
+
+    if (file.dcfItems[i].data != NULL && (file.dcfItems[i].accessType == WRITE_ONLY || file.dcfItems[i].accessType == READ_AND_WRITE))
     {
-        // These special objects are marked in the EDS and DCF files. 
-        // The object description sections may contain an entry ObjFlags with an unsigned32 content: 
-        // The lowest bit shall be a boolean value (0=false, 1=true) for "Refuse write on download", 
-        // the second bit shall be a boolean value for "Refuse read on scan".
+      if (file.dcfItems[i].dataType >= 2 && file.dcfItems[i].dataType <= 7)
+      {
+        char* buf = new char[file.dcfItems[i].dataLen];
+        u32 value = 0;
 
-        if (file.dcfItems[i].objFlags & 0x1)
-            continue;
-
-        if (file.dcfItems[i].data != NULL && (file.dcfItems[i].accessType == WRITE_ONLY || file.dcfItems[i].accessType == READ_AND_WRITE))  
+        if (strncmp("$NODEID+", (char*)file.dcfItems[i].data, 8) == 0)
         {
-            if (file.dcfItems[i].dataType >= 2 && file.dcfItems[i].dataType <= 7)
-            {
-                char *buf = new char[file.dcfItems[i].dataLen];
-                u32 value = 0;
-
-                if (strncmp("$NODEID+", (char*)file.dcfItems[i].data, 8) == 0)
-                {
-                    value = (u32)strtoul((char *)file.dcfItems[i].data + 8, NULL, 16) + this->node_id;
-                }
-                else
-                {
-                    value = (u32)strtoul((char *)file.dcfItems[i].data, NULL, 16);
-                }
-                val2buf(value, (u8*)buf, file.dcfItems[i].dataTypeToLen);
-                ret = this->objectWrite(file.dcfItems[i].objectIndex, file.dcfItems[i].subIndex, (u8*)buf, file.dcfItems[i].dataTypeToLen, errCode);
-                if (ret != CANOPEN_OK)
-                {
-                    *failing_object_index = file.dcfItems[i].objectIndex;
-                    *failing_sub_index = file.dcfItems[i].subIndex;
-                    break;
-                }
-            }
-            else
-            {
-                ret = this->objectWrite(file.dcfItems[i].objectIndex, file.dcfItems[i].subIndex, file.dcfItems[i].data, file.dcfItems[i].dataLen, errCode);
-                if (ret != CANOPEN_OK)
-                {
-                    *failing_object_index = file.dcfItems[i].objectIndex;
-                    *failing_sub_index = file.dcfItems[i].subIndex;
-                    break;
-                }
-            }
+          value = (u32)strtoul((char*)file.dcfItems[i].data + 8, NULL, 16) + this->node_id;
         }
+        else
+        {
+          value = (u32)strtoul((char*)file.dcfItems[i].data, NULL, 16);
+        }
+        val2buf(value, (u8*)buf, file.dcfItems[i].dataTypeToLen);
+        ret = this->objectWrite(file.dcfItems[i].objectIndex, file.dcfItems[i].subIndex, (u8*)buf, file.dcfItems[i].dataTypeToLen, errCode);
+        if (ret != CANOPEN_OK)
+        {
+          *failing_object_index = file.dcfItems[i].objectIndex;
+          *failing_sub_index = file.dcfItems[i].subIndex;
+          break;
+        }
+      }
+      else
+      {
+        ret = this->objectWrite(file.dcfItems[i].objectIndex, file.dcfItems[i].subIndex, file.dcfItems[i].data, file.dcfItems[i].dataLen, errCode);
+        if (ret != CANOPEN_OK)
+        {
+          *failing_object_index = file.dcfItems[i].objectIndex;
+          *failing_sub_index = file.dcfItems[i].subIndex;
+          break;
+        }
+      }
     }
+  }
 
-    return ret;
+  return ret;
 }

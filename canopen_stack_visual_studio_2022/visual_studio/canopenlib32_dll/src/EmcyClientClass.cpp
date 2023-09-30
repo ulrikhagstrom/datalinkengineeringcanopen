@@ -1,17 +1,17 @@
-/*             _____        _        _      _       _    
-              |  __ \      | |      | |    (_)     | |   
+/*             _____        _        _      _       _
+              |  __ \      | |      | |    (_)     | |
               | |  | | __ _| |_ __ _| |     _ _ __ | | __
               | |  | |/ _` | __/ _` | |    | | '_ \| |/ /
-              | |__| | (_| | || (_| | |____| | | | |   < 
+              | |__| | (_| | || (_| | |____| | | | |   <
               |_____/ \__,_|\__\__,_|______|_|_| |_|_|\_\
-         ______             _                      _             
-        |  ____|           (_)                    (_)            
-        | |__   _ __   __ _ _ _ __   ___  ___ _ __ _ _ __   __ _ 
+         ______             _                      _
+        |  ____|           (_)                    (_)
+        | |__   _ __   __ _ _ _ __   ___  ___ _ __ _ _ __   __ _
         |  __| | '_ \ / _` | | '_ \ / _ \/ _ \ '__| | '_ \ / _` |
         | |____| | | | (_| | | | | |  __/  __/ |  | | | | | (_| |
         |______|_| |_|\__, |_|_| |_|\___|\___|_|  |_|_| |_|\__, |
                        __/ |                                __/ |
-                      |___/                                |___/ 
+                      |___/                                |___/
 
       Web: http://www.datalink.se E-mail: ulrik.hagstrom@datalink.se
 
@@ -27,7 +27,7 @@
 //------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------
-EmcyClient :: EmcyClient (void)
+EmcyClient::EmcyClient(void)
 {
   this->node_id = -1;
   this->can_hardware_is_initiated = false;
@@ -36,7 +36,7 @@ EmcyClient :: EmcyClient (void)
 //------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------
-EmcyClient :: ~EmcyClient (void)
+EmcyClient :: ~EmcyClient(void)
 {
   (void)this->canHardwareDisconnect();
 }
@@ -44,7 +44,7 @@ EmcyClient :: ~EmcyClient (void)
 //------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------
-canOpenStatus EmcyClient :: nodeSetId(u8 node_id)
+canOpenStatus EmcyClient::nodeSetId(u8 node_id)
 {
   this->node_id = node_id;
   return CANOPEN_OK;
@@ -53,7 +53,7 @@ canOpenStatus EmcyClient :: nodeSetId(u8 node_id)
 //------------------------------------------------------------------------
 // Callback for processing CAN messages that has been received by the interface.
 //------------------------------------------------------------------------
-canOpenStatus  EmcyClient :: canFrameConsumer(unsigned long id, unsigned char *data, 
+canOpenStatus  EmcyClient::canFrameConsumer(unsigned long id, unsigned char* data,
   unsigned int dlc, unsigned int flags)
 {
   return CANOPEN_MSG_NOT_PROCESSED;
@@ -62,7 +62,7 @@ canOpenStatus  EmcyClient :: canFrameConsumer(unsigned long id, unsigned char *d
 //------------------------------------------------------------------------
 // Callback for processing CAN messages that has been received by the interface.
 //------------------------------------------------------------------------
-canOpenStatus  EmcyClient :: transferHelper(void)
+canOpenStatus  EmcyClient::transferHelper(void)
 {
   canOpenStatus ret = CANOPEN_ERROR;
   return ret;
@@ -71,14 +71,14 @@ canOpenStatus  EmcyClient :: transferHelper(void)
 //------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------
-canOpenStatus  EmcyClient :: sendEmcyMessage(u8 nodeId, u16 emcy_error_code, u8 error_register, u8* manufSpecificErrorField)
+canOpenStatus  EmcyClient::sendEmcyMessage(u8 nodeId, u16 emcy_error_code, u8 error_register, u8* manufSpecificErrorField)
 {
   canOpenStatus ret = CANOPEN_ERROR_HW_NOT_CONNECTED;
-  if ( can_interface != NULL )
+  if (can_interface != NULL)
   {
     u8 canData[8];
 
-    setU16Val( emcy_error_code, canData, 0);
+    setU16Val(emcy_error_code, canData, 0);
     canData[2] = error_register;
 
     for (int i = 0; i < 5; i++)
@@ -89,7 +89,7 @@ canOpenStatus  EmcyClient :: sendEmcyMessage(u8 nodeId, u16 emcy_error_code, u8 
         canData[3 + i] = 0;
     }
 
-    ret = can_interface->canWrite(0x80 + nodeId, canData, 8, 0); 
+    ret = can_interface->canWrite(0x80 + nodeId, canData, 8, 0);
     if (ret != CANOPEN_OK)
     {
       DebugLogToFile("writeToCanBus failed\n");
@@ -101,7 +101,7 @@ canOpenStatus  EmcyClient :: sendEmcyMessage(u8 nodeId, u16 emcy_error_code, u8 
 //------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------
-canOpenStatus  EmcyClient :: sendEmcyMessage(u16 emcy_error_code, u8 error_register, u8* manufSpecificErrorField)
+canOpenStatus  EmcyClient::sendEmcyMessage(u16 emcy_error_code, u8 error_register, u8* manufSpecificErrorField)
 {
   return sendEmcyMessage(this->node_id, emcy_error_code, error_register, manufSpecificErrorField);
 }

@@ -1,17 +1,17 @@
-/*             _____        _        _      _       _    
-              |  __ \      | |      | |    (_)     | |   
+/*             _____        _        _      _       _
+              |  __ \      | |      | |    (_)     | |
               | |  | | __ _| |_ __ _| |     _ _ __ | | __
               | |  | |/ _` | __/ _` | |    | | '_ \| |/ /
-              | |__| | (_| | || (_| | |____| | | | |   < 
+              | |__| | (_| | || (_| | |____| | | | |   <
               |_____/ \__,_|\__\__,_|______|_|_| |_|_|\_\
-         ______             _                      _             
-        |  ____|           (_)                    (_)            
-        | |__   _ __   __ _ _ _ __   ___  ___ _ __ _ _ __   __ _ 
+         ______             _                      _
+        |  ____|           (_)                    (_)
+        | |__   _ __   __ _ _ _ __   ___  ___ _ __ _ _ __   __ _
         |  __| | '_ \ / _` | | '_ \ / _ \/ _ \ '__| | '_ \ / _` |
         | |____| | | | (_| | | | | |  __/  __/ |  | | | | | (_| |
         |______|_| |_|\__, |_|_| |_|\___|\___|_|  |_|_| |_|\__, |
                        __/ |                                __/ |
-                      |___/                                |___/ 
+                      |___/                                |___/
 
       Web: http://www.datalink.se E-mail: ulrik.hagstrom@datalink.se
 
@@ -27,7 +27,7 @@
 //------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------
-PeriodicTransmitter :: PeriodicTransmitter (void)
+PeriodicTransmitter::PeriodicTransmitter(void)
 {
   this->remote_node_id = 0;
   this->can_interface = NULL;
@@ -37,32 +37,32 @@ PeriodicTransmitter :: PeriodicTransmitter (void)
   // Register a timer to be used for doing the node-guard polling.
   //
   timer = TimeClass::getTimeInterface();
-  timer->registerPeriodicCallback((TimeClass::TimeHandlerFuncPtr)timerCallbackHandler, 
+  timer->registerPeriodicCallback((TimeClass::TimeHandlerFuncPtr)timerCallbackHandler,
     this, 100, &periodic_timer_index);
 }
 
 //------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------
-PeriodicTransmitter :: ~PeriodicTransmitter (void)
+PeriodicTransmitter :: ~PeriodicTransmitter(void)
 {
-  timer->unregisterPeriodicCallback( this->periodic_timer_index );
-  timer->removeTimeInterface(); 
+  timer->unregisterPeriodicCallback(this->periodic_timer_index);
+  timer->removeTimeInterface();
   (void)this->canHardwareDisconnect();
 }
 
 //------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------
-void PeriodicTransmitter :: timerCallbackHandler(void *periodic_transmitter_context)
+void PeriodicTransmitter::timerCallbackHandler(void* periodic_transmitter_context)
 {
   if (((PeriodicTransmitter*)periodic_transmitter_context)->can_hardware_is_initiated)
   {
     if (((PeriodicTransmitter*)periodic_transmitter_context)->tMsg_periodic_transmission)
     {
-		if ((((PeriodicTransmitter*)periodic_transmitter_context)->tMsg_time_stamp_last_tx +
-			((PeriodicTransmitter*)periodic_transmitter_context)-> tMsg_period_time) < TimeClass::readTimer())
-			((PeriodicTransmitter*)periodic_transmitter_context)->transmitMsg();
+      if ((((PeriodicTransmitter*)periodic_transmitter_context)->tMsg_time_stamp_last_tx +
+        ((PeriodicTransmitter*)periodic_transmitter_context)->tMsg_period_time) < TimeClass::readTimer())
+        ((PeriodicTransmitter*)periodic_transmitter_context)->transmitMsg();
     }
   }
 }
@@ -70,7 +70,7 @@ void PeriodicTransmitter :: timerCallbackHandler(void *periodic_transmitter_cont
 //------------------------------------------------------------------------
 // 
 //------------------------------------------------------------------------
-canOpenStatus  PeriodicTransmitter :: setData(COBID cobid, u8* data, u8 len)
+canOpenStatus  PeriodicTransmitter::setData(COBID cobid, u8* data, u8 len)
 {
   canOpenStatus ret = CANOPEN_ERROR;
   if (len > 8 || len < 0)
@@ -80,8 +80,8 @@ canOpenStatus  PeriodicTransmitter :: setData(COBID cobid, u8* data, u8 len)
   else
   {
     this->tMsg_cobid = cobid;
-	if (data != NULL)
-		memcpy(this->tMsg_data, data, len);
+    if (data != NULL)
+      memcpy(this->tMsg_data, data, len);
     this->tMsg_len = len;
     ret = CANOPEN_OK;
   }
@@ -91,16 +91,16 @@ canOpenStatus  PeriodicTransmitter :: setData(COBID cobid, u8* data, u8 len)
 //------------------------------------------------------------------------
 // 
 //------------------------------------------------------------------------
-canOpenStatus  PeriodicTransmitter :: transmitMsg(void)
+canOpenStatus  PeriodicTransmitter::transmitMsg(void)
 {
   canOpenStatus ret = CANOPEN_ERROR;
-  if ( this->can_hardware_is_initiated )
+  if (this->can_hardware_is_initiated)
   {
-    if ( can_interface != NULL )
+    if (can_interface != NULL)
     {
-	  tMsg_time_stamp_last_tx = TimeClass::readTimer();
-      return can_interface->canWrite( this->tMsg_cobid, this->tMsg_data, this->tMsg_len, 0 );
-    } 
+      tMsg_time_stamp_last_tx = TimeClass::readTimer();
+      return can_interface->canWrite(this->tMsg_cobid, this->tMsg_data, this->tMsg_len, 0);
+    }
     else
     {
       return CANOPEN_ERROR;
@@ -113,13 +113,13 @@ canOpenStatus  PeriodicTransmitter :: transmitMsg(void)
 //------------------------------------------------------------------------
 // 
 //------------------------------------------------------------------------
-canOpenStatus  PeriodicTransmitter :: periodicTransmission(bool value)
+canOpenStatus  PeriodicTransmitter::periodicTransmission(bool value)
 {
   canOpenStatus ret = CANOPEN_ERROR;
   this->tMsg_periodic_transmission = value;
 
   if (value == TRUE)
-	  this->transmitMsg();
+    this->transmitMsg();
 
   ret = CANOPEN_OK;
   return ret;
@@ -129,7 +129,7 @@ canOpenStatus  PeriodicTransmitter :: periodicTransmission(bool value)
 //------------------------------------------------------------------------
 // 
 //------------------------------------------------------------------------
-canOpenStatus  PeriodicTransmitter :: setTransmissionPeriodTime(unsigned long sync_period_time)
+canOpenStatus  PeriodicTransmitter::setTransmissionPeriodTime(unsigned long sync_period_time)
 {
   canOpenStatus ret = CANOPEN_OK;
   this->tMsg_period_time = sync_period_time;

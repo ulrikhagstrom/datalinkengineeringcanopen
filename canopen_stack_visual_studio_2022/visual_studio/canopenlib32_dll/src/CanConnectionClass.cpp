@@ -15,12 +15,12 @@ CanConnection::CanConnection()
 //------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------
-canOpenStatus  CanConnection :: canHardwareInit(int port, int bitrate, 
-  DispatcherCanFuncPtr can_frame_handler_function, 
+canOpenStatus  CanConnection::canHardwareInit(int port, int bitrate,
+  DispatcherCanFuncPtr can_frame_handler_function,
   ProtocolImplementationStateMachineFuncPtr transfer_protocol_handler_function)
 {
   canOpenStatus ret = CANOPEN_ERROR;
-  if ( this->can_hardware_is_initiated )
+  if (this->can_hardware_is_initiated)
   {
     // Make it impossible to initated more than once, 
     // to for example other CAN port.
@@ -30,16 +30,16 @@ canOpenStatus  CanConnection :: canHardwareInit(int port, int bitrate,
   this->can_interface = ::CanInterface::getCanInterface(port);
   if (this->can_interface != NULL)
   {
-    ret = this->can_interface->canOpenPort( port, bitrate );
+    ret = this->can_interface->canOpenPort(port, bitrate);
     if (ret == CANOPEN_OK)
     {
       ret = this->can_interface->canGoBusOn();
-    } 
+    }
   }
 
   if (ret == CANOPEN_OK)
   {
-    ret = this->can_interface->registerCanMessageHandler(this, can_frame_handler_function, 
+    ret = this->can_interface->registerCanMessageHandler(this, can_frame_handler_function,
       transfer_protocol_handler_function, &this->can_message_handler_index);
     this->can_hardware_is_initiated = true;
   }
@@ -49,7 +49,7 @@ canOpenStatus  CanConnection :: canHardwareInit(int port, int bitrate,
 //------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------
-canOpenStatus CanConnection :: canHardwareConnect(u8 port, u32 bitrate)
+canOpenStatus CanConnection::canHardwareConnect(u8 port, u32 bitrate)
 {
   return this->canHardwareInit(port, bitrate, NULL, NULL);
 }
@@ -57,42 +57,42 @@ canOpenStatus CanConnection :: canHardwareConnect(u8 port, u32 bitrate)
 //------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------
-canOpenStatus  CanConnection :: canHardwareDisconnect(void)
+canOpenStatus  CanConnection::canHardwareDisconnect(void)
 {
   canOpenStatus ret = CANOPEN_ERROR;
-  if ( this->can_hardware_is_initiated == false )
+  if (this->can_hardware_is_initiated == false)
   {
     ret = CANOPEN_ERROR_HW_NOT_CONNECTED;
   }
   else
   {
-    if ( this->can_interface != NULL )
+    if (this->can_interface != NULL)
     {
-      ret = this->can_interface->unregisterCanMessageHandler( this->can_message_handler_index );
+      ret = this->can_interface->unregisterCanMessageHandler(this->can_message_handler_index);
       if (ret == CANOPEN_OK)
       {
         ret = this->can_interface->canClosePort();
       }
     }
-    this->can_message_handler_index = - 1;
+    this->can_message_handler_index = -1;
     this->can_hardware_is_initiated = false;
     this->can_interface = NULL;
     ret = CANOPEN_OK;
-  }  
+  }
   return ret;
 }
 
 //------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------
-canOpenStatus CanConnection :: canDispatcherPerformance(
-                                     int sleepNoMessageFromCanInterface,
-                                     int sleepProcessedCanInterface)
+canOpenStatus CanConnection::canDispatcherPerformance(
+  int sleepNoMessageFromCanInterface,
+  int sleepProcessedCanInterface)
 {
-    canOpenStatus ret = CANOPEN_ERROR;
-    if ( this->can_interface != NULL )
-    {
-        ret = this->can_interface->canDispatcherPerformance( sleepNoMessageFromCanInterface, sleepProcessedCanInterface );
-    }
-    return ret;
+  canOpenStatus ret = CANOPEN_ERROR;
+  if (this->can_interface != NULL)
+  {
+    ret = this->can_interface->canDispatcherPerformance(sleepNoMessageFromCanInterface, sleepProcessedCanInterface);
+  }
+  return ret;
 }

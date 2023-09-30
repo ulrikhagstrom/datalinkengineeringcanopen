@@ -1,17 +1,17 @@
-/*             _____        _        _      _       _    
-              |  __ \      | |      | |    (_)     | |   
+/*             _____        _        _      _       _
+              |  __ \      | |      | |    (_)     | |
               | |  | | __ _| |_ __ _| |     _ _ __ | | __
               | |  | |/ _` | __/ _` | |    | | '_ \| |/ /
-              | |__| | (_| | || (_| | |____| | | | |   < 
+              | |__| | (_| | || (_| | |____| | | | |   <
               |_____/ \__,_|\__\__,_|______|_|_| |_|_|\_\
-         ______             _                      _             
-        |  ____|           (_)                    (_)            
-        | |__   _ __   __ _ _ _ __   ___  ___ _ __ _ _ __   __ _ 
+         ______             _                      _
+        |  ____|           (_)                    (_)
+        | |__   _ __   __ _ _ _ __   ___  ___ _ __ _ _ __   __ _
         |  __| | '_ \ / _` | | '_ \ / _ \/ _ \ '__| | '_ \ / _` |
         | |____| | | | (_| | | | | |  __/  __/ |  | | | | | (_| |
         |______|_| |_|\__, |_|_| |_|\___|\___|_|  |_|_| |_|\__, |
                        __/ |                                __/ |
-                      |___/                                |___/ 
+                      |___/                                |___/
 
       Web: http://www.datalink.se E-mail: ulrik.hagstrom@datalink.se
 
@@ -26,7 +26,7 @@
 //------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------
-SyncServer :: SyncServer (void)
+SyncServer::SyncServer(void)
 {
   this->sync_messagae_callback = NULL;
   this->can_interface = NULL;
@@ -37,7 +37,7 @@ SyncServer :: SyncServer (void)
 //------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------
-SyncServer :: ~SyncServer (void)
+SyncServer :: ~SyncServer(void)
 {
   (void)this->canHardwareDisconnect();
 }
@@ -45,30 +45,30 @@ SyncServer :: ~SyncServer (void)
 //------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------
-canOpenStatus SyncServer :: canHardwareConnect(u8 port, u32 bitrate)
+canOpenStatus SyncServer::canHardwareConnect(u8 port, u32 bitrate)
 {
   return CanConnection::canHardwareInit(port,
-                                        bitrate,
-                                        canFrameConsumerW,
-                                        NULL);
+    bitrate,
+    canFrameConsumerW,
+    NULL);
 }
 
 
 //------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------
-canOpenStatus SyncServer :: canFrameConsumerW(void *sync_server_object, 
-  unsigned long id, unsigned char *data, unsigned int dlc, unsigned int flags)
+canOpenStatus SyncServer::canFrameConsumerW(void* sync_server_object,
+  unsigned long id, unsigned char* data, unsigned int dlc, unsigned int flags)
 {
-  SyncServer *syncServer = (SyncServer*) sync_server_object;
+  SyncServer* syncServer = (SyncServer*)sync_server_object;
   return syncServer->canFrameConsumer(id, data, dlc, flags);
 }
 
 //------------------------------------------------------------------------
 // Callback for processing CAN messages that has been received by the interface.
 //------------------------------------------------------------------------
-canOpenStatus  SyncServer :: canFrameConsumer(unsigned long id, 
-  unsigned char *data, unsigned int dlc, unsigned int flags)
+canOpenStatus  SyncServer::canFrameConsumer(unsigned long id,
+  unsigned char* data, unsigned int dlc, unsigned int flags)
 {
   canOpenStatus ret = CANOPEN_MSG_NOT_PROCESSED;
   if (sync_messagae_callback != NULL) // Perform callback if configured to do so.
@@ -85,7 +85,7 @@ canOpenStatus  SyncServer :: canFrameConsumer(unsigned long id,
 //------------------------------------------------------------------------
 // 
 //------------------------------------------------------------------------
-canOpenStatus  SyncServer :: registerSyncMessageCallBack(void *context, SyncMessageFunPtr fp)
+canOpenStatus  SyncServer::registerSyncMessageCallBack(void* context, SyncMessageFunPtr fp)
 {
   this->sync_messagae_callback = fp;
   this->context = context;
@@ -96,7 +96,7 @@ canOpenStatus  SyncServer :: registerSyncMessageCallBack(void *context, SyncMess
 //------------------------------------------------------------------------
 // 
 //------------------------------------------------------------------------
-canOpenStatus  SyncServer :: reconfigureSyncCOBID(u32 COBID)
+canOpenStatus  SyncServer::reconfigureSyncCOBID(u32 COBID)
 {
   this->COBID_Sync = COBID;
   return CANOPEN_OK;

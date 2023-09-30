@@ -1,17 +1,17 @@
-/*             _____        _        _      _       _    
-              |  __ \      | |      | |    (_)     | |   
+/*             _____        _        _      _       _
+              |  __ \      | |      | |    (_)     | |
               | |  | | __ _| |_ __ _| |     _ _ __ | | __
               | |  | |/ _` | __/ _` | |    | | '_ \| |/ /
-              | |__| | (_| | || (_| | |____| | | | |   < 
+              | |__| | (_| | || (_| | |____| | | | |   <
               |_____/ \__,_|\__\__,_|______|_|_| |_|_|\_\
-         ______             _                      _             
-        |  ____|           (_)                    (_)            
-        | |__   _ __   __ _ _ _ __   ___  ___ _ __ _ _ __   __ _ 
+         ______             _                      _
+        |  ____|           (_)                    (_)
+        | |__   _ __   __ _ _ _ __   ___  ___ _ __ _ _ __   __ _
         |  __| | '_ \ / _` | | '_ \ / _ \/ _ \ '__| | '_ \ / _` |
         | |____| | | | (_| | | | | |  __/  __/ |  | | | | | (_| |
         |______|_| |_|\__, |_|_| |_|\___|\___|_|  |_|_| |_|\__, |
                        __/ |                                __/ |
-                      |___/                                |___/ 
+                      |___/                                |___/
 
       Web: http://www.datalink.se E-mail: ulrik.hagstrom@datalink.se
 
@@ -27,7 +27,7 @@
 //------------------------------------------------------------------------
 // 
 //------------------------------------------------------------------------
-ServerSDO :: ServerSDO()
+ServerSDO::ServerSDO()
 {
   if (this->registerPeriodicTimerCallback() == CANOPEN_OK)
   {
@@ -43,26 +43,26 @@ ServerSDO :: ServerSDO()
 // 
 //------------------------------------------------------------------------
 ServerSDO :: ~ServerSDO()
-{ 
+{
   (void)SDO::unregisterPeriodicTimerCallback();
 }
 
 //------------------------------------------------------------------------
 // 
 //------------------------------------------------------------------------
-canOpenStatus ServerSDO :: registerPeriodicTimerCallback(void)
+canOpenStatus ServerSDO::registerPeriodicTimerCallback(void)
 {
-  return SDO::registerPeriodicTimerCallback( 
-    (TimeClass::TimeHandlerFuncPtr)periodicTimerCallbackWrapper, 
+  return SDO::registerPeriodicTimerCallback(
+    (TimeClass::TimeHandlerFuncPtr)periodicTimerCallbackWrapper,
     this, CALLBACK_PERIOD_TIME);
 }
 
 //------------------------------------------------------------------------
 // 
 //------------------------------------------------------------------------
-canOpenStatus  ServerSDO :: nodeSetId(u8 _node_id)
+canOpenStatus  ServerSDO::nodeSetId(u8 _node_id)
 {
-  canOpenStatus ret = CANOPEN_ERROR;  
+  canOpenStatus ret = CANOPEN_ERROR;
   if (_node_id < 128)
   {
     this->node_id = _node_id;
@@ -80,7 +80,7 @@ canOpenStatus  ServerSDO :: nodeSetId(u8 _node_id)
 //------------------------------------------------------------------------
 // Collect client command specifier.
 //------------------------------------------------------------------------
-canOpenStatus  ServerSDO :: getCliCmd(u8 *cmd)
+canOpenStatus  ServerSDO::getCliCmd(u8* cmd)
 {
   *cmd = (this->can_data_rx[0] >> 5) & 7;
   return CANOPEN_OK;
@@ -89,10 +89,10 @@ canOpenStatus  ServerSDO :: getCliCmd(u8 *cmd)
 //------------------------------------------------------------------------
 //9.2.2.2.2 Initiate SDO Download Protocol
 //------------------------------------------------------------------------
-canOpenStatus  ServerSDO :: getCliCmdSpcInitDnReq(u8 *n, u8 *e, u8 *s)
+canOpenStatus  ServerSDO::getCliCmdSpcInitDnReq(u8* n, u8* e, u8* s)
 {
   canOpenStatus ret = CANOPEN_ERROR;
-  u8 flags = this->can_data_rx[0]; 
+  u8 flags = this->can_data_rx[0];
   u8 ccs = (flags >> 5) & 7;
   if (ccs == 1)
   {
@@ -111,10 +111,10 @@ canOpenStatus  ServerSDO :: getCliCmdSpcInitDnReq(u8 *n, u8 *e, u8 *s)
 //------------------------------------------------------------------------
 //9.2.2.2.3 Download SDO Segment Protocol
 //------------------------------------------------------------------------
-canOpenStatus  ServerSDO :: getCliCmdSpcDnSegReq(u8 *t, u8 *n, u8 *c)  
+canOpenStatus  ServerSDO::getCliCmdSpcDnSegReq(u8* t, u8* n, u8* c)
 {
   canOpenStatus ret = CANOPEN_ERROR;
-  u8 flags = this->can_data_rx[0]; 
+  u8 flags = this->can_data_rx[0];
   u8 ccs = (flags >> 5) & 7;
   if (ccs == 0)
   {
@@ -133,10 +133,10 @@ canOpenStatus  ServerSDO :: getCliCmdSpcDnSegReq(u8 *t, u8 *n, u8 *c)
 //------------------------------------------------------------------------
 //9.2.2.2.5 Initiate SDO Upload Protocol 
 //------------------------------------------------------------------------
-canOpenStatus  ServerSDO :: getCliCmdSpcInitUpReq(void)
+canOpenStatus  ServerSDO::getCliCmdSpcInitUpReq(void)
 {
   canOpenStatus ret = CANOPEN_ERROR;
-  u8 flags = this->can_data_rx[0]; 
+  u8 flags = this->can_data_rx[0];
   u8 ccs = (flags >> 5) & 7;
   if (ccs == 2)
   {
@@ -152,10 +152,10 @@ canOpenStatus  ServerSDO :: getCliCmdSpcInitUpReq(void)
 //------------------------------------------------------------------------
 //9.2.2.2.6 Upload SDO Segment Protocol
 //------------------------------------------------------------------------
-canOpenStatus  ServerSDO :: getCliCmdSpcUpSegReq(u8 *t)
+canOpenStatus  ServerSDO::getCliCmdSpcUpSegReq(u8* t)
 {
   canOpenStatus ret = CANOPEN_ERROR;
-  u8 flags = this->can_data_rx[0]; 
+  u8 flags = this->can_data_rx[0];
   u8 ccs = (flags >> 5) & 7;
   if (ccs == 3)
   {
@@ -172,7 +172,7 @@ canOpenStatus  ServerSDO :: getCliCmdSpcUpSegReq(u8 *t)
 //------------------------------------------------------------------------
 //9.2.2.2.7 Abort SDO Transfer Protocol
 //------------------------------------------------------------------------
-canOpenStatus  ServerSDO :: getCliCmdSpcAbrtTrnsf(void)
+canOpenStatus  ServerSDO::getCliCmdSpcAbrtTrnsf(void)
 {
   canOpenStatus ret = CANOPEN_ERROR;
 
@@ -182,10 +182,10 @@ canOpenStatus  ServerSDO :: getCliCmdSpcAbrtTrnsf(void)
 //------------------------------------------------------------------------
 //9.2.2.2.9 Initiate SDO Block Download Protocol
 //------------------------------------------------------------------------
-canOpenStatus   ServerSDO ::  getCliCmdSpcBlkDn(u8 *cc, u8 *s, u8 *cs)
+canOpenStatus   ServerSDO::getCliCmdSpcBlkDn(u8* cc, u8* s, u8* cs)
 {
   canOpenStatus ret = CANOPEN_ERROR;
-  u8 flags = this->can_data_rx[0]; 
+  u8 flags = this->can_data_rx[0];
   u8 ccs = (flags >> 5) & 7;
   if (ccs == 6)
   {
@@ -205,7 +205,7 @@ canOpenStatus   ServerSDO ::  getCliCmdSpcBlkDn(u8 *cc, u8 *s, u8 *cs)
 //------------------------------------------------------------------------
 // 9.2.2.2.11 End SDO Block Download Protocol
 //------------------------------------------------------------------------
-canOpenStatus  ServerSDO ::  getCliCmdSpcEndBlkDnReq(u8 *n, u16 *crc)
+canOpenStatus  ServerSDO::getCliCmdSpcEndBlkDnReq(u8* n, u16* crc)
 {
   canOpenStatus ret = CANOPEN_ERROR;
   u8 flags = this->can_data_rx[0];
@@ -223,7 +223,7 @@ canOpenStatus  ServerSDO ::  getCliCmdSpcEndBlkDnReq(u8 *n, u16 *crc)
 //------------------------------------------------------------------------
 //9.2.2.2.2 Initiate SDO Download Protocol
 //------------------------------------------------------------------------
-canOpenStatus  ServerSDO :: setSrvCmdSpcInitDnResp(void)
+canOpenStatus  ServerSDO::setSrvCmdSpcInitDnResp(void)
 {
   canOpenStatus ret = CANOPEN_ERROR;
   this->can_data_tx[0] = (3 << 5); // scs == 3
@@ -234,15 +234,15 @@ canOpenStatus  ServerSDO :: setSrvCmdSpcInitDnResp(void)
 //------------------------------------------------------------------------
 //9.2.2.2.3 Download SDO Segment Protocol
 //------------------------------------------------------------------------
-canOpenStatus  ServerSDO :: setSrvCmdSpcDnSegResp(u8 t)
+canOpenStatus  ServerSDO::setSrvCmdSpcDnSegResp(u8 t)
 {
   canOpenStatus ret = CANOPEN_ERROR;
   if (t <= 1)
   {
-    u8 flags               = 0;
-    flags                  = (1 << 5);  // scs == 1
-    flags                 |= (t << 4);
-    this->can_data_tx[0]   = flags;
+    u8 flags = 0;
+    flags = (1 << 5);  // scs == 1
+    flags |= (t << 4);
+    this->can_data_tx[0] = flags;
     ret = CANOPEN_OK;
   }
   return ret;
@@ -251,16 +251,16 @@ canOpenStatus  ServerSDO :: setSrvCmdSpcDnSegResp(u8 t)
 //------------------------------------------------------------------------
 //9.2.2.2.9 Initiate SDO Block Download Protocol
 //------------------------------------------------------------------------
-canOpenStatus  ServerSDO :: setSrvCmdSpcInitBlockDnResp(u8 sc)
+canOpenStatus  ServerSDO::setSrvCmdSpcInitBlockDnResp(u8 sc)
 {
   canOpenStatus ret = CANOPEN_ERROR;
   if (sc <= 1)
   {
-    u8 flags               = 0;
-    flags                  = (5 << 5);  // scs == 1
-    flags                 |= (sc << 2);
-    flags                 |= (0 << 0);  // initiate download response (server subcommand)  
-    this->can_data_tx[0]   = flags;
+    u8 flags = 0;
+    flags = (5 << 5);  // scs == 1
+    flags |= (sc << 2);
+    flags |= (0 << 0);  // initiate download response (server subcommand)  
+    this->can_data_tx[0] = flags;
     ret = CANOPEN_OK;
   }
   return ret;
@@ -269,16 +269,16 @@ canOpenStatus  ServerSDO :: setSrvCmdSpcInitBlockDnResp(u8 sc)
 //------------------------------------------------------------------------
 //9.2.2.2.5 Initiate SDO Upload Protocol
 //------------------------------------------------------------------------
-canOpenStatus  ServerSDO :: setSrvCmdSpcInitUpResp(u8 valid, u8 e, u8 s)
+canOpenStatus  ServerSDO::setSrvCmdSpcInitUpResp(u8 valid, u8 e, u8 s)
 {
   canOpenStatus ret = CANOPEN_ERROR;
-  u8 n = (4 -  valid);
+  u8 n = (4 - valid);
   if ((n <= 3) && (e <= 1) && (s <= 1))
   {
-    u8 flags   = (2 << 5); // scs == 2.
-    flags     |= (n << 2);
-    flags     |= (e << 1);
-    flags     |= (s << 0);
+    u8 flags = (2 << 5); // scs == 2.
+    flags |= (n << 2);
+    flags |= (e << 1);
+    flags |= (s << 0);
     this->can_data_tx[0] = flags;
     ret = CANOPEN_OK;
   }
@@ -288,15 +288,15 @@ canOpenStatus  ServerSDO :: setSrvCmdSpcInitUpResp(u8 valid, u8 e, u8 s)
 //------------------------------------------------------------------------
 //9.2.2.2.6 Upload SDO Segment Protocol
 //------------------------------------------------------------------------
-canOpenStatus  ServerSDO :: setSrvCmdSpcUpSegResp(u8 t, u8 n, u8 c)
+canOpenStatus  ServerSDO::setSrvCmdSpcUpSegResp(u8 t, u8 n, u8 c)
 {
   canOpenStatus ret = CANOPEN_ERROR;
   if ((t <= 1) && (n <= 7) && (c <= 1))
   {
-    u8 flags   = (0 << 5); // scs == 0.
-    flags     |= (t << 4);
-    flags     |= (n << 1);
-    flags     |= (c << 0);
+    u8 flags = (0 << 5); // scs == 0.
+    flags |= (t << 4);
+    flags |= (n << 1);
+    flags |= (c << 0);
     this->can_data_tx[0] = flags;
     ret = CANOPEN_OK;
   }
@@ -310,13 +310,13 @@ canOpenStatus  ServerSDO :: setSrvCmdSpcUpSegResp(u8 t, u8 n, u8 c)
 //------------------------------------------------------------------------
 //9.2.2.2.10 Upload SDO Segment Protocol
 //------------------------------------------------------------------------
-canOpenStatus  ServerSDO :: setSrvCmdSpcBlkDnResp(u8 ss, u8 ackseq, u8 blksize)
+canOpenStatus  ServerSDO::setSrvCmdSpcBlkDnResp(u8 ss, u8 ackseq, u8 blksize)
 {
   canOpenStatus ret = CANOPEN_ERROR;
   if (ss <= 3)
   {
-    u8 flags   =  (5 << 5); // scs == 5, block download.
-    flags     |= (ss << 0); // ss == 2, server subcommand.
+    u8 flags = (5 << 5); // scs == 5, block download.
+    flags |= (ss << 0); // ss == 2, server subcommand.
     this->can_data_tx[0] = flags;
     ::setU8Val(ackseq, this->can_data_tx, 1);
     ::setU8Val(blksize, this->can_data_tx, 2);
@@ -332,11 +332,11 @@ canOpenStatus  ServerSDO :: setSrvCmdSpcBlkDnResp(u8 ss, u8 ackseq, u8 blksize)
 //------------------------------------------------------------------------
 //9.2.2.2.11 End SDO Block Download Protocol
 //------------------------------------------------------------------------
-canOpenStatus  ServerSDO :: setSrvCmdSpcEndBlkDnResp(void)
+canOpenStatus  ServerSDO::setSrvCmdSpcEndBlkDnResp(void)
 {
   canOpenStatus ret = CANOPEN_ERROR;
   u8 flags = 0;
-  flags  = (5 << 5); // scs == 5.
+  flags = (5 << 5); // scs == 5.
   flags |= (1 << 0); // ss == 1;
   ::setU8Val(flags, this->can_data_tx, 0);
   ret = clrTxCanDataField(1, 7); // reserved space == 0.
@@ -346,24 +346,24 @@ canOpenStatus  ServerSDO :: setSrvCmdSpcEndBlkDnResp(void)
 //------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------
-canOpenStatus ServerSDO :: periodicTimerCallbackWrapper(void *context)
+canOpenStatus ServerSDO::periodicTimerCallbackWrapper(void* context)
 {
-  ServerSDO *srvSDO = (ServerSDO*) context;
+  ServerSDO* srvSDO = (ServerSDO*)context;
   return srvSDO->periodicTimerCallback();
 }
 
 //------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------
-canOpenStatus ServerSDO ::periodicTimerCallback(void) 
+canOpenStatus ServerSDO::periodicTimerCallback(void)
 {
   canOpenStatus ret = CANOPEN_ERROR;
   if (this->state != SRV_WAIT_ANY_CMD)
   {
-    if ((TimeClass::readTimer() - 
-         this->getLatestEventTimestamp()) > ONGOING_TRANSFER_INACTIVITY_TIMEOUT)
+    if ((TimeClass::readTimer() -
+      this->getLatestEventTimestamp()) > ONGOING_TRANSFER_INACTIVITY_TIMEOUT)
     {
-      ret = this->setCliSrvAbortTransfer(this->application_object_index, 
+      ret = this->setCliSrvAbortTransfer(this->application_object_index,
         this->application_sub_index, SDO_PROTOCOL_TIMED_OUT);
       if (ret == CANOPEN_OK)
       {
@@ -378,12 +378,12 @@ canOpenStatus ServerSDO ::periodicTimerCallback(void)
 //------------------------------------------------------------------------
 // Wrapper for being able to setup callbacks to non-static funcs.
 //------------------------------------------------------------------------
-canOpenStatus ServerSDO :: canFrameConsumerW(void *context, unsigned long id, 
-                                             unsigned char *data, 
-                                             unsigned int dlc, unsigned int flags)
+canOpenStatus ServerSDO::canFrameConsumerW(void* context, unsigned long id,
+  unsigned char* data,
+  unsigned int dlc, unsigned int flags)
 {
   canOpenStatus ret = CANOPEN_ERROR;
-  ServerSDO *srvSDO = (ServerSDO*) context;
+  ServerSDO* srvSDO = (ServerSDO*)context;
   ret = srvSDO->setLatestEventTimestamp();
   if (ret == CANOPEN_OK)
   {
@@ -395,7 +395,7 @@ canOpenStatus ServerSDO :: canFrameConsumerW(void *context, unsigned long id,
 //------------------------------------------------------------------------
 // Wrapper for being able to setup callbacks to non-static funcs.
 //------------------------------------------------------------------------
-canOpenStatus ServerSDO :: serverSDOStateMachineW(void *client_sdo_object)
+canOpenStatus ServerSDO::serverSDOStateMachineW(void* client_sdo_object)
 {
   //qqq, TBD.
   return CANOPEN_ERROR;
@@ -404,7 +404,7 @@ canOpenStatus ServerSDO :: serverSDOStateMachineW(void *client_sdo_object)
 //------------------------------------------------------------------------
 // 
 //------------------------------------------------------------------------
-canOpenStatus  ServerSDO :: serverSDOStateMachine(void)
+canOpenStatus  ServerSDO::serverSDOStateMachine(void)
 {
   canOpenStatus ret = CANOPEN_ERROR;
   ;
@@ -414,8 +414,8 @@ canOpenStatus  ServerSDO :: serverSDOStateMachine(void)
 //------------------------------------------------------------------------
 // Callback handler for Server
 //------------------------------------------------------------------------
-canOpenStatus  ServerSDO :: canFrameConsumer(unsigned long id, 
-  unsigned char *data, unsigned int dlc, unsigned int flags)
+canOpenStatus  ServerSDO::canFrameConsumer(unsigned long id,
+  unsigned char* data, unsigned int dlc, unsigned int flags)
 {
   canOpenStatus ret = CANOPEN_ERROR;
 
@@ -426,28 +426,28 @@ canOpenStatus  ServerSDO :: canFrameConsumer(unsigned long id,
   {
     switch (this->state)
     {
-      case SRV_WAIT_ANY_CMD:
-        ret = hndlCliRequest();
-        break;
-      case SRV_WAIT_DOWNLOAD_SEGMENT_REQUEST:
-        ret = hndlDlSegReq();
-        break;
-      case SRV_WAIT_UPLOAD_SEGMENT_REQUEST:
-        ret = hndlUpSegReq();
-        break;
-      case SRV_WAIT_DOWNLOAD_BLOCK:
-        ret = hndlDlBlkSegReq();  //9.2.2.2.10 Download SDO Block Segment Protocol
-        break; 
-      case SRV_WAIT_END_BLOCK_DOWNLOAD:
-        ret = hndlEndBlkDnReq();  //9.2.2.2.11 End SDO Block Download Protocol
-        break; 
-      default:
-        ret = CANOPEN_INTERNAL_STATE_ERROR;
-        break;
+    case SRV_WAIT_ANY_CMD:
+      ret = hndlCliRequest();
+      break;
+    case SRV_WAIT_DOWNLOAD_SEGMENT_REQUEST:
+      ret = hndlDlSegReq();
+      break;
+    case SRV_WAIT_UPLOAD_SEGMENT_REQUEST:
+      ret = hndlUpSegReq();
+      break;
+    case SRV_WAIT_DOWNLOAD_BLOCK:
+      ret = hndlDlBlkSegReq();  //9.2.2.2.10 Download SDO Block Segment Protocol
+      break;
+    case SRV_WAIT_END_BLOCK_DOWNLOAD:
+      ret = hndlEndBlkDnReq();  //9.2.2.2.11 End SDO Block Download Protocol
+      break;
+    default:
+      ret = CANOPEN_INTERNAL_STATE_ERROR;
+      break;
     }
     if (ret == CANOPEN_CMD_SPEC_UNKNOWN_OR_INVALLD)
     {
-      ret = SDO :: hndlInvalidCmdSpec(); // A invalid or unknown command specifier, surender.
+      ret = SDO::hndlInvalidCmdSpec(); // A invalid or unknown command specifier, surender.
       this->state = SRV_WAIT_ANY_CMD;
     }
   }
@@ -457,12 +457,12 @@ canOpenStatus  ServerSDO :: canFrameConsumer(unsigned long id,
 //------------------------------------------------------------------------
 //  This method initiates the SDO on the network.
 //------------------------------------------------------------------------
-canOpenStatus   ServerSDO :: canHardwareConnect(u8 port, u32 bitrate) 
+canOpenStatus   ServerSDO::canHardwareConnect(u8 port, u32 bitrate)
 {
-  return SDO :: canHardwareInit(
-    port, 
-    bitrate, 
-    (DispatcherCanFuncPtr)canFrameConsumerW, 
+  return SDO::canHardwareInit(
+    port,
+    bitrate,
+    (DispatcherCanFuncPtr)canFrameConsumerW,
     (ProtocolImplementationStateMachineFuncPtr)serverSDOStateMachineW);
 }
 
@@ -470,19 +470,19 @@ canOpenStatus   ServerSDO :: canHardwareConnect(u8 port, u32 bitrate)
 //------------------------------------------------------------------------
 // This method registers the callback to be used for read object callbacks.
 //------------------------------------------------------------------------
-canOpenStatus   ServerSDO :: registerObjectReadCallback(SrvReadFuncPtr fp, 
-                                                        void *context)
+canOpenStatus   ServerSDO::registerObjectReadCallback(SrvReadFuncPtr fp,
+  void* context)
 {
   this->object_read_callback = fp;
   this->object_read_callback_context = context;
   return CANOPEN_OK;
 }
-  
+
 //------------------------------------------------------------------------
 // This method registers the callback to be used for write object callbacks.
 //------------------------------------------------------------------------
-canOpenStatus   ServerSDO :: registerObjectWriteCallback( SrvWriteFuncPtr callback, 
-                                                          void *context)
+canOpenStatus   ServerSDO::registerObjectWriteCallback(SrvWriteFuncPtr callback,
+  void* context)
 {
   this->object_write_callback = callback;
   this->object_write_callback_context = context;
@@ -492,7 +492,7 @@ canOpenStatus   ServerSDO :: registerObjectWriteCallback( SrvWriteFuncPtr callba
 //------------------------------------------------------------------------
 // 
 //------------------------------------------------------------------------
-canOpenStatus   ServerSDO :: hndlCliRequest(void)
+canOpenStatus   ServerSDO::hndlCliRequest(void)
 {
   canOpenStatus ret = CANOPEN_ERROR;
   u8 cliCmd = 0;
@@ -501,24 +501,24 @@ canOpenStatus   ServerSDO :: hndlCliRequest(void)
   {
     switch (cliCmd)
     {
-      case CLI_CMD_INIT_DL_REQ:
-        ret = hndlInitDlReq();
-        break;
-      case CLI_CMD_DL_SEG_REQ:
-        ret = hndlDlSegReq();
-        break;
-      case CLI_CMD_INIT_UL_REQ:
-        ret = hndlInitUpReq();
-        break;
-      case CLI_CMD_UL_SEG_REQ:
-        ret = hndlUpSegReq();
-        break;
-      case CLI_CMD_BLOCK_DL_REQ:
-        ret = hndlBlkDl();  // CSS is set to 6 for "initiate download request" and "end block download request".
-        break;
-      default:
-        ret = CANOPEN_CMD_SPEC_UNKNOWN_OR_INVALLD;
-        break;
+    case CLI_CMD_INIT_DL_REQ:
+      ret = hndlInitDlReq();
+      break;
+    case CLI_CMD_DL_SEG_REQ:
+      ret = hndlDlSegReq();
+      break;
+    case CLI_CMD_INIT_UL_REQ:
+      ret = hndlInitUpReq();
+      break;
+    case CLI_CMD_UL_SEG_REQ:
+      ret = hndlUpSegReq();
+      break;
+    case CLI_CMD_BLOCK_DL_REQ:
+      ret = hndlBlkDl();  // CSS is set to 6 for "initiate download request" and "end block download request".
+      break;
+    default:
+      ret = CANOPEN_CMD_SPEC_UNKNOWN_OR_INVALLD;
+      break;
     }
   }
   return ret;
@@ -528,7 +528,7 @@ canOpenStatus   ServerSDO :: hndlCliRequest(void)
 //------------------------------------------------------------------------
 //9.2.2.2.2 Initiate SDO Download Protocol
 //------------------------------------------------------------------------
-canOpenStatus   ServerSDO :: hndlInitDlReq(void)
+canOpenStatus   ServerSDO::hndlInitDlReq(void)
 {
   canOpenStatus ret = CANOPEN_ERROR;
   u8 n = 0;
@@ -545,7 +545,7 @@ canOpenStatus   ServerSDO :: hndlInitDlReq(void)
       u16 flags;
       this->application_object_index = object_index;
       this->application_sub_index = sub_index;
-      ret = object_attributes_callback(object_attributes_callback_context, 
+      ret = object_attributes_callback(object_attributes_callback_context,
         object_index, sub_index, &flags);
       if (ret == CANOPEN_OK)
       {
@@ -562,7 +562,7 @@ canOpenStatus   ServerSDO :: hndlInitDlReq(void)
               u32 canopen_error_code = 0;
               u8 buffer_data[4];  //Max 4 bytes.
               ::val2buf(data, buffer_data, valid);
-              ret = this->object_write_callback(object_write_callback_context, 
+              ret = this->object_write_callback(object_write_callback_context,
                 object_index, sub_index, buffer_data, valid, &canopen_error_code);
               if (ret == CANOPEN_OK)
               {
@@ -570,7 +570,7 @@ canOpenStatus   ServerSDO :: hndlInitDlReq(void)
                 ret = setSrvCmdSpcInitDnResp();
                 if (ret == CANOPEN_OK)
                 {
-                  ret = setMultiplexor(this->application_object_index, 
+                  ret = setMultiplexor(this->application_object_index,
                     this->application_sub_index);
                   if (ret == CANOPEN_OK)
                   {
@@ -597,7 +597,7 @@ canOpenStatus   ServerSDO :: hndlInitDlReq(void)
                 {
                   canopen_error_code_to_client = DATA_CAN_NOT_BE_STORED; // Error defined by CANopen spec.
                 }
-                ret = this->setCliSrvAbortTransfer(this->application_object_index, 
+                ret = this->setCliSrvAbortTransfer(this->application_object_index,
                   this->application_sub_index, canopen_error_code_to_client);
                 if (ret == CANOPEN_OK)
                 {
@@ -605,17 +605,17 @@ canOpenStatus   ServerSDO :: hndlInitDlReq(void)
                 }
               }
             }
-            else  
+            else
             {
               // It's not expedited.
               if (s == 1)
               {
-                if(data < SDO_SERVER_BUFFER)
+                if (data < SDO_SERVER_BUFFER)
                 {
                   ret = setSrvCmdSpcInitDnResp();
                   if (ret == CANOPEN_OK)
                   {
-                    ret = setMultiplexor(this->application_object_index, 
+                    ret = setMultiplexor(this->application_object_index,
                       this->application_sub_index);
                     if (ret == CANOPEN_OK)
                     {
@@ -629,11 +629,11 @@ canOpenStatus   ServerSDO :: hndlInitDlReq(void)
                         ret = this->writeToCanBus();
                       }
                     }
-                  }                  
+                  }
                 }
                 else
                 {
-                  ret = this->setCliSrvAbortTransfer(this->application_object_index, 
+                  ret = this->setCliSrvAbortTransfer(this->application_object_index,
                     this->application_sub_index, OUT_OF_MEMORY);
                   if (ret == CANOPEN_OK)
                   {
@@ -664,8 +664,8 @@ canOpenStatus   ServerSDO :: hndlInitDlReq(void)
           {
             err = UNSUPPORTED_ACCESS_TO_AN_OBJECT;
           }
-          ret = this->setCliSrvAbortTransfer(this->application_object_index, 
-            this->application_sub_index, 
+          ret = this->setCliSrvAbortTransfer(this->application_object_index,
+            this->application_sub_index,
             err);
           if (ret == CANOPEN_OK)
           {
@@ -685,7 +685,7 @@ canOpenStatus   ServerSDO :: hndlInitDlReq(void)
 //------------------------------------------------------------------------
 //9.2.2.2.3 Download SDO Segment Protocol
 //------------------------------------------------------------------------
-canOpenStatus   ServerSDO :: hndlDlSegReq(void)
+canOpenStatus   ServerSDO::hndlDlSegReq(void)
 {
   canOpenStatus ret = CANOPEN_ERROR;
   u8 t = 0;
@@ -702,19 +702,19 @@ canOpenStatus   ServerSDO :: hndlDlSegReq(void)
       ret = getSegData(segmData, &valid, n);
       if (ret == CANOPEN_OK)
       {
-        u32 canopen_error_code ;
+        u32 canopen_error_code;
         if ((this->data_buffer_counter + valid) < SDO_SERVER_BUFFER)
         {
           memcpy(&this->data_buffer[this->data_buffer_counter], segmData, valid);
           this->data_buffer_counter += valid;
           if (c == 1) // no more segments to be downloaded
           {
-            ret = this->object_write_callback(object_write_callback_context, 
-              this->application_object_index, 
-              this->application_sub_index, 
-              data_buffer, 
-              this->data_buffer_counter, 
-              &canopen_error_code );
+            ret = this->object_write_callback(object_write_callback_context,
+              this->application_object_index,
+              this->application_sub_index,
+              data_buffer,
+              this->data_buffer_counter,
+              &canopen_error_code);
           }
           if (ret == CANOPEN_OK)
           {
@@ -737,11 +737,11 @@ canOpenStatus   ServerSDO :: hndlDlSegReq(void)
             }
           }
         }
-        else 
+        else
         {
           // Server SDO ran out of buffer.
-          ret = this->setCliSrvAbortTransfer(this->application_object_index, 
-            this->application_sub_index, CANOPEN_OUT_OF_MEM); 
+          ret = this->setCliSrvAbortTransfer(this->application_object_index,
+            this->application_sub_index, CANOPEN_OUT_OF_MEM);
           if (ret == CANOPEN_OK)
           {
             ret = this->writeToCanBus();
@@ -753,7 +753,7 @@ canOpenStatus   ServerSDO :: hndlDlSegReq(void)
     else
     {
       // Toggle miss-match.
-      ret = this->setCliSrvAbortTransfer(this->application_object_index, 
+      ret = this->setCliSrvAbortTransfer(this->application_object_index,
         this->application_sub_index, TOGGLE_BIT_NOT_ALTERED);
       if (ret == CANOPEN_OK)
       {
@@ -768,12 +768,12 @@ canOpenStatus   ServerSDO :: hndlDlSegReq(void)
 //------------------------------------------------------------------------
 //9.2.2.2.10 Download SDO Block Segment Protocol
 //------------------------------------------------------------------------
-canOpenStatus   ServerSDO :: hndlDlBlkSegReq(void)
+canOpenStatus   ServerSDO::hndlDlBlkSegReq(void)
 {
   static int generatefault = 1;
   canOpenStatus ret = CANOPEN_ERROR;
-  u8 c                = 0;
-  u8 sequence_number  = 0;
+  u8 c = 0;
+  u8 sequence_number = 0;
   ret = this->getDlBlkSegHeader(&c, &sequence_number);
   if (ret == CANOPEN_OK)
   {
@@ -798,7 +798,7 @@ canOpenStatus   ServerSDO :: hndlDlBlkSegReq(void)
         {
           memcpy(&this->data_buffer[this->data_buffer_counter], segmData, valid);
           this->data_buffer_counter += valid;
-          if ((c == 1) || (sequence_number >= MAX_SRV_BLOCK_SEGM )) //c = 1 gives: more segments to be downloaded.
+          if ((c == 1) || (sequence_number >= MAX_SRV_BLOCK_SEGM)) //c = 1 gives: more segments to be downloaded.
           {
             ret = setSrvCmdSpcBlkDnResp(2, sequence_number, MAX_SRV_BLOCK_SEGM);
             if (ret == CANOPEN_OK)
@@ -817,7 +817,7 @@ canOpenStatus   ServerSDO :: hndlDlBlkSegReq(void)
               }
             }
           }
-          else 
+          else
           {
             block_transfer_segment_count++;
           }
@@ -829,8 +829,8 @@ canOpenStatus   ServerSDO :: hndlDlBlkSegReq(void)
       // Segment counter missmatch.
       if (block_transfer_segment_count > 0)
       {
-        ret = setSrvCmdSpcBlkDnResp(2, 
-          (block_transfer_segment_count - 1), 
+        ret = setSrvCmdSpcBlkDnResp(2,
+          (block_transfer_segment_count - 1),
           MAX_SRV_BLOCK_SEGM); // qqq: Should trigger re-transmission in the client.
         if (ret == CANOPEN_OK)
         {
@@ -849,7 +849,7 @@ canOpenStatus   ServerSDO :: hndlDlBlkSegReq(void)
 //------------------------------------------------------------------------
 // 9.2.2.2.11 End SDO Block Download Protocol
 //------------------------------------------------------------------------
-canOpenStatus   ServerSDO :: hndlEndBlkDnReq(void)
+canOpenStatus   ServerSDO::hndlEndBlkDnReq(void)
 {
   canOpenStatus ret = CANOPEN_ERROR;
   u8 n = 0;
@@ -862,11 +862,11 @@ canOpenStatus   ServerSDO :: hndlEndBlkDnReq(void)
     // qqq, decrement the number of received bytes in the last received frame due 
     // to that n is being told only in the end block transfer request.
     this->data_buffer_counter -= n;
-    ret = this->object_write_callback(object_write_callback_context, 
-      this->application_object_index, 
-      this->application_sub_index, 
-      data_buffer, 
-      this->data_buffer_counter, 
+    ret = this->object_write_callback(object_write_callback_context,
+      this->application_object_index,
+      this->application_sub_index,
+      data_buffer,
+      this->data_buffer_counter,
       &canopen_error_code);
     if (state == SRV_WAIT_END_BLOCK_DOWNLOAD)
     {
@@ -890,8 +890,8 @@ canOpenStatus   ServerSDO :: hndlEndBlkDnReq(void)
         {
           canopen_error_code_to_client = DATA_CAN_NOT_BE_STORED; // Error defined by CANopen spec.
         }
-        ret = this->setCliSrvAbortTransfer(this->application_object_index, 
-          this->application_sub_index, 
+        ret = this->setCliSrvAbortTransfer(this->application_object_index,
+          this->application_sub_index,
           canopen_error_code_to_client);
         if (ret == CANOPEN_OK)
         {
@@ -907,7 +907,7 @@ canOpenStatus   ServerSDO :: hndlEndBlkDnReq(void)
 //------------------------------------------------------------------------
 //9.2.2.2.9 Initiate SDO Block Download Protocol
 //------------------------------------------------------------------------
-canOpenStatus   ServerSDO :: hndlBlkDl(void)
+canOpenStatus   ServerSDO::hndlBlkDl(void)
 {
   canOpenStatus ret = CANOPEN_ERROR;
   u8 cc = 0;
@@ -930,12 +930,12 @@ canOpenStatus   ServerSDO :: hndlBlkDl(void)
         ret = getData(&objSize, NULL, 0);
         if (ret == CANOPEN_OK)
         {
-          if(objSize < SDO_SERVER_BUFFER)
+          if (objSize < SDO_SERVER_BUFFER)
           {
             ret = setSrvCmdSpcInitBlockDnResp(0); // No CRC-check support.
             if (ret == CANOPEN_OK)
             {
-              ret = setMultiplexor(this->application_object_index, 
+              ret = setMultiplexor(this->application_object_index,
                 this->application_sub_index);
               if (ret == CANOPEN_OK)
               {
@@ -955,11 +955,11 @@ canOpenStatus   ServerSDO :: hndlBlkDl(void)
             }
           }
         }
-      }  
+      }
     }
     else // End block download request
     {
-      
+
     }
   }
   return ret;
@@ -968,7 +968,7 @@ canOpenStatus   ServerSDO :: hndlBlkDl(void)
 //------------------------------------------------------------------------
 //9.2.2.2.5 Initiate SDO Upload Protocol
 //------------------------------------------------------------------------
-canOpenStatus   ServerSDO :: hndlInitUpReq(void)
+canOpenStatus   ServerSDO::hndlInitUpReq(void)
 {
   canOpenStatus ret = CANOPEN_ERROR;
   u8 n = 0;
@@ -986,7 +986,7 @@ canOpenStatus   ServerSDO :: hndlInitUpReq(void)
       u16 flags = 0;
       this->application_object_index = object_index;
       this->application_sub_index = sub_index;
-      ret = object_attributes_callback(object_attributes_callback_context, 
+      ret = object_attributes_callback(object_attributes_callback_context,
         object_index, sub_index, &flags);
       if (ret == CANOPEN_OK)
       {
@@ -994,8 +994,8 @@ canOpenStatus   ServerSDO :: hndlInitUpReq(void)
         {
           u32 coErrorCode = 0;
           u32 application_data_size;
-          ret = this->object_read_callback(object_read_callback_context, 
-            object_index, sub_index, data_buffer, &application_data_size, 
+          ret = this->object_read_callback(object_read_callback_context,
+            object_index, sub_index, data_buffer, &application_data_size,
             SDO_SERVER_BUFFER, &coErrorCode);
           if (ret == CANOPEN_OK)
           {
@@ -1017,9 +1017,9 @@ canOpenStatus   ServerSDO :: hndlInitUpReq(void)
               e = 0;
               s = 1;
               valid = 4;
-              this->application_buffer_length   = application_data_size;
-              this->application_buffer_offset   = 0;
-              dataSrvUploadResp                 = application_data_size;
+              this->application_buffer_length = application_data_size;
+              this->application_buffer_offset = 0;
+              dataSrvUploadResp = application_data_size;
             }
             //canOpenStatus  setSrvCmdSpcInitUpResp(u8 valid, u8 e, u8 s); //9.2.2.2.5 Initiate SDO Upload Protocol
             ret = setSrvCmdSpcInitUpResp(valid, e, s);
@@ -1048,8 +1048,8 @@ canOpenStatus   ServerSDO :: hndlInitUpReq(void)
           }
           else if (ret == CANOPEN_ERR_DEFINED_BY_APPL)
           {
-            ret = this->setCliSrvAbortTransfer(this->application_object_index, 
-              this->application_sub_index, 
+            ret = this->setCliSrvAbortTransfer(this->application_object_index,
+              this->application_sub_index,
               coErrorCode);
             if (ret == CANOPEN_OK)
             {
@@ -1073,8 +1073,8 @@ canOpenStatus   ServerSDO :: hndlInitUpReq(void)
           {
             err = UNSUPPORTED_ACCESS_TO_AN_OBJECT;
           }
-          ret = this->setCliSrvAbortTransfer(this->application_object_index, 
-            this->application_sub_index, 
+          ret = this->setCliSrvAbortTransfer(this->application_object_index,
+            this->application_sub_index,
             err);
           if (ret == CANOPEN_OK)
           {
@@ -1096,7 +1096,7 @@ canOpenStatus   ServerSDO :: hndlInitUpReq(void)
 //------------------------------------------------------------------------
 //9.2.2.2.6 Upload SDO Segment Protocol
 //------------------------------------------------------------------------
-canOpenStatus   ServerSDO :: hndlUpSegReq(void)
+canOpenStatus   ServerSDO::hndlUpSegReq(void)
 {
   canOpenStatus ret = CANOPEN_ERROR;
   u8 t;
@@ -1113,9 +1113,9 @@ canOpenStatus   ServerSDO :: hndlUpSegReq(void)
         bytes_to_send_in_segment = 7;
         c = 0; // more segments to be uploaded
       }
-      else 
+      else
       {
-       // There are 1 -> 7 bytes left to copy.
+        // There are 1 -> 7 bytes left to copy.
         bytes_to_send_in_segment = (u8)data_left_in_buffer;
         c = 1; // no more segments to be uploaded
         this->state = SRV_WAIT_ANY_CMD;
@@ -1134,7 +1134,7 @@ canOpenStatus   ServerSDO :: hndlUpSegReq(void)
         }
       }
       this->toggle();
-    }    
+    }
     else
     {
       ; // toggle missmatch ?? qqq
@@ -1146,8 +1146,8 @@ canOpenStatus   ServerSDO :: hndlUpSegReq(void)
 //------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------
-canOpenStatus ServerSDO :: registerObjectGetAttributesCallback(
-  SrvGetAttrFuncPtr callback_function, void *context)
+canOpenStatus ServerSDO::registerObjectGetAttributesCallback(
+  SrvGetAttrFuncPtr callback_function, void* context)
 {
   this->object_attributes_callback = callback_function;
   this->object_attributes_callback_context = context;

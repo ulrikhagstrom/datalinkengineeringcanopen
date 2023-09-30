@@ -1,17 +1,17 @@
-/*             _____        _        _      _       _    
-              |  __ \      | |      | |    (_)     | |   
+/*             _____        _        _      _       _
+              |  __ \      | |      | |    (_)     | |
               | |  | | __ _| |_ __ _| |     _ _ __ | | __
               | |  | |/ _` | __/ _` | |    | | '_ \| |/ /
-              | |__| | (_| | || (_| | |____| | | | |   < 
+              | |__| | (_| | || (_| | |____| | | | |   <
               |_____/ \__,_|\__\__,_|______|_|_| |_|_|\_\
-         ______             _                      _             
-        |  ____|           (_)                    (_)            
-        | |__   _ __   __ _ _ _ __   ___  ___ _ __ _ _ __   __ _ 
+         ______             _                      _
+        |  ____|           (_)                    (_)
+        | |__   _ __   __ _ _ _ __   ___  ___ _ __ _ _ __   __ _
         |  __| | '_ \ / _` | | '_ \ / _ \/ _ \ '__| | '_ \ / _` |
         | |____| | | | (_| | | | | |  __/  __/ |  | | | | | (_| |
         |______|_| |_|\__, |_|_| |_|\___|\___|_|  |_|_| |_|\__, |
                        __/ |                                __/ |
-                      |___/                                |___/ 
+                      |___/                                |___/
 
       Web: http://www.datalink.se E-mail: ulrik.hagstrom@datalink.se
 
@@ -47,10 +47,10 @@ canAdapter CANOPENDLL_API getAdapter();
 #define DLL_DEVELOPMENT 1
 
 #ifndef __cplusplus
-  #define FALSE   0 
-  #define TRUE    1
-  #define NULL    0
-  typedef unsigned int bool;
+#define FALSE   0 
+#define TRUE    1
+#define NULL    0
+typedef unsigned int bool;
 #endif
 
 
@@ -73,36 +73,36 @@ typedef u32     COBID;
 typedef u32     CanOpenErrorCode;
 
 #ifdef HAS_LONG_LONG
-void val2buf(u64 val, u8 *buf, u8 len);
+void val2buf(u64 val, u8* buf, u8 len);
 #endif
-void val2buf(u32 val, u8 *buf, u8 len);
-u32 buf2val(u8 *buf, u8 len);
-u16 getU16Val(u8 *p, u8 offset);
-u32 getU32Val(u8 *p, u8 offset);
+void val2buf(u32 val, u8* buf, u8 len);
+u32 buf2val(u8* buf, u8 len);
+u16 getU16Val(u8* p, u8 offset);
+u32 getU32Val(u8* p, u8 offset);
 #ifdef HAS_LONG_LONG
-u64 getU64Val(u8 *p, u8 offset);
+u64 getU64Val(u8* p, u8 offset);
 #endif
-void setU16Val(u16 val, u8 *p, u8 offset);
-void setU32Val(u32 val, u8 *p, u8 offset);
+void setU16Val(u16 val, u8* p, u8 offset);
+void setU32Val(u32 val, u8* p, u8 offset);
 #ifdef HAS_LONG_LONG
-void setU64Val(u64 val, u8 *p, u8 offset);
+void setU64Val(u64 val, u8* p, u8 offset);
 #endif
 
-u8 getU8Val(u8 *p, u8 offset);
-void setU8Val(u8 val, u8 *p, u8 offset);
-u32 getU24Val(u8 *p, u8 offset);
-void setU24Val(u32 val, u8 *p, u8 offset);
+u8 getU8Val(u8* p, u8 offset);
+void setU8Val(u8 val, u8* p, u8 offset);
+u32 getU24Val(u8* p, u8 offset);
+void setU24Val(u32 val, u8* p, u8 offset);
 
 
-typedef canOpenStatus (*DispatcherCanFuncPtr)(
-  void *context, 
-  unsigned long id, 
-  unsigned char *data, 
-  unsigned int dlc, 
+typedef canOpenStatus(*DispatcherCanFuncPtr)(
+  void* context,
+  unsigned long id,
+  unsigned char* data,
+  unsigned int dlc,
   unsigned int flags);
-typedef canOpenStatus (*ProtocolImplementationStateMachineFuncPtr)(void *context); // Callback for helping the transfer, will be called in same thread as "canFrameConsumer".
+typedef canOpenStatus(*ProtocolImplementationStateMachineFuncPtr)(void* context); // Callback for helping the transfer, will be called in same thread as "canFrameConsumer".
 
-void DebugLogToFile(char *string);
+void DebugLogToFile(char* string);
 canOpenStatus DebugExitErrorValueLogToFile(canOpenStatus code);
 
 #endif
