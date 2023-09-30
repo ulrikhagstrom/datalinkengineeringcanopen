@@ -31,15 +31,15 @@ namespace DatalinkEngineering
 
     ServerSDO_NET::ServerSDO_NET()
     {
-      typedef canOpenStatus(*SrvReadFuncPtr)(void *context, u16 object_index, u8 sub_index, u8 *buf, u32 *valid, u32 buffer_size, u32 *coerror_code); //Read from srv's application.
-      typedef canOpenStatus(*SrvWriteFuncPtr)(void *context, u16 object_index, u8 sub_index, u8 *buf, u32 valid, u32 *coerror_code); //Write to srv's application.
-      typedef canOpenStatus(*SrvGetAttrFuncPtr)(void *context, u16 object_index, u8 sub_index, u16 *flags);
+      typedef canOpenStatus(*SrvReadFuncPtr)(void* context, u16 object_index, u8 sub_index, u8* buf, u32* valid, u32 buffer_size, u32* coerror_code); //Read from srv's application.
+      typedef canOpenStatus(*SrvWriteFuncPtr)(void* context, u16 object_index, u8 sub_index, u8* buf, u32 valid, u32* coerror_code); //Write to srv's application.
+      typedef canOpenStatus(*SrvGetAttrFuncPtr)(void* context, u16 object_index, u8 sub_index, u16* flags);
 
       this->cpp_ServerSDO = new ServerSDO();
 
       srvWriteDelegate = gcnew ServerWriteDelegate(this, &ServerSDO_NET::serverWrite);
       IntPtr pSrvWriteDelegate = Marshal::GetFunctionPointerForDelegate(srvWriteDelegate);
-      void *pf = pSrvWriteDelegate.ToPointer();
+      void* pf = pSrvWriteDelegate.ToPointer();
       this->cpp_ServerSDO->registerObjectWriteCallback((SrvWriteFuncPtr)pf, 0);
 
       srvReadDelegate = gcnew ServerReadDelegate(this, &ServerSDO_NET::serverRead);
@@ -100,7 +100,7 @@ namespace DatalinkEngineering
       return (CanOpenStatus)this->cpp_ServerSDO->nodeSetId(node_id);
     }
 
-    canOpenStatus ServerSDO_NET::serverRead(void *p, u16 object_index, u8 sub_index, u8 *buf, u32 *valid, u32 buffer_size, u32 *coerror_code)
+    canOpenStatus ServerSDO_NET::serverRead(void* p, u16 object_index, u8 sub_index, u8* buf, u32* valid, u32 buffer_size, u32* coerror_code)
     {
       canOpenStatus ret;
       array<System::Byte>^ data;
@@ -115,7 +115,7 @@ namespace DatalinkEngineering
       return ret;
     }
 
-    canOpenStatus ServerSDO_NET::serverWrite(void *p, u16 object_index, u8 sub_index, u8 *buf, u32 valid, u32 *coerror_code)
+    canOpenStatus ServerSDO_NET::serverWrite(void* p, u16 object_index, u8 sub_index, u8* buf, u32 valid, u32* coerror_code)
     {
       canOpenStatus ret;
       array<System::Byte>^ data;
@@ -129,7 +129,7 @@ namespace DatalinkEngineering
 
     }
 
-    canOpenStatus ServerSDO_NET::serverGetAttribut(void *p, u16 object_index, u8 sub_index, u16 *flags)
+    canOpenStatus ServerSDO_NET::serverGetAttribut(void* p, u16 object_index, u8 sub_index, u16* flags)
     {
       return (canOpenStatus)this->attribObjectDelegate(this->attribObjectDelegateObject, object_index, sub_index, *flags);
     }
@@ -143,12 +143,12 @@ namespace DatalinkEngineering
 
     CanMonitor_NET::CanMonitor_NET()
     {
-      typedef void(*RawCanReceiveFunPtr)(void * context, u32 id, u8 *data, u8 dlc, u32 flags);
+      typedef void(*RawCanReceiveFunPtr)(void* context, u32 id, u8* data, u8 dlc, u32 flags);
 
       this->cpp_CanMonitor = new CanMonitor();
       can_receive_delegate_CPP = gcnew CanReceiveDelegate_CPP(this, &CanMonitor_NET::canReceiveCPP);
       IntPtr p_can_receive_delegate_CPP = Marshal::GetFunctionPointerForDelegate(can_receive_delegate_CPP);
-      void *p = p_can_receive_delegate_CPP.ToPointer();
+      void* p = p_can_receive_delegate_CPP.ToPointer();
       this->cpp_CanMonitor->registerCanReceiveCallback(0, (RawCanReceiveFunPtr)p);
 
     }
@@ -194,7 +194,7 @@ namespace DatalinkEngineering
       return ret;
     }
 
-    canOpenStatus CanMonitor_NET::canReceiveCPP(void *context, u32 id, u8 *data, u8 dlc, u32 flags)
+    canOpenStatus CanMonitor_NET::canReceiveCPP(void* context, u32 id, u8* data, u8 dlc, u32 flags)
     {
       canOpenStatus ret;
 
@@ -404,7 +404,7 @@ namespace DatalinkEngineering
 
     ReceivePDO_NET::ReceivePDO_NET()
     {
-      typedef void(*RawPdoReceiveFunPtr)(void * context, u32 id, u8 *data, u8 dlc);
+      typedef void(*RawPdoReceiveFunPtr)(void* context, u32 id, u8* data, u8 dlc);
 
       this->receive_pdo_delegate = nullptr;
       this->receive_pdo_delegate_object = nullptr;
@@ -412,7 +412,7 @@ namespace DatalinkEngineering
       this->cpp_ReceivePDO = new ReceivePDO();
       receive_pdo_delegate_CPP = gcnew ReceivePdoDelegate_CPP(this, &ReceivePDO_NET::receivePdoCPP);
       IntPtr p_pdo_receive_delegate_CPP = Marshal::GetFunctionPointerForDelegate(receive_pdo_delegate_CPP);
-      void *p = p_pdo_receive_delegate_CPP.ToPointer();
+      void* p = p_pdo_receive_delegate_CPP.ToPointer();
       this->cpp_ReceivePDO->registerReceivePdoMessageCallBack(0, (RawPdoReceiveFunPtr)p);
     }
 
@@ -444,7 +444,7 @@ namespace DatalinkEngineering
       return CanOpenStatus::CANOPEN_OK;
     }
 
-    canOpenStatus ReceivePDO_NET::receivePdoCPP(void *context, u32 id, u8 *data, u8 dlc)
+    canOpenStatus ReceivePDO_NET::receivePdoCPP(void* context, u32 id, u8* data, u8 dlc)
     {
       canOpenStatus ret;
 
@@ -472,7 +472,7 @@ namespace DatalinkEngineering
       return (CanOpenStatus)this->cpp_ReceivePDO->requestPDO(dlc);
     }
 
-    CanOpenStatus ReceivePDO_NET::readPdoData([System::Runtime::InteropServices::Out] u8 %val, u8 index)
+    CanOpenStatus ReceivePDO_NET::readPdoData([System::Runtime::InteropServices::Out] u8% val, u8 index)
     {
       pin_ptr<u8> valp = &val;
       u8* nvalp = valp;
@@ -490,12 +490,12 @@ namespace DatalinkEngineering
 
     SyncServer_NET::SyncServer_NET()
     {
-      typedef void(*RawSyncMessageFunPtr)(void *context);
+      typedef void(*RawSyncMessageFunPtr)(void* context);
 
       this->cpp_SyncServer = new SyncServer();
       sync_server_delegate_CPP = gcnew SyncServerDelegate_CPP(this, &SyncServer_NET::syncServerCallbackCPP);
       IntPtr p_pdo_receive_delegate_CPP = Marshal::GetFunctionPointerForDelegate(sync_server_delegate_CPP);
-      void *p = p_pdo_receive_delegate_CPP.ToPointer();
+      void* p = p_pdo_receive_delegate_CPP.ToPointer();
       this->cpp_SyncServer->registerSyncMessageCallBack(0, (RawSyncMessageFunPtr)p);
 
     }
@@ -528,7 +528,7 @@ namespace DatalinkEngineering
       return CanOpenStatus::CANOPEN_OK;
     }
 
-    canOpenStatus SyncServer_NET::syncServerCallbackCPP(void *context)
+    canOpenStatus SyncServer_NET::syncServerCallbackCPP(void* context)
     {
       return (canOpenStatus)this->sync_server_delegate(this->sync_server_delegate_object);
     }
@@ -549,12 +549,12 @@ namespace DatalinkEngineering
 
     EmcyServer_NET::EmcyServer_NET()
     {
-      typedef void(*EmcyServerFunPtr)(void *context, u8 nodeId, u16 emcyErrorCode, u8 errorRegister, u8 *manufacturerSpecificErrorField);
+      typedef void(*EmcyServerFunPtr)(void* context, u8 nodeId, u16 emcyErrorCode, u8 errorRegister, u8* manufacturerSpecificErrorField);
 
       this->cpp_EmcyServer = new EmcyServer();
       emcy_server_delegate_CPP = gcnew EmcyServerDelegate_CPP(this, &EmcyServer_NET::emcyServerCallbackCPP);
       IntPtr p_emcy_server_delegate_CPP = Marshal::GetFunctionPointerForDelegate(emcy_server_delegate_CPP);
-      void *p = p_emcy_server_delegate_CPP.ToPointer();
+      void* p = p_emcy_server_delegate_CPP.ToPointer();
       this->cpp_EmcyServer->registerEmergencyMessageCallBack(0, (EmcyServerFunPtr)p);
     }
 
@@ -586,7 +586,7 @@ namespace DatalinkEngineering
       return CanOpenStatus::CANOPEN_OK;
     }
 
-    canOpenStatus EmcyServer_NET::emcyServerCallbackCPP(void *context, u8 nodeId, u16 emcyErrorCode, u8 errorRegister, u8 *manufacturerSpecificErrorField)
+    canOpenStatus EmcyServer_NET::emcyServerCallbackCPP(void* context, u8 nodeId, u16 emcyErrorCode, u8 errorRegister, u8* manufacturerSpecificErrorField)
     {
       canOpenStatus ret;
       array<System::Byte>^ data_cs;
@@ -624,13 +624,13 @@ namespace DatalinkEngineering
 
     CanOpenStatus ClientSDO_NET::registerObjectReadResultCallback(CliReadResultDelegate^ readResultDelegate, System::Object^ obj)
     {
-      typedef void(*CliReadResultFuncPtr)(void *context, canOpenStatus status, u8 nodeid, u16 object_index, u8 sub_index, u8 *buffer, u32 valid, u32 co_error_code);
+      typedef void(*CliReadResultFuncPtr)(void* context, canOpenStatus status, u8 nodeid, u16 object_index, u8 sub_index, u8* buffer, u32 valid, u32 co_error_code);
       this->readObjectResultDelegate = readResultDelegate;
       this->readObjectResultDelgateObject = obj;
 
       cliReadResultDelegate = gcnew ClientReadResultDelegate(this, &ClientSDO_NET::clientReadResultWrapperCallback);
       IntPtr pCliReadResultDelegate = Marshal::GetFunctionPointerForDelegate(cliReadResultDelegate);
-      void *pf = pCliReadResultDelegate.ToPointer();
+      void* pf = pCliReadResultDelegate.ToPointer();
       this->cpp_ClientSDO->registerObjectReadResultCallback((CliReadResultFuncPtr)pf, 0);
 
       return CanOpenStatus::CANOPEN_OK;
@@ -638,13 +638,13 @@ namespace DatalinkEngineering
 
     CanOpenStatus ClientSDO_NET::registerObjectWriteResultCallback(CliWriteResultDelegate^ writeDelegate, System::Object^ obj)
     {
-      typedef void(*CliWriteResultFuncPtr)(void *context, canOpenStatus status, u8 node_id, u16 object_index, u8 sub_index, u32 co_error_code);
+      typedef void(*CliWriteResultFuncPtr)(void* context, canOpenStatus status, u8 node_id, u16 object_index, u8 sub_index, u32 co_error_code);
       this->writeObjectResultDelegate = writeDelegate;
       this->writeObjectResultDelegateObject = obj;
 
       cliWriteResultDelegate = gcnew ClientWriteResultDelegate(this, &ClientSDO_NET::clientWriteResultWrapperCallback);
       IntPtr pCliWriteResultDelegate = Marshal::GetFunctionPointerForDelegate(cliWriteResultDelegate);
-      void *pf = pCliWriteResultDelegate.ToPointer();
+      void* pf = pCliWriteResultDelegate.ToPointer();
       this->cpp_ClientSDO->registerObjectWriteResultCallback((CliWriteResultFuncPtr)pf, 0);
 
       return CanOpenStatus::CANOPEN_OK;
@@ -658,23 +658,23 @@ namespace DatalinkEngineering
     }
 
     CanOpenStatus ClientSDO_NET::sendConfigurationData(String^ filePath,
-        [System::Runtime::InteropServices::Out] u16 %object_index,
-        [System::Runtime::InteropServices::Out] u8 %sub_index,		
-        [System::Runtime::InteropServices::Out] CanOpenErrorCode %coErrorCode)
+      [System::Runtime::InteropServices::Out] u16% object_index,
+      [System::Runtime::InteropServices::Out] u8% sub_index,
+      [System::Runtime::InteropServices::Out] CanOpenErrorCode% coErrorCode)
     {
-        pin_ptr<u32> coErrorCodep = &coErrorCode;
-        u32* ncoErrorCodep = coErrorCodep;
+      pin_ptr<u32> coErrorCodep = &coErrorCode;
+      u32* ncoErrorCodep = coErrorCodep;
 
-        pin_ptr<u16> coObjectIndexP = &object_index;
-        u16* ncoObjectIndex = coObjectIndexP;
+      pin_ptr<u16> coObjectIndexP = &object_index;
+      u16* ncoObjectIndex = coObjectIndexP;
 
-        pin_ptr<u8> coSubIndexP = &sub_index;
-        u8* ncoSubIndexP = coSubIndexP;
+      pin_ptr<u8> coSubIndexP = &sub_index;
+      u8* ncoSubIndexP = coSubIndexP;
 
-        return (CanOpenStatus)this->cpp_ClientSDO->sendConfigurationData(
-            (char*) (Marshal::StringToHGlobalAnsi(filePath)).ToPointer(),
-            ncoObjectIndex, ncoSubIndexP,
-            ncoErrorCodep);
+      return (CanOpenStatus)this->cpp_ClientSDO->sendConfigurationData(
+        (char*)(Marshal::StringToHGlobalAnsi(filePath)).ToPointer(),
+        ncoObjectIndex, ncoSubIndexP,
+        ncoErrorCodep);
     }
 
     void ClientSDO_NET::setWriteObjectTimeout(u32 timeout)
@@ -704,8 +704,8 @@ namespace DatalinkEngineering
 
 
     CanOpenStatus ClientSDO_NET::objectRead(u16 object_index, u8 sub_index,
-      [System::Runtime::InteropServices::Out] u8 %val,
-      [System::Runtime::InteropServices::Out] CanOpenErrorCode %coErrorCode)
+      [System::Runtime::InteropServices::Out] u8% val,
+      [System::Runtime::InteropServices::Out] CanOpenErrorCode% coErrorCode)
     {
       pin_ptr<u8> valp = &val;
       u8* nvalp = valp;
@@ -719,8 +719,8 @@ namespace DatalinkEngineering
     CanOpenStatus ClientSDO_NET::objectRead(u16 object_index,
       u8 sub_index,
       array<Byte>^ data_buffer,
-      [System::Runtime::InteropServices::Out] u32 %valid,
-      [System::Runtime::InteropServices::Out] u32 %coErrorCode)
+      [System::Runtime::InteropServices::Out] u32% valid,
+      [System::Runtime::InteropServices::Out] u32% coErrorCode)
     {
       pin_ptr<u8> p = &data_buffer[0];
       u8* np = p;
@@ -741,8 +741,8 @@ namespace DatalinkEngineering
 
 
     CanOpenStatus ClientSDO_NET::objectRead(u16 object_index, u8 sub_index,
-      [System::Runtime::InteropServices::Out] u16 %val,
-      [System::Runtime::InteropServices::Out] CanOpenErrorCode %coErrorCode)
+      [System::Runtime::InteropServices::Out] u16% val,
+      [System::Runtime::InteropServices::Out] CanOpenErrorCode% coErrorCode)
     {
       pin_ptr<u16> valp = &val;
       u16* nvalp = valp;
@@ -754,8 +754,8 @@ namespace DatalinkEngineering
     }
 
     CanOpenStatus ClientSDO_NET::objectRead(u16 object_index, u8 sub_index,
-      [System::Runtime::InteropServices::Out] u32 %val,
-      [System::Runtime::InteropServices::Out] CanOpenErrorCode %coErrorCode)
+      [System::Runtime::InteropServices::Out] u32% val,
+      [System::Runtime::InteropServices::Out] CanOpenErrorCode% coErrorCode)
     {
       pin_ptr<u32> valp = &val;
       u32* nvalp = valp;
@@ -769,8 +769,8 @@ namespace DatalinkEngineering
 #ifdef HAS_LONG_LONG
 
     CanOpenStatus ClientSDO_NET::objectRead(u16 object_index, u8 sub_index,
-      [System::Runtime::InteropServices::Out] u64 %val,
-      [System::Runtime::InteropServices::Out] CanOpenErrorCode %coErrorCode)
+      [System::Runtime::InteropServices::Out] u64% val,
+      [System::Runtime::InteropServices::Out] CanOpenErrorCode% coErrorCode)
     {
       pin_ptr<u64> valp = &val;
       u64* nvalp = valp;
@@ -786,7 +786,7 @@ namespace DatalinkEngineering
       u8 sub_index,
       array<Byte>^ data_buffer, //u8 *buf, 
       u32 valid,
-      [System::Runtime::InteropServices::Out] CanOpenErrorCode %coErrorCode)
+      [System::Runtime::InteropServices::Out] CanOpenErrorCode% coErrorCode)
     {
       pin_ptr<u32> coErrorCodep = &coErrorCode;
       u32* ncoErrorCodep = coErrorCodep;
@@ -806,7 +806,7 @@ namespace DatalinkEngineering
       u16 crc,
       array<Byte>^ data_buffer,
       u32 valid,
-      [System::Runtime::InteropServices::Out] CanOpenErrorCode %coErrorCode)
+      [System::Runtime::InteropServices::Out] CanOpenErrorCode% coErrorCode)
     {
       pin_ptr<u8> p = &data_buffer[0];   // pin pointer to first element in arr
       u8* np = p;   // pointer to the first element in arr
@@ -825,7 +825,7 @@ namespace DatalinkEngineering
     CanOpenStatus  ClientSDO_NET::objectWrite(u16 object_index,
       u8 sub_index,
       u8  val,
-      [System::Runtime::InteropServices::Out] CanOpenErrorCode %coErrorCode)
+      [System::Runtime::InteropServices::Out] CanOpenErrorCode% coErrorCode)
     {
       pin_ptr<u32> coErrorCodep = &coErrorCode;
       u32* ncoErrorCodep = coErrorCodep;
@@ -839,7 +839,7 @@ namespace DatalinkEngineering
     CanOpenStatus  ClientSDO_NET::objectWrite(u16 object_index,
       u8 sub_index,
       u16 val,
-      [System::Runtime::InteropServices::Out] CanOpenErrorCode %coErrorCode)
+      [System::Runtime::InteropServices::Out] CanOpenErrorCode% coErrorCode)
     {
       pin_ptr<u32> coErrorCodep = &coErrorCode;
       u32* ncoErrorCodep = coErrorCodep;
@@ -853,7 +853,7 @@ namespace DatalinkEngineering
     CanOpenStatus  ClientSDO_NET::objectWrite(u16 object_index,
       u8 sub_index,
       u32 val,
-      [System::Runtime::InteropServices::Out] CanOpenErrorCode %coErrorCode)
+      [System::Runtime::InteropServices::Out] CanOpenErrorCode% coErrorCode)
     {
       pin_ptr<u32> coErrorCodep = &coErrorCode;   // pin pointer to first element in arr
       u32* ncoErrorCodep = coErrorCodep;   // pointer to the first element in arr
@@ -868,7 +868,7 @@ namespace DatalinkEngineering
     CanOpenStatus  ClientSDO_NET::objectWrite(u16 object_index,
       u8 sub_index,
       u64 val,
-      [System::Runtime::InteropServices::Out] CanOpenErrorCode %coErrorCode)
+      [System::Runtime::InteropServices::Out] CanOpenErrorCode% coErrorCode)
     {
       pin_ptr<u32> coErrorCodep = &coErrorCode;
       u32* ncoErrorCodep = coErrorCodep;
@@ -908,12 +908,12 @@ namespace DatalinkEngineering
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-    void ClientSDO_NET::clientReadResultWrapperCallback(void *context,
+    void ClientSDO_NET::clientReadResultWrapperCallback(void* context,
       canOpenStatus status,
       u8 node_id,
       u16 object_index,
       u8 sub_index,
-      u8 *buffer,
+      u8* buffer,
       u32 valid,
       u32 co_error_code)
     {
@@ -936,7 +936,7 @@ namespace DatalinkEngineering
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-    void ClientSDO_NET::clientWriteResultWrapperCallback(void *context,
+    void ClientSDO_NET::clientWriteResultWrapperCallback(void* context,
       canOpenStatus status,
       u8 node_id,
       u16 object_index,
@@ -955,7 +955,7 @@ namespace DatalinkEngineering
     // Network Mangement Master
     // **************************
 
-    CanOpenStatus NMT_Master_NET::NMTOperationalStateWrapperCPP(void *obj,
+    CanOpenStatus NMT_Master_NET::NMTOperationalStateWrapperCPP(void* obj,
       u8 node_id,
       u8 state)
     {
@@ -982,7 +982,7 @@ namespace DatalinkEngineering
       nmtOperationalStateDelegateCPP = gcnew NMTOperationalStateDelegate_CPP(this,
         &NMT_Master_NET::NMTOperationalStateWrapperCPP);
       IntPtr pNMTOperationalStateWrapper = Marshal::GetFunctionPointerForDelegate(nmtOperationalStateDelegateCPP);
-      void *pf = pNMTOperationalStateWrapper.ToPointer();
+      void* pf = pNMTOperationalStateWrapper.ToPointer();
       this->cpp_NMTMaster->registerRemoteNodeStateCallback((NMTOperationalStateFunPtr)pf, 0);
     }
 
@@ -1096,7 +1096,7 @@ namespace DatalinkEngineering
 
     CanOpenStatus  NMT_Master_NET::nodeReadOperationalState(u8 node_id,
       u32 maxMsTimeout,
-      [System::Runtime::InteropServices::Out] u8 %node_state)
+      [System::Runtime::InteropServices::Out] u8% node_state)
     {
       pin_ptr<u8> node_statep = &node_state;
       u8* nnode_statep = node_statep;
@@ -1120,7 +1120,7 @@ namespace DatalinkEngineering
       nmtLocalNodeOperationalStateDelegatCPP = gcnew NMTLocalNodeOperationalStateDelegate_CPP(this,
         &NMT_Slave_NET::NMTLocalNodeOperationalStateWrapperCPP);
       IntPtr pNMTLocalNodeOperationalStateWrapper = Marshal::GetFunctionPointerForDelegate(nmtLocalNodeOperationalStateDelegatCPP);
-      void *pf = pNMTLocalNodeOperationalStateWrapper.ToPointer();
+      void* pf = pNMTLocalNodeOperationalStateWrapper.ToPointer();
       this->cpp_NMTSlave->registerLocalNodeStateChangeCallback((NMTLocalNodeOperationalStateFunPtr)pf, 0);
     }
 
@@ -1196,7 +1196,7 @@ namespace DatalinkEngineering
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-    CanOpenStatus NMT_Slave_NET::NMTLocalNodeOperationalStateWrapperCPP(void *obj, u8 state)
+    CanOpenStatus NMT_Slave_NET::NMTLocalNodeOperationalStateWrapperCPP(void* obj, u8 state)
     {
       // Convert and call the C# callback
       if (nmtLocalNodeOperationalStateDelegate_CS != nullptr)
@@ -1281,8 +1281,8 @@ namespace DatalinkEngineering
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
     CanOpenStatus  LSS_Master_NET::configureNodeId(u8 nodeId,
-      [System::Runtime::InteropServices::Out] u8 %errorCode,
-      [System::Runtime::InteropServices::Out] u8 %specificErrorCode)
+      [System::Runtime::InteropServices::Out] u8% errorCode,
+      [System::Runtime::InteropServices::Out] u8% specificErrorCode)
     {
       pin_ptr<u8> errorCodep = &errorCode;
       u8* ncoErrorCodep = errorCodep;
@@ -1298,8 +1298,8 @@ namespace DatalinkEngineering
 
     CanOpenStatus  LSS_Master_NET::configureBitTimingParamteres(u8 tableSelector,
       u8 tableIndex,
-      [System::Runtime::InteropServices::Out] u8 %errorCode,
-      [System::Runtime::InteropServices::Out] u8 %specificErrorCode)
+      [System::Runtime::InteropServices::Out] u8% errorCode,
+      [System::Runtime::InteropServices::Out] u8% specificErrorCode)
     {
       pin_ptr<u8> errorCodep = &errorCode;
       u8* ncoErrorCodep = errorCodep;
@@ -1320,8 +1320,8 @@ namespace DatalinkEngineering
     }
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-    CanOpenStatus  LSS_Master_NET::storeConfiguration([System::Runtime::InteropServices::Out] u8 %errorCode,
-      [System::Runtime::InteropServices::Out] u8 %specificErrorCode)
+    CanOpenStatus  LSS_Master_NET::storeConfiguration([System::Runtime::InteropServices::Out] u8% errorCode,
+      [System::Runtime::InteropServices::Out] u8% specificErrorCode)
     {
       pin_ptr<u8> errorCodep = &errorCode;
       u8* ncoErrorCodep = errorCodep;

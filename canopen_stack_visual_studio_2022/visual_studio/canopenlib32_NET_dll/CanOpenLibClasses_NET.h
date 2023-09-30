@@ -118,18 +118,18 @@ namespace DatalinkEngineering
 
 
     public delegate CanOpenStatus SrvReadDelegate(System::Object^ obj, u16 object_index, u8 sub_index, array<System::Byte>^ data,
-      [OutAttribute] u32 %valid,
-      [OutAttribute] u32 %canopenErrorCode); //Read from srv's application.
+      [OutAttribute] u32% valid,
+      [OutAttribute] u32% canopenErrorCode); //Read from srv's application.
     public delegate CanOpenStatus SrvWriteDelegate(System::Object^ obj,
       u16 object_index,
       u8 sub_index,
       array<System::Byte>^ data,
       u32 valid,
-      [OutAttribute] u32 %canopenErrorCode); //Write to srv's application.
+      [OutAttribute] u32% canopenErrorCode); //Write to srv's application.
     public delegate CanOpenStatus SrvGetAttrDelegate(System::Object^ obj,
       u16 object_index,
       u8 sub_index,
-      [OutAttribute] u16 %flags);
+      [OutAttribute] u16% flags);
 
 
     public delegate void CliReadResultDelegate(System::Object^ obj, CanOpenStatus status, u8 node_id, u16 object_index, u8 sub_index, array<System::Byte>^ data,
@@ -151,16 +151,16 @@ namespace DatalinkEngineering
 
     private:
 
-      ServerSDO *cpp_ServerSDO;
+      ServerSDO* cpp_ServerSDO;
       [UnmanagedFunctionPointer(CallingConvention::Cdecl)]
-      delegate canOpenStatus ServerWriteDelegate(void *context, u16 object_index, u8 sub_index, u8 *buf, u32 valid, u32 *coErrorCode);
-      ServerWriteDelegate ^srvWriteDelegate;
+      delegate canOpenStatus ServerWriteDelegate(void* context, u16 object_index, u8 sub_index, u8* buf, u32 valid, u32* coErrorCode);
+      ServerWriteDelegate^ srvWriteDelegate;
       [UnmanagedFunctionPointer(CallingConvention::Cdecl)]
-      delegate canOpenStatus ServerReadDelegate(void *context, u16 object_index, u8 sub_index, u8 *buf, u32 *valid, u32 buffer_size, u32 *coerror_code);
-      ServerReadDelegate ^srvReadDelegate;
+      delegate canOpenStatus ServerReadDelegate(void* context, u16 object_index, u8 sub_index, u8* buf, u32* valid, u32 buffer_size, u32* coerror_code);
+      ServerReadDelegate^ srvReadDelegate;
       [UnmanagedFunctionPointer(CallingConvention::Cdecl)]
-      delegate canOpenStatus ServerGetAttrDelegate(void *p, u16 object_index, u8 sub_index, u16 *flags);
-      ServerGetAttrDelegate ^srvGetAttrDelegate;
+      delegate canOpenStatus ServerGetAttrDelegate(void* p, u16 object_index, u8 sub_index, u16* flags);
+      ServerGetAttrDelegate^ srvGetAttrDelegate;
 
       SrvReadDelegate^ readObjectDelegate;
       System::Object^ readObjectDelgateObject;
@@ -185,9 +185,9 @@ namespace DatalinkEngineering
       CanOpenStatus registerObjectGetAttributesCallback(SrvGetAttrDelegate^ getAttrDelegate, System::Object^ obj);
 
     private:
-      canOpenStatus serverRead(void *p, u16 object_index, u8 sub_index, u8 *buf, u32 *valid, u32 buffer_size, u32 *coerror_code);
-      canOpenStatus serverWrite(void *p, u16 object_index, u8 sub_index, u8 *buf, u32 valid, u32 *coerror_code);
-      canOpenStatus serverGetAttribut(void *p, u16 object_index, u8 sub_index, u16 *flags);
+      canOpenStatus serverRead(void* p, u16 object_index, u8 sub_index, u8* buf, u32* valid, u32 buffer_size, u32* coerror_code);
+      canOpenStatus serverWrite(void* p, u16 object_index, u8 sub_index, u8* buf, u32 valid, u32* coerror_code);
+      canOpenStatus serverGetAttribut(void* p, u16 object_index, u8 sub_index, u16* flags);
     };
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -216,10 +216,10 @@ namespace DatalinkEngineering
     {
 
     private:
-      CanMonitor *cpp_CanMonitor;
+      CanMonitor* cpp_CanMonitor;
       [UnmanagedFunctionPointer(CallingConvention::Cdecl)]
-      delegate canOpenStatus CanReceiveDelegate_CPP(void *context, u32 id, u8 *data, u8 dlc, u32 flags);
-      CanReceiveDelegate_CPP ^can_receive_delegate_CPP;
+      delegate canOpenStatus CanReceiveDelegate_CPP(void* context, u32 id, u8* data, u8 dlc, u32 flags);
+      CanReceiveDelegate_CPP^ can_receive_delegate_CPP;
 
       CanReceiveDelegate^ can_receive_delegate;  //C#
       System::Object^ can_receive_delegate_object; //C#
@@ -236,7 +236,7 @@ namespace DatalinkEngineering
       CanOpenStatus    canWrite(u32 id, array<Byte>^ data, u8 dlc, u32 flags);
 
     private:
-      canOpenStatus    canReceiveCPP(void * context, u32 id, u8 *data, u8 dlc, u32 flags);
+      canOpenStatus    canReceiveCPP(void* context, u32 id, u8* data, u8 dlc, u32 flags);
 
     };
 
@@ -245,10 +245,10 @@ namespace DatalinkEngineering
     public ref class ReceivePDO_NET
     {
     private:
-      ReceivePDO *cpp_ReceivePDO;
+      ReceivePDO* cpp_ReceivePDO;
       [UnmanagedFunctionPointer(CallingConvention::Cdecl)]
-      delegate canOpenStatus ReceivePdoDelegate_CPP(void *context, u32 cobid, u8* data, u8 len);
-      ReceivePdoDelegate_CPP ^receive_pdo_delegate_CPP;
+      delegate canOpenStatus ReceivePdoDelegate_CPP(void* context, u32 cobid, u8* data, u8 len);
+      ReceivePdoDelegate_CPP^ receive_pdo_delegate_CPP;
 
       ReceivePdoDelegate^ receive_pdo_delegate;  //C#
       System::Object^ receive_pdo_delegate_object; //C#
@@ -264,10 +264,10 @@ namespace DatalinkEngineering
       CanOpenStatus    registerReceivePdoMessageCallBack(System::Object^ obj, ReceivePdoDelegate^ can_receive_delegate);
       CanOpenStatus    setCobid(u32 cobid);
       CanOpenStatus    requestPDO(u8 dlc);
-      CanOpenStatus    readPdoData([System::Runtime::InteropServices::Out] u8 %val, u8 index);
+      CanOpenStatus    readPdoData([System::Runtime::InteropServices::Out] u8% val, u8 index);
 
     private:
-      canOpenStatus    receivePdoCPP(void * context, u32 id, u8 *data, u8 dlc);
+      canOpenStatus    receivePdoCPP(void* context, u32 id, u8* data, u8 dlc);
     };
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -275,10 +275,10 @@ namespace DatalinkEngineering
     public ref class SyncServer_NET
     {
     private:
-      SyncServer *cpp_SyncServer;
+      SyncServer* cpp_SyncServer;
       [UnmanagedFunctionPointer(CallingConvention::Cdecl)]
-      delegate canOpenStatus SyncServerDelegate_CPP(void *context);
-      SyncServerDelegate_CPP ^sync_server_delegate_CPP;
+      delegate canOpenStatus SyncServerDelegate_CPP(void* context);
+      SyncServerDelegate_CPP^ sync_server_delegate_CPP;
 
       SyncServerDelegate^ sync_server_delegate;  //C#
       System::Object^ sync_server_delegate_object; //C#
@@ -295,7 +295,7 @@ namespace DatalinkEngineering
       CanOpenStatus    setCobid(u32 cobid);
 
     private:
-      canOpenStatus    syncServerCallbackCPP(void * context);
+      canOpenStatus    syncServerCallbackCPP(void* context);
     };
 
 
@@ -305,10 +305,10 @@ namespace DatalinkEngineering
     public ref class EmcyServer_NET
     {
     private:
-      EmcyServer *cpp_EmcyServer;
+      EmcyServer* cpp_EmcyServer;
       [UnmanagedFunctionPointer(CallingConvention::Cdecl)]
-      delegate canOpenStatus EmcyServerDelegate_CPP(void *context, u8 nodeId, u16 emcyErrorCode, u8 errorRegister, u8 *manufacturerSpecificErrorField);
-      EmcyServerDelegate_CPP ^emcy_server_delegate_CPP;
+      delegate canOpenStatus EmcyServerDelegate_CPP(void* context, u8 nodeId, u16 emcyErrorCode, u8 errorRegister, u8* manufacturerSpecificErrorField);
+      EmcyServerDelegate_CPP^ emcy_server_delegate_CPP;
 
       EmcyServerDelegate^ emcy_server_delegate;  //C#
       System::Object^ emcy_server_delegate_object; //C#
@@ -324,7 +324,7 @@ namespace DatalinkEngineering
       CanOpenStatus    registerEmcyServerMessageCallBack(System::Object^ obj, EmcyServerDelegate^ can_receive_delegate);
 
     private:
-      canOpenStatus emcyServerCallbackCPP(void *context, u8 nodeId, u16 emcyErrorCode, u8 errorRegister, u8 *manufacturerSpecificErrorField);
+      canOpenStatus emcyServerCallbackCPP(void* context, u8 nodeId, u16 emcyErrorCode, u8 errorRegister, u8* manufacturerSpecificErrorField);
     };
 
 
@@ -334,7 +334,7 @@ namespace DatalinkEngineering
     public ref class TransmitPDO_NET
     {
     private:
-      TransmitPDO *cpp_TransmitPDO;
+      TransmitPDO* cpp_TransmitPDO;
 
     public:
       TransmitPDO_NET();
@@ -355,7 +355,7 @@ namespace DatalinkEngineering
     public ref class SyncProducer_NET
     {
     private:
-      SyncProducer *cpp_SyncProducer;
+      SyncProducer* cpp_SyncProducer;
 
     public:
       SyncProducer_NET();
@@ -375,7 +375,7 @@ namespace DatalinkEngineering
     public ref class EmcyClient_NET
     {
     private:
-      EmcyClient *cpp_EmcyClient;
+      EmcyClient* cpp_EmcyClient;
 
     public:
       EmcyClient_NET();
@@ -413,9 +413,9 @@ namespace DatalinkEngineering
       CanOpenStatus registerObjectWriteResultCallback(CliWriteResultDelegate^ writeDelegate, System::Object^ obj);
       CanOpenStatus unregisterObjectReadWriteResultCallbacks(void);
       CanOpenStatus sendConfigurationData(String^ filePath,
-            [System::Runtime::InteropServices::Out] u16 %object_index,
-            [System::Runtime::InteropServices::Out] u8 %sub_index,		
-            [System::Runtime::InteropServices::Out] CanOpenErrorCode %coErrorCode);
+        [System::Runtime::InteropServices::Out] u16% object_index,
+        [System::Runtime::InteropServices::Out] u8% sub_index,
+        [System::Runtime::InteropServices::Out] CanOpenErrorCode% coErrorCode);
 
       void          setWriteObjectTimeout(u32 timeout);
       void          setReadObjectTimeout(u32 timeout);
@@ -427,69 +427,69 @@ namespace DatalinkEngineering
       CanOpenStatus objectRead(u16 object_index,
         u8 sub_index,
         array<Byte>^ val,
-        [System::Runtime::InteropServices::Out] u32 %valid,
-        [System::Runtime::InteropServices::Out] CanOpenErrorCode %coErrorCode);
+        [System::Runtime::InteropServices::Out] u32% valid,
+        [System::Runtime::InteropServices::Out] CanOpenErrorCode% coErrorCode);
 
       CanOpenStatus  objectRead(u16 object_index, u8 sub_index,
-        [System::Runtime::InteropServices::Out] u8 %val,
-        [System::Runtime::InteropServices::Out] CanOpenErrorCode %coErrorCode);
+        [System::Runtime::InteropServices::Out] u8% val,
+        [System::Runtime::InteropServices::Out] CanOpenErrorCode% coErrorCode);
 
       CanOpenStatus  objectRead(u16 object_index, u8 sub_index,
-        [System::Runtime::InteropServices::Out] u16 %val,
-        [System::Runtime::InteropServices::Out] CanOpenErrorCode %coErrorCode);
+        [System::Runtime::InteropServices::Out] u16% val,
+        [System::Runtime::InteropServices::Out] CanOpenErrorCode% coErrorCode);
 
       CanOpenStatus  objectRead(u16 object_index, u8 sub_index,
-        [System::Runtime::InteropServices::Out] u32 %val,
-        [System::Runtime::InteropServices::Out] CanOpenErrorCode %coErrorCode);
+        [System::Runtime::InteropServices::Out] u32% val,
+        [System::Runtime::InteropServices::Out] CanOpenErrorCode% coErrorCode);
 #ifdef HAS_LONG_LONG
       CanOpenStatus  objectRead(u16 object_index, u8 sub_index,
-        [System::Runtime::InteropServices::Out] u64 %val,
-        [System::Runtime::InteropServices::Out] CanOpenErrorCode %coErrorCode);
+        [System::Runtime::InteropServices::Out] u64% val,
+        [System::Runtime::InteropServices::Out] CanOpenErrorCode% coErrorCode);
 #endif
 
       CanOpenStatus  objectWrite(u16 object_index,
         u8 sub_index,
         array<Byte>^ buf, //u8 *buf, 
         u32 valid,
-        [System::Runtime::InteropServices::Out] CanOpenErrorCode %coErrorCode);
+        [System::Runtime::InteropServices::Out] CanOpenErrorCode% coErrorCode);
 
       CanOpenStatus  objectWriteBlock(u16 object_index,
         u8 sub_index,
         u16 crc,
         array<Byte>^ buf,
         u32 valid,
-        [System::Runtime::InteropServices::Out] CanOpenErrorCode %coErrorCode);
+        [System::Runtime::InteropServices::Out] CanOpenErrorCode% coErrorCode);
 
       CanOpenStatus  objectWrite(u16 object_index,
         u8 sub_index,
         u8  val,
-        [System::Runtime::InteropServices::Out] CanOpenErrorCode %coErrorCode);
+        [System::Runtime::InteropServices::Out] CanOpenErrorCode% coErrorCode);
 
       CanOpenStatus  objectWrite(u16 object_index,
         u8 sub_index,
         u16 val,
-        [System::Runtime::InteropServices::Out] CanOpenErrorCode %coErrorCode);
+        [System::Runtime::InteropServices::Out] CanOpenErrorCode% coErrorCode);
 
       CanOpenStatus  objectWrite(u16 object_index,
         u8 sub_index,
         u32 val,
-        [System::Runtime::InteropServices::Out] CanOpenErrorCode %coErrorCode);
+        [System::Runtime::InteropServices::Out] CanOpenErrorCode% coErrorCode);
 #ifdef HAS_LONG_LONG
       CanOpenStatus  objectWrite(u16 object_index,
         u8 sub_index,
         u64 val,
-        [System::Runtime::InteropServices::Out] CanOpenErrorCode %coErrorCode);
+        [System::Runtime::InteropServices::Out] CanOpenErrorCode% coErrorCode);
 #endif
     private:
-      ClientSDO *cpp_ClientSDO;
+      ClientSDO* cpp_ClientSDO;
       array<Byte>^ applications_buffer;
 
       //typedef void (*CliWriteFuncPtr)(void *context, canOpenStatus status, u16 object_index, 
       //  u8 sub_index, u32 co_error_code); 
 
       [UnmanagedFunctionPointer(CallingConvention::Cdecl)]
-      delegate void ClientWriteResultDelegate(void *context, canOpenStatus status, u8 node_id, u16 object_index, u8 sub_index, u32 co_error_code);
-      ClientWriteResultDelegate ^cliWriteResultDelegate;
+      delegate void ClientWriteResultDelegate(void* context, canOpenStatus status, u8 node_id, u16 object_index, u8 sub_index, u32 co_error_code);
+      ClientWriteResultDelegate^ cliWriteResultDelegate;
 
       CliWriteResultDelegate^ writeObjectResultDelegate;
       System::Object^ writeObjectResultDelegateObject;
@@ -498,14 +498,14 @@ namespace DatalinkEngineering
       //  u8 sub_index, u8 *buffer, u32 valid, u32 co_error_code);
 
       [UnmanagedFunctionPointer(CallingConvention::Cdecl)]
-      delegate void ClientReadResultDelegate(void *context, canOpenStatus status, u8 node_id, u16 object_index, u8 sub_index, u8 *buffer, u32 valid, u32 co_error_code);
-      ClientReadResultDelegate ^cliReadResultDelegate;
+      delegate void ClientReadResultDelegate(void* context, canOpenStatus status, u8 node_id, u16 object_index, u8 sub_index, u8* buffer, u32 valid, u32 co_error_code);
+      ClientReadResultDelegate^ cliReadResultDelegate;
 
       CliReadResultDelegate^ readObjectResultDelegate;
       System::Object^ readObjectResultDelgateObject;
 
-      void clientReadResultWrapperCallback(void *context, canOpenStatus status, u8 node_id, u16 object_index, u8 sub_index, u8 *buffer, u32 valid, u32 co_error_code);
-      void clientWriteResultWrapperCallback(void *context, canOpenStatus status, u8 node_id, u16 object_index, u8 sub_index, u32 co_error_code);
+      void clientReadResultWrapperCallback(void* context, canOpenStatus status, u8 node_id, u16 object_index, u8 sub_index, u8* buffer, u32 valid, u32 co_error_code);
+      void clientWriteResultWrapperCallback(void* context, canOpenStatus status, u8 node_id, u16 object_index, u8 sub_index, u32 co_error_code);
     };
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -542,19 +542,19 @@ namespace DatalinkEngineering
       CanOpenStatus  nodeReadOperationalState(
         u8 node_id,
         u32 maxMsTimeout,
-        [System::Runtime::InteropServices::Out] u8 %node_state);
+        [System::Runtime::InteropServices::Out] u8% node_state);
 
-      CanOpenStatus NMTOperationalStateWrapperCPP(void *obj, u8 node_id, u8 state);
+      CanOpenStatus NMTOperationalStateWrapperCPP(void* obj, u8 node_id, u8 state);
 
     private:
-      NMTMaster *cpp_NMTMaster;
+      NMTMaster* cpp_NMTMaster;
       NMTOperationalStateDelegate^ nmtOperationalStateDelegate_CS;
       System::Object^ nmtOperationalStateDelegateObject;
 
       [UnmanagedFunctionPointer(CallingConvention::Cdecl)]
-      delegate CanOpenStatus NMTOperationalStateDelegate_CPP(void *obj, u8 node_id, u8 state);
+      delegate CanOpenStatus NMTOperationalStateDelegate_CPP(void* obj, u8 node_id, u8 state);
 
-      NMTOperationalStateDelegate_CPP ^nmtOperationalStateDelegateCPP;
+      NMTOperationalStateDelegate_CPP^ nmtOperationalStateDelegateCPP;
     };
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -578,16 +578,16 @@ namespace DatalinkEngineering
       CanOpenStatus  registerLocalNodeStateChangeCallback(NMTLocalNodeOperationalStateDelegate^ localOperationalStateDelegate, System::Object^ obj);
 
     private:
-      NMTSlave *cpp_NMTSlave;
+      NMTSlave* cpp_NMTSlave;
 
       NMTLocalNodeOperationalStateDelegate^ nmtLocalNodeOperationalStateDelegate_CS;
       System::Object^ nmtLocalNodeOperationalStateDelegateObject;
 
       [UnmanagedFunctionPointer(CallingConvention::Cdecl)]
-      delegate CanOpenStatus NMTLocalNodeOperationalStateDelegate_CPP(void *obj, u8 state);
-      NMTLocalNodeOperationalStateDelegate_CPP ^nmtLocalNodeOperationalStateDelegatCPP;
+      delegate CanOpenStatus NMTLocalNodeOperationalStateDelegate_CPP(void* obj, u8 state);
+      NMTLocalNodeOperationalStateDelegate_CPP^ nmtLocalNodeOperationalStateDelegatCPP;
 
-      CanOpenStatus NMTLocalNodeOperationalStateWrapperCPP(void *obj, u8 state);
+      CanOpenStatus NMTLocalNodeOperationalStateWrapperCPP(void* obj, u8 state);
     };
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -608,13 +608,13 @@ namespace DatalinkEngineering
       CanOpenStatus  switchModeSelectiveProductCode(u32 productCode);
       CanOpenStatus  switchModeSelectiveRevisionNumber(u32 revisionNumber);
       CanOpenStatus  switchModeSelectiveSerialNumber(u32 serialNumber);
-      CanOpenStatus  configureNodeId(u8 nodeId, [System::Runtime::InteropServices::Out] u8 %errorCode, [System::Runtime::InteropServices::Out] u8 %specificErrorCode);
-      CanOpenStatus  configureBitTimingParamteres(u8 tableSelector, u8 tableIndex, [System::Runtime::InteropServices::Out] u8 %errorCode, [System::Runtime::InteropServices::Out] u8 %specificErrorCode);
+      CanOpenStatus  configureNodeId(u8 nodeId, [System::Runtime::InteropServices::Out] u8% errorCode, [System::Runtime::InteropServices::Out] u8% specificErrorCode);
+      CanOpenStatus  configureBitTimingParamteres(u8 tableSelector, u8 tableIndex, [System::Runtime::InteropServices::Out] u8% errorCode, [System::Runtime::InteropServices::Out] u8% specificErrorCode);
       CanOpenStatus  activateBitTimingParameters(u16 switchDelay);
-      CanOpenStatus  storeConfiguration([System::Runtime::InteropServices::Out] u8 %errorCode, [System::Runtime::InteropServices::Out] u8 %specificErrorCode);
+      CanOpenStatus  storeConfiguration([System::Runtime::InteropServices::Out] u8% errorCode, [System::Runtime::InteropServices::Out] u8% specificErrorCode);
 
     private:
-      LSSMaster *cpp_LSSMaster;
+      LSSMaster* cpp_LSSMaster;
 
     };
 
@@ -634,7 +634,7 @@ namespace DatalinkEngineering
       void  setDeviceParameters(u32 vendorId, u32 productCode, u32 revisionNumber, u32 serialNumber);
 
     private:
-      LSSSlave *cpp_LSSSlave;
+      LSSSlave* cpp_LSSSlave;
 
     };
 
