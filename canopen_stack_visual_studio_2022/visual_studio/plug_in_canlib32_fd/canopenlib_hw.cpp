@@ -51,10 +51,6 @@
 #pragma managed(pop)
 #endif
 
-
-
-
-
 //------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------
@@ -99,46 +95,62 @@ CANOPENLIB_HW_API   canOpenStatus    __stdcall canPortLibraryInit(void)
 
 CANOPENLIB_HW_API   canOpenStatus    __stdcall canPortOpen(int port, canPortHandle* handle)
 {
-    int kv_handle;
+  int kv_handle;
 
-    kv_handle = canOpenChannel(port, canOPEN_ACCEPT_VIRTUAL);
-    if (kv_handle >= 0)
-    {
-      *handle = kv_handle;
-      return CANOPEN_OK;
-    }
-    else
-      return CANOPEN_ERROR_HW_UNDEFINED;
+  kv_handle = canOpenChannel(port, canOPEN_ACCEPT_VIRTUAL | canOPEN_CAN_FD);
+  if (kv_handle >= 0)
+  {
+    *handle = kv_handle;
+    return CANOPEN_OK;
+  }
+  else
+    return CANOPEN_ERROR_HW_UNDEFINED;
 }
 
 CANOPENLIB_HW_API   canOpenStatus    __stdcall canPortClose(canPortHandle handle)
 {
-    canStatus kv_status = canClose((int)handle);
-    if (kv_status == canOK)
-    {
-      return CANOPEN_OK;
-    }
-    else
-      return CANOPEN_ERROR_HW_UNDEFINED;
+  canStatus kv_status = canClose((int)handle);
+  if (kv_status == canOK)
+  {
+    return CANOPEN_OK;
+  }
+  else
+    return CANOPEN_ERROR_HW_UNDEFINED;
 }
 
 CANOPENLIB_HW_API   canOpenStatus    __stdcall canPortBitrateSet(canPortHandle handle, int bitrate)
 {
-    canStatus kv_status = canSetBitrate((int)handle, bitrate);
-    if (kv_status == canOK)
-      return CANOPEN_OK;
-    else
-      return CANOPEN_ERROR_HW_UNDEFINED;
+  canStatus kv_status = canERR_INTERNAL;
+
+  switch (bitrate) {
+  case 1000000:
+    kv_status = canSetBusParamsFd(handle, canFD_BITRATE_1M_80P, 0, 0, 0);
+    break;
+  case 500000:
+    kv_status = canSetBusParamsFd(handle, canFD_BITRATE_500K_80P, 0, 0, 0);
+    break;
+  case 250000:
+    kv_status = canSetBitrate(handle, 250);
+    break;
+  case 125000:
+    kv_status = canSetBitrate(handle, 125000);
+    break;
+  }
+
+  if (kv_status == canOK)
+    return CANOPEN_OK;
+  else
+    return CANOPEN_ERROR_HW_UNDEFINED;
 }
 
 CANOPENLIB_HW_API   canOpenStatus    __stdcall canPortEcho(canPortHandle handle, bool enabled)
 {
-    DWORD flag = enabled ? 1 : 0;
-    canStatus kv_status = canIoCtl((int)handle, canIOCTL_SET_TXACK, &flag, sizeof(DWORD));
-    if (kv_status == canOK)
-      return CANOPEN_OK;
-    else
-      return CANOPEN_ERROR_HW_UNDEFINED;
+  DWORD flag = enabled ? 1 : 0;
+  canStatus kv_status = canIoCtl((int)handle, canIOCTL_SET_TXACK, &flag, sizeof(DWORD));
+  if (kv_status == canOK)
+    return CANOPEN_OK;
+  else
+    return CANOPEN_ERROR_HW_UNDEFINED;
 }
 
 CANOPENLIB_HW_API   canOpenStatus    __stdcall canPortGoBusOn(canPortHandle handle)
