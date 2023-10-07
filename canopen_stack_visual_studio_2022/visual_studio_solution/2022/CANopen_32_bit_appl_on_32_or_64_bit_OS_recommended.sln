@@ -54,6 +54,7 @@ Global
 		Debug Embedded Intelligence|Win32 = Debug Embedded Intelligence|Win32
 		Debug EMS|Win32 = Debug EMS|Win32
 		Debug Ixxat|Win32 = Debug Ixxat|Win32
+		Debug Kvaser FD|Win32 = Debug Kvaser FD|Win32
 		Debug Kvaser|Win32 = Debug Kvaser|Win32
 		Debug Lawicel USB|Win32 = Debug Lawicel USB|Win32
 		Debug PEAK|Win32 = Debug PEAK|Win32
@@ -82,6 +83,8 @@ Global
 		{275CE4F0-21BE-4D5C-BC6D-7C1412258B25}.Debug EMS|Win32.Build.0 = Debug|x86
 		{275CE4F0-21BE-4D5C-BC6D-7C1412258B25}.Debug Ixxat|Win32.ActiveCfg = Debug|x86
 		{275CE4F0-21BE-4D5C-BC6D-7C1412258B25}.Debug Ixxat|Win32.Build.0 = Debug|x86
+		{275CE4F0-21BE-4D5C-BC6D-7C1412258B25}.Debug Kvaser FD|Win32.ActiveCfg = Debug Kvaser FD|x86
+		{275CE4F0-21BE-4D5C-BC6D-7C1412258B25}.Debug Kvaser FD|Win32.Build.0 = Debug Kvaser FD|x86
 		{275CE4F0-21BE-4D5C-BC6D-7C1412258B25}.Debug Kvaser|Win32.ActiveCfg = Debug|x86
 		{275CE4F0-21BE-4D5C-BC6D-7C1412258B25}.Debug Kvaser|Win32.Build.0 = Debug|x86
 		{275CE4F0-21BE-4D5C-BC6D-7C1412258B25}.Debug Lawicel USB|Win32.ActiveCfg = Debug|x86
@@ -119,6 +122,8 @@ Global
 		{A1A98567-6FD8-4AE2-AEF1-84B4AEA49A89}.Debug EMS|Win32.Build.0 = Debug|x86
 		{A1A98567-6FD8-4AE2-AEF1-84B4AEA49A89}.Debug Ixxat|Win32.ActiveCfg = Debug|x86
 		{A1A98567-6FD8-4AE2-AEF1-84B4AEA49A89}.Debug Ixxat|Win32.Build.0 = Debug|x86
+		{A1A98567-6FD8-4AE2-AEF1-84B4AEA49A89}.Debug Kvaser FD|Win32.ActiveCfg = Debug Kvaser FD|x86
+		{A1A98567-6FD8-4AE2-AEF1-84B4AEA49A89}.Debug Kvaser FD|Win32.Build.0 = Debug Kvaser FD|x86
 		{A1A98567-6FD8-4AE2-AEF1-84B4AEA49A89}.Debug Kvaser|Win32.ActiveCfg = Debug|x86
 		{A1A98567-6FD8-4AE2-AEF1-84B4AEA49A89}.Debug Kvaser|Win32.Build.0 = Debug|x86
 		{A1A98567-6FD8-4AE2-AEF1-84B4AEA49A89}.Debug Lawicel USB|Win32.ActiveCfg = Debug|x86
@@ -157,6 +162,7 @@ Global
 		{5A28A16B-93CC-498C-A5B4-6BEC68D2DDCF}.Debug EMS|Win32.ActiveCfg = Debug|Win32
 		{5A28A16B-93CC-498C-A5B4-6BEC68D2DDCF}.Debug EMS|Win32.Build.0 = Debug|Win32
 		{5A28A16B-93CC-498C-A5B4-6BEC68D2DDCF}.Debug Ixxat|Win32.ActiveCfg = Debug|Win32
+		{5A28A16B-93CC-498C-A5B4-6BEC68D2DDCF}.Debug Kvaser FD|Win32.ActiveCfg = Debug Kvaser FD|Win32
 		{5A28A16B-93CC-498C-A5B4-6BEC68D2DDCF}.Debug Kvaser|Win32.ActiveCfg = Debug|Win32
 		{5A28A16B-93CC-498C-A5B4-6BEC68D2DDCF}.Debug Lawicel USB|Win32.ActiveCfg = Debug|Win32
 		{5A28A16B-93CC-498C-A5B4-6BEC68D2DDCF}.Debug PEAK|Win32.ActiveCfg = Debug|Win32
@@ -181,6 +187,8 @@ Global
 		{87506536-AB5E-4D66-8288-2961FCECF3B8}.Debug Embedded Intelligence|Win32.ActiveCfg = Debug|Win32
 		{87506536-AB5E-4D66-8288-2961FCECF3B8}.Debug EMS|Win32.ActiveCfg = Debug|Win32
 		{87506536-AB5E-4D66-8288-2961FCECF3B8}.Debug Ixxat|Win32.ActiveCfg = Debug|Win32
+		{87506536-AB5E-4D66-8288-2961FCECF3B8}.Debug Kvaser FD|Win32.ActiveCfg = Debug Kvaser FD|Win32
+		{87506536-AB5E-4D66-8288-2961FCECF3B8}.Debug Kvaser FD|Win32.Build.0 = Debug Kvaser FD|Win32
 		{87506536-AB5E-4D66-8288-2961FCECF3B8}.Debug Kvaser|Win32.ActiveCfg = Debug|Win32
 		{87506536-AB5E-4D66-8288-2961FCECF3B8}.Debug Kvaser|Win32.Build.0 = Debug|Win32
 		{87506536-AB5E-4D66-8288-2961FCECF3B8}.Debug Lawicel USB|Win32.ActiveCfg = Debug|Win32
@@ -207,6 +215,7 @@ Global
 		{C49DF85E-552D-42AE-8DEA-C4DB5AC419F1}.Debug Embedded Intelligence|Win32.ActiveCfg = Debug|Win32
 		{C49DF85E-552D-42AE-8DEA-C4DB5AC419F1}.Debug EMS|Win32.ActiveCfg = Debug|Win32
 		{C49DF85E-552D-42AE-8DEA-C4DB5AC419F1}.Debug Ixxat|Win32.ActiveCfg = Debug|Win32
+		{C49DF85E-552D-42AE-8DEA-C4DB5AC419F1}.Debug Kvaser FD|Win32.ActiveCfg = Debug Kvaser FD|Win32
 		{C49DF85E-552D-42AE-8DEA-C4DB5AC419F1}.Debug Kvaser|Win32.ActiveCfg = Debug|Win32
 		{C49DF85E-552D-42AE-8DEA-C4DB5AC419F1}.Debug Lawicel USB|Win32.ActiveCfg = Debug|Win32
 		{C49DF85E-552D-42AE-8DEA-C4DB5AC419F1}.Debug PEAK|Win32.ActiveCfg = Debug|Win32
@@ -231,6 +240,7 @@ Global
 		{2BA73DAA-A61C-4E68-99A1-8D959DE5EB74}.Debug Embedded Intelligence|Win32.ActiveCfg = Debug|Win32
 		{2BA73DAA-A61C-4E68-99A1-8D959DE5EB74}.Debug EMS|Win32.ActiveCfg = Debug|Win32
 		{2BA73DAA-A61C-4E68-99A1-8D959DE5EB74}.Debug Ixxat|Win32.ActiveCfg = Debug|Win32
+		{2BA73DAA-A61C-4E68-99A1-8D959DE5EB74}.Debug Kvaser FD|Win32.ActiveCfg = Debug Kvaser FD|Win32
 		{2BA73DAA-A61C-4E68-99A1-8D959DE5EB74}.Debug Kvaser|Win32.ActiveCfg = Debug|Win32
 		{2BA73DAA-A61C-4E68-99A1-8D959DE5EB74}.Debug Lawicel USB|Win32.ActiveCfg = Debug|Win32
 		{2BA73DAA-A61C-4E68-99A1-8D959DE5EB74}.Debug Lawicel USB|Win32.Build.0 = Debug|Win32
@@ -257,6 +267,7 @@ Global
 		{6B048E62-0E01-401E-8EE9-3D4F15BC69F3}.Debug Embedded Intelligence|Win32.ActiveCfg = Debug|Win32
 		{6B048E62-0E01-401E-8EE9-3D4F15BC69F3}.Debug EMS|Win32.ActiveCfg = Debug|Win32
 		{6B048E62-0E01-401E-8EE9-3D4F15BC69F3}.Debug Ixxat|Win32.ActiveCfg = Debug|Win32
+		{6B048E62-0E01-401E-8EE9-3D4F15BC69F3}.Debug Kvaser FD|Win32.ActiveCfg = Debug Kvaser FD|Win32
 		{6B048E62-0E01-401E-8EE9-3D4F15BC69F3}.Debug Kvaser|Win32.ActiveCfg = Debug|Win32
 		{6B048E62-0E01-401E-8EE9-3D4F15BC69F3}.Debug Lawicel USB|Win32.ActiveCfg = Debug|Win32
 		{6B048E62-0E01-401E-8EE9-3D4F15BC69F3}.Debug PEAK|Win32.ActiveCfg = Debug|Win32
@@ -281,6 +292,7 @@ Global
 		{B257F58E-9C1E-4A40-AC63-9621ED16147E}.Debug Embedded Intelligence|Win32.ActiveCfg = Debug|Win32
 		{B257F58E-9C1E-4A40-AC63-9621ED16147E}.Debug EMS|Win32.ActiveCfg = Debug|Win32
 		{B257F58E-9C1E-4A40-AC63-9621ED16147E}.Debug Ixxat|Win32.ActiveCfg = Debug|Win32
+		{B257F58E-9C1E-4A40-AC63-9621ED16147E}.Debug Kvaser FD|Win32.ActiveCfg = Debug Kvaser FD|Win32
 		{B257F58E-9C1E-4A40-AC63-9621ED16147E}.Debug Kvaser|Win32.ActiveCfg = Debug|Win32
 		{B257F58E-9C1E-4A40-AC63-9621ED16147E}.Debug Lawicel USB|Win32.ActiveCfg = Debug|Win32
 		{B257F58E-9C1E-4A40-AC63-9621ED16147E}.Debug PEAK|Win32.ActiveCfg = Debug|Win32
@@ -306,6 +318,7 @@ Global
 		{FC5F32FD-5008-478B-9D83-A1B75752BCC0}.Debug Embedded Intelligence|Win32.ActiveCfg = Debug|Win32
 		{FC5F32FD-5008-478B-9D83-A1B75752BCC0}.Debug EMS|Win32.ActiveCfg = Debug|Win32
 		{FC5F32FD-5008-478B-9D83-A1B75752BCC0}.Debug Ixxat|Win32.ActiveCfg = Debug|Win32
+		{FC5F32FD-5008-478B-9D83-A1B75752BCC0}.Debug Kvaser FD|Win32.ActiveCfg = Debug Kvaser FD|Win32
 		{FC5F32FD-5008-478B-9D83-A1B75752BCC0}.Debug Kvaser|Win32.ActiveCfg = Debug|Win32
 		{FC5F32FD-5008-478B-9D83-A1B75752BCC0}.Debug Lawicel USB|Win32.ActiveCfg = Debug|Win32
 		{FC5F32FD-5008-478B-9D83-A1B75752BCC0}.Debug PEAK|Win32.ActiveCfg = Debug|Win32
@@ -331,6 +344,7 @@ Global
 		{E15E37A8-317C-4CF2-AC93-928465CC20B4}.Debug Embedded Intelligence|Win32.ActiveCfg = Debug|Win32
 		{E15E37A8-317C-4CF2-AC93-928465CC20B4}.Debug EMS|Win32.ActiveCfg = Debug|Win32
 		{E15E37A8-317C-4CF2-AC93-928465CC20B4}.Debug Ixxat|Win32.ActiveCfg = Debug|Win32
+		{E15E37A8-317C-4CF2-AC93-928465CC20B4}.Debug Kvaser FD|Win32.ActiveCfg = Debug Kvaser FD|Win32
 		{E15E37A8-317C-4CF2-AC93-928465CC20B4}.Debug Kvaser|Win32.ActiveCfg = Debug|Win32
 		{E15E37A8-317C-4CF2-AC93-928465CC20B4}.Debug Lawicel USB|Win32.ActiveCfg = Debug|Win32
 		{E15E37A8-317C-4CF2-AC93-928465CC20B4}.Debug PEAK|Win32.ActiveCfg = Debug|Win32
@@ -361,6 +375,8 @@ Global
 		{FF417857-733A-49CD-84F8-8A7568897CDC}.Debug EMS|Win32.Build.0 = Debug|Win32
 		{FF417857-733A-49CD-84F8-8A7568897CDC}.Debug Ixxat|Win32.ActiveCfg = Debug|Win32
 		{FF417857-733A-49CD-84F8-8A7568897CDC}.Debug Ixxat|Win32.Build.0 = Debug|Win32
+		{FF417857-733A-49CD-84F8-8A7568897CDC}.Debug Kvaser FD|Win32.ActiveCfg = Debug Kvaser FD|Win32
+		{FF417857-733A-49CD-84F8-8A7568897CDC}.Debug Kvaser FD|Win32.Build.0 = Debug Kvaser FD|Win32
 		{FF417857-733A-49CD-84F8-8A7568897CDC}.Debug Kvaser|Win32.ActiveCfg = Debug|Win32
 		{FF417857-733A-49CD-84F8-8A7568897CDC}.Debug Kvaser|Win32.Build.0 = Debug|Win32
 		{FF417857-733A-49CD-84F8-8A7568897CDC}.Debug Lawicel USB|Win32.ActiveCfg = Debug|Win32
@@ -403,6 +419,8 @@ Global
 		{9EDCD498-21A1-4960-AE0E-C2E445DDC395}.Debug EMS|Win32.Build.0 = Debug|Win32
 		{9EDCD498-21A1-4960-AE0E-C2E445DDC395}.Debug Ixxat|Win32.ActiveCfg = Debug|Win32
 		{9EDCD498-21A1-4960-AE0E-C2E445DDC395}.Debug Ixxat|Win32.Build.0 = Debug|Win32
+		{9EDCD498-21A1-4960-AE0E-C2E445DDC395}.Debug Kvaser FD|Win32.ActiveCfg = Debug Kvaser FD|Win32
+		{9EDCD498-21A1-4960-AE0E-C2E445DDC395}.Debug Kvaser FD|Win32.Build.0 = Debug Kvaser FD|Win32
 		{9EDCD498-21A1-4960-AE0E-C2E445DDC395}.Debug Kvaser|Win32.ActiveCfg = Debug|Win32
 		{9EDCD498-21A1-4960-AE0E-C2E445DDC395}.Debug Kvaser|Win32.Build.0 = Debug|Win32
 		{9EDCD498-21A1-4960-AE0E-C2E445DDC395}.Debug Lawicel USB|Win32.ActiveCfg = Debug|Win32
@@ -445,6 +463,8 @@ Global
 		{54DDACC0-E19B-41D4-8235-6DA310F4D670}.Debug EMS|Win32.Build.0 = Debug|Win32
 		{54DDACC0-E19B-41D4-8235-6DA310F4D670}.Debug Ixxat|Win32.ActiveCfg = Debug|Win32
 		{54DDACC0-E19B-41D4-8235-6DA310F4D670}.Debug Ixxat|Win32.Build.0 = Debug|Win32
+		{54DDACC0-E19B-41D4-8235-6DA310F4D670}.Debug Kvaser FD|Win32.ActiveCfg = Debug Kvaser FD|Win32
+		{54DDACC0-E19B-41D4-8235-6DA310F4D670}.Debug Kvaser FD|Win32.Build.0 = Debug Kvaser FD|Win32
 		{54DDACC0-E19B-41D4-8235-6DA310F4D670}.Debug Kvaser|Win32.ActiveCfg = Debug|Win32
 		{54DDACC0-E19B-41D4-8235-6DA310F4D670}.Debug Kvaser|Win32.Build.0 = Debug|Win32
 		{54DDACC0-E19B-41D4-8235-6DA310F4D670}.Debug Lawicel USB|Win32.ActiveCfg = Debug|Win32
@@ -483,6 +503,7 @@ Global
 		{BC684197-43CB-4B3D-B7BF-67D8FB6C2CA7}.Debug EMS|Win32.ActiveCfg = Debug|Win32
 		{BC684197-43CB-4B3D-B7BF-67D8FB6C2CA7}.Debug Ixxat|Win32.ActiveCfg = Debug|Win32
 		{BC684197-43CB-4B3D-B7BF-67D8FB6C2CA7}.Debug Ixxat|Win32.Build.0 = Debug|Win32
+		{BC684197-43CB-4B3D-B7BF-67D8FB6C2CA7}.Debug Kvaser FD|Win32.ActiveCfg = Debug Kvaser FD|Win32
 		{BC684197-43CB-4B3D-B7BF-67D8FB6C2CA7}.Debug Kvaser|Win32.ActiveCfg = Debug|Win32
 		{BC684197-43CB-4B3D-B7BF-67D8FB6C2CA7}.Debug Lawicel USB|Win32.ActiveCfg = Debug|Win32
 		{BC684197-43CB-4B3D-B7BF-67D8FB6C2CA7}.Debug PEAK|Win32.ActiveCfg = Debug|Win32
@@ -507,6 +528,7 @@ Global
 		{487AE379-0BF5-4E2B-9272-59847D48735F}.Debug Embedded Intelligence|Win32.Build.0 = Debug|Win32
 		{487AE379-0BF5-4E2B-9272-59847D48735F}.Debug EMS|Win32.ActiveCfg = Debug|Win32
 		{487AE379-0BF5-4E2B-9272-59847D48735F}.Debug Ixxat|Win32.ActiveCfg = Debug|Win32
+		{487AE379-0BF5-4E2B-9272-59847D48735F}.Debug Kvaser FD|Win32.ActiveCfg = Debug Kvaser FD|Win32
 		{487AE379-0BF5-4E2B-9272-59847D48735F}.Debug Kvaser|Win32.ActiveCfg = Debug|Win32
 		{487AE379-0BF5-4E2B-9272-59847D48735F}.Debug Lawicel USB|Win32.ActiveCfg = Debug|Win32
 		{487AE379-0BF5-4E2B-9272-59847D48735F}.Debug PEAK|Win32.ActiveCfg = Debug|Win32
@@ -531,6 +553,7 @@ Global
 		{2D6EA77A-FC07-470A-B407-00B98C8936F1}.Debug Embedded Intelligence|Win32.ActiveCfg = Debug|Win32
 		{2D6EA77A-FC07-470A-B407-00B98C8936F1}.Debug EMS|Win32.ActiveCfg = Debug|Win32
 		{2D6EA77A-FC07-470A-B407-00B98C8936F1}.Debug Ixxat|Win32.ActiveCfg = Debug|Win32
+		{2D6EA77A-FC07-470A-B407-00B98C8936F1}.Debug Kvaser FD|Win32.ActiveCfg = Debug Kvaser FD|Win32
 		{2D6EA77A-FC07-470A-B407-00B98C8936F1}.Debug Kvaser|Win32.ActiveCfg = Debug|Win32
 		{2D6EA77A-FC07-470A-B407-00B98C8936F1}.Debug Lawicel USB|Win32.ActiveCfg = Debug|Win32
 		{2D6EA77A-FC07-470A-B407-00B98C8936F1}.Debug PEAK|Win32.ActiveCfg = Debug|Win32
