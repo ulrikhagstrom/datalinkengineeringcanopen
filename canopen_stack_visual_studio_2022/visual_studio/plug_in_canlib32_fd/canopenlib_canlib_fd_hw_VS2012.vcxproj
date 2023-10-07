@@ -11,8 +11,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectName>canopenlib32_hw.dll (KVASER CANlib)</ProjectName>
-    <ProjectGuid>{87506536-AB5E-4D66-8288-2961FCECF3B8}</ProjectGuid>
+    <ProjectName>canopenlib32_hw.dll (KVASER CAN-FD CANlib)</ProjectName>
+    <ProjectGuid>{2D6EA77A-FC07-470A-B407-00B98C8936F1}</ProjectGuid>
     <RootNamespace>canlib32</RootNamespace>
     <Keyword>Win32Proj</Keyword>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>

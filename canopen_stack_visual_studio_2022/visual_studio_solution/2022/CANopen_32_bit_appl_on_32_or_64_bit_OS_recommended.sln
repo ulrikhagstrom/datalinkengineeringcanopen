@@ -45,6 +45,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "canopenlib32_hw.dll (Ixxat 
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "canopenlib32_hw.dll (Embedded Intelligence)", "..\..\visual_studio\plug_in_ei\canopenlib_hw_ei_VS2012.vcxproj", "{487AE379-0BF5-4E2B-9272-59847D48735F}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "canopenlib32_hw.dll (KVASER CAN-FD CANlib)", "..\..\visual_studio\plug_in_canlib32_fd\canopenlib_canlib_fd_hw_VS2012.vcxproj", "{2D6EA77A-FC07-470A-B407-00B98C8936F1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug CAN232 and USBTIN|Win32 = Debug CAN232 and USBTIN|Win32
@@ -57,6 +59,7 @@ Global
 		Debug PEAK|Win32 = Debug PEAK|Win32
 		Debug TinyCAN|Win32 = Debug TinyCAN|Win32
 		Debug Zanthic|Win32 = Debug Zanthic|Win32
+		Debug|Win32 = Debug|Win32
 		Release CAN232 and USBTIN|Win32 = Release CAN232 and USBTIN|Win32
 		Release Castor|Win32 = Release Castor|Win32
 		Release Embedded Intelligence|Win32 = Release Embedded Intelligence|Win32
@@ -66,6 +69,7 @@ Global
 		Release PEAK|Win32 = Release PEAK|Win32
 		Release TinyCAN|Win32 = Release TinyCAN|Win32
 		Release Zanthic|Win32 = Release Zanthic|Win32
+		Release|Win32 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{275CE4F0-21BE-4D5C-BC6D-7C1412258B25}.Debug CAN232 and USBTIN|Win32.ActiveCfg = Debug|x86
@@ -85,6 +89,8 @@ Global
 		{275CE4F0-21BE-4D5C-BC6D-7C1412258B25}.Debug PEAK|Win32.ActiveCfg = Debug|x86
 		{275CE4F0-21BE-4D5C-BC6D-7C1412258B25}.Debug TinyCAN|Win32.ActiveCfg = Debug|x86
 		{275CE4F0-21BE-4D5C-BC6D-7C1412258B25}.Debug Zanthic|Win32.ActiveCfg = Debug|x86
+		{275CE4F0-21BE-4D5C-BC6D-7C1412258B25}.Debug|Win32.ActiveCfg = Debug|x86
+		{275CE4F0-21BE-4D5C-BC6D-7C1412258B25}.Debug|Win32.Build.0 = Debug|x86
 		{275CE4F0-21BE-4D5C-BC6D-7C1412258B25}.Release CAN232 and USBTIN|Win32.ActiveCfg = Release|x86
 		{275CE4F0-21BE-4D5C-BC6D-7C1412258B25}.Release CAN232 and USBTIN|Win32.Build.0 = Release|x86
 		{275CE4F0-21BE-4D5C-BC6D-7C1412258B25}.Release Castor|Win32.ActiveCfg = Release|x86
@@ -101,6 +107,8 @@ Global
 		{275CE4F0-21BE-4D5C-BC6D-7C1412258B25}.Release TinyCAN|Win32.Build.0 = Release|x86
 		{275CE4F0-21BE-4D5C-BC6D-7C1412258B25}.Release Zanthic|Win32.ActiveCfg = Release|x86
 		{275CE4F0-21BE-4D5C-BC6D-7C1412258B25}.Release Zanthic|Win32.Build.0 = Release|x86
+		{275CE4F0-21BE-4D5C-BC6D-7C1412258B25}.Release|Win32.ActiveCfg = Release|x86
+		{275CE4F0-21BE-4D5C-BC6D-7C1412258B25}.Release|Win32.Build.0 = Release|x86
 		{A1A98567-6FD8-4AE2-AEF1-84B4AEA49A89}.Debug CAN232 and USBTIN|Win32.ActiveCfg = Debug|x86
 		{A1A98567-6FD8-4AE2-AEF1-84B4AEA49A89}.Debug CAN232 and USBTIN|Win32.Build.0 = Debug|x86
 		{A1A98567-6FD8-4AE2-AEF1-84B4AEA49A89}.Debug Castor|Win32.ActiveCfg = Debug|x86
@@ -121,6 +129,8 @@ Global
 		{A1A98567-6FD8-4AE2-AEF1-84B4AEA49A89}.Debug TinyCAN|Win32.Build.0 = Debug|x86
 		{A1A98567-6FD8-4AE2-AEF1-84B4AEA49A89}.Debug Zanthic|Win32.ActiveCfg = Debug|x86
 		{A1A98567-6FD8-4AE2-AEF1-84B4AEA49A89}.Debug Zanthic|Win32.Build.0 = Debug|x86
+		{A1A98567-6FD8-4AE2-AEF1-84B4AEA49A89}.Debug|Win32.ActiveCfg = Debug|x86
+		{A1A98567-6FD8-4AE2-AEF1-84B4AEA49A89}.Debug|Win32.Build.0 = Debug|x86
 		{A1A98567-6FD8-4AE2-AEF1-84B4AEA49A89}.Release CAN232 and USBTIN|Win32.ActiveCfg = Release|x86
 		{A1A98567-6FD8-4AE2-AEF1-84B4AEA49A89}.Release CAN232 and USBTIN|Win32.Build.0 = Release|x86
 		{A1A98567-6FD8-4AE2-AEF1-84B4AEA49A89}.Release Castor|Win32.ActiveCfg = Release|x86
@@ -139,6 +149,8 @@ Global
 		{A1A98567-6FD8-4AE2-AEF1-84B4AEA49A89}.Release TinyCAN|Win32.Build.0 = Release|x86
 		{A1A98567-6FD8-4AE2-AEF1-84B4AEA49A89}.Release Zanthic|Win32.ActiveCfg = Release|x86
 		{A1A98567-6FD8-4AE2-AEF1-84B4AEA49A89}.Release Zanthic|Win32.Build.0 = Release|x86
+		{A1A98567-6FD8-4AE2-AEF1-84B4AEA49A89}.Release|Win32.ActiveCfg = Release|x86
+		{A1A98567-6FD8-4AE2-AEF1-84B4AEA49A89}.Release|Win32.Build.0 = Release|x86
 		{5A28A16B-93CC-498C-A5B4-6BEC68D2DDCF}.Debug CAN232 and USBTIN|Win32.ActiveCfg = Debug|Win32
 		{5A28A16B-93CC-498C-A5B4-6BEC68D2DDCF}.Debug Castor|Win32.ActiveCfg = Debug|Win32
 		{5A28A16B-93CC-498C-A5B4-6BEC68D2DDCF}.Debug Embedded Intelligence|Win32.ActiveCfg = Debug|Win32
@@ -150,6 +162,8 @@ Global
 		{5A28A16B-93CC-498C-A5B4-6BEC68D2DDCF}.Debug PEAK|Win32.ActiveCfg = Debug|Win32
 		{5A28A16B-93CC-498C-A5B4-6BEC68D2DDCF}.Debug TinyCAN|Win32.ActiveCfg = Debug|Win32
 		{5A28A16B-93CC-498C-A5B4-6BEC68D2DDCF}.Debug Zanthic|Win32.ActiveCfg = Debug|Win32
+		{5A28A16B-93CC-498C-A5B4-6BEC68D2DDCF}.Debug|Win32.ActiveCfg = Debug|Win32
+		{5A28A16B-93CC-498C-A5B4-6BEC68D2DDCF}.Debug|Win32.Build.0 = Debug|Win32
 		{5A28A16B-93CC-498C-A5B4-6BEC68D2DDCF}.Release CAN232 and USBTIN|Win32.ActiveCfg = Release|Win32
 		{5A28A16B-93CC-498C-A5B4-6BEC68D2DDCF}.Release Castor|Win32.ActiveCfg = Release|Win32
 		{5A28A16B-93CC-498C-A5B4-6BEC68D2DDCF}.Release Embedded Intelligence|Win32.ActiveCfg = Release|Win32
@@ -160,6 +174,8 @@ Global
 		{5A28A16B-93CC-498C-A5B4-6BEC68D2DDCF}.Release PEAK|Win32.ActiveCfg = Release|Win32
 		{5A28A16B-93CC-498C-A5B4-6BEC68D2DDCF}.Release TinyCAN|Win32.ActiveCfg = Release|Win32
 		{5A28A16B-93CC-498C-A5B4-6BEC68D2DDCF}.Release Zanthic|Win32.ActiveCfg = Release|Win32
+		{5A28A16B-93CC-498C-A5B4-6BEC68D2DDCF}.Release|Win32.ActiveCfg = Release|Win32
+		{5A28A16B-93CC-498C-A5B4-6BEC68D2DDCF}.Release|Win32.Build.0 = Release|Win32
 		{87506536-AB5E-4D66-8288-2961FCECF3B8}.Debug CAN232 and USBTIN|Win32.ActiveCfg = Debug|Win32
 		{87506536-AB5E-4D66-8288-2961FCECF3B8}.Debug Castor|Win32.ActiveCfg = Debug|Win32
 		{87506536-AB5E-4D66-8288-2961FCECF3B8}.Debug Embedded Intelligence|Win32.ActiveCfg = Debug|Win32
@@ -171,6 +187,8 @@ Global
 		{87506536-AB5E-4D66-8288-2961FCECF3B8}.Debug PEAK|Win32.ActiveCfg = Debug|Win32
 		{87506536-AB5E-4D66-8288-2961FCECF3B8}.Debug TinyCAN|Win32.ActiveCfg = Debug|Win32
 		{87506536-AB5E-4D66-8288-2961FCECF3B8}.Debug Zanthic|Win32.ActiveCfg = Debug|Win32
+		{87506536-AB5E-4D66-8288-2961FCECF3B8}.Debug|Win32.ActiveCfg = Debug|Win32
+		{87506536-AB5E-4D66-8288-2961FCECF3B8}.Debug|Win32.Build.0 = Debug|Win32
 		{87506536-AB5E-4D66-8288-2961FCECF3B8}.Release CAN232 and USBTIN|Win32.ActiveCfg = Release|Win32
 		{87506536-AB5E-4D66-8288-2961FCECF3B8}.Release Castor|Win32.ActiveCfg = Release|Win32
 		{87506536-AB5E-4D66-8288-2961FCECF3B8}.Release Embedded Intelligence|Win32.ActiveCfg = Release|Win32
@@ -181,6 +199,8 @@ Global
 		{87506536-AB5E-4D66-8288-2961FCECF3B8}.Release PEAK|Win32.ActiveCfg = Release|Win32
 		{87506536-AB5E-4D66-8288-2961FCECF3B8}.Release TinyCAN|Win32.ActiveCfg = Release|Win32
 		{87506536-AB5E-4D66-8288-2961FCECF3B8}.Release Zanthic|Win32.ActiveCfg = Release|Win32
+		{87506536-AB5E-4D66-8288-2961FCECF3B8}.Release|Win32.ActiveCfg = Release|Win32
+		{87506536-AB5E-4D66-8288-2961FCECF3B8}.Release|Win32.Build.0 = Release|Win32
 		{C49DF85E-552D-42AE-8DEA-C4DB5AC419F1}.Debug CAN232 and USBTIN|Win32.ActiveCfg = Debug|Win32
 		{C49DF85E-552D-42AE-8DEA-C4DB5AC419F1}.Debug CAN232 and USBTIN|Win32.Build.0 = Debug|Win32
 		{C49DF85E-552D-42AE-8DEA-C4DB5AC419F1}.Debug Castor|Win32.ActiveCfg = Debug|Win32
@@ -192,6 +212,8 @@ Global
 		{C49DF85E-552D-42AE-8DEA-C4DB5AC419F1}.Debug PEAK|Win32.ActiveCfg = Debug|Win32
 		{C49DF85E-552D-42AE-8DEA-C4DB5AC419F1}.Debug TinyCAN|Win32.ActiveCfg = Debug|Win32
 		{C49DF85E-552D-42AE-8DEA-C4DB5AC419F1}.Debug Zanthic|Win32.ActiveCfg = Debug|Win32
+		{C49DF85E-552D-42AE-8DEA-C4DB5AC419F1}.Debug|Win32.ActiveCfg = Debug|Win32
+		{C49DF85E-552D-42AE-8DEA-C4DB5AC419F1}.Debug|Win32.Build.0 = Debug|Win32
 		{C49DF85E-552D-42AE-8DEA-C4DB5AC419F1}.Release CAN232 and USBTIN|Win32.ActiveCfg = Release|Win32
 		{C49DF85E-552D-42AE-8DEA-C4DB5AC419F1}.Release CAN232 and USBTIN|Win32.Build.0 = Release|Win32
 		{C49DF85E-552D-42AE-8DEA-C4DB5AC419F1}.Release Castor|Win32.ActiveCfg = Release|Win32
@@ -202,6 +224,8 @@ Global
 		{C49DF85E-552D-42AE-8DEA-C4DB5AC419F1}.Release PEAK|Win32.ActiveCfg = Release|Win32
 		{C49DF85E-552D-42AE-8DEA-C4DB5AC419F1}.Release TinyCAN|Win32.ActiveCfg = Release|Win32
 		{C49DF85E-552D-42AE-8DEA-C4DB5AC419F1}.Release Zanthic|Win32.ActiveCfg = Release|Win32
+		{C49DF85E-552D-42AE-8DEA-C4DB5AC419F1}.Release|Win32.ActiveCfg = Release|Win32
+		{C49DF85E-552D-42AE-8DEA-C4DB5AC419F1}.Release|Win32.Build.0 = Release|Win32
 		{2BA73DAA-A61C-4E68-99A1-8D959DE5EB74}.Debug CAN232 and USBTIN|Win32.ActiveCfg = Debug|Win32
 		{2BA73DAA-A61C-4E68-99A1-8D959DE5EB74}.Debug Castor|Win32.ActiveCfg = Debug|Win32
 		{2BA73DAA-A61C-4E68-99A1-8D959DE5EB74}.Debug Embedded Intelligence|Win32.ActiveCfg = Debug|Win32
@@ -213,6 +237,8 @@ Global
 		{2BA73DAA-A61C-4E68-99A1-8D959DE5EB74}.Debug PEAK|Win32.ActiveCfg = Debug|Win32
 		{2BA73DAA-A61C-4E68-99A1-8D959DE5EB74}.Debug TinyCAN|Win32.ActiveCfg = Debug|Win32
 		{2BA73DAA-A61C-4E68-99A1-8D959DE5EB74}.Debug Zanthic|Win32.ActiveCfg = Debug|Win32
+		{2BA73DAA-A61C-4E68-99A1-8D959DE5EB74}.Debug|Win32.ActiveCfg = Debug|Win32
+		{2BA73DAA-A61C-4E68-99A1-8D959DE5EB74}.Debug|Win32.Build.0 = Debug|Win32
 		{2BA73DAA-A61C-4E68-99A1-8D959DE5EB74}.Release CAN232 and USBTIN|Win32.ActiveCfg = Release|Win32
 		{2BA73DAA-A61C-4E68-99A1-8D959DE5EB74}.Release Castor|Win32.ActiveCfg = Release|Win32
 		{2BA73DAA-A61C-4E68-99A1-8D959DE5EB74}.Release Embedded Intelligence|Win32.ActiveCfg = Release|Win32
@@ -223,6 +249,8 @@ Global
 		{2BA73DAA-A61C-4E68-99A1-8D959DE5EB74}.Release PEAK|Win32.ActiveCfg = Release|Win32
 		{2BA73DAA-A61C-4E68-99A1-8D959DE5EB74}.Release TinyCAN|Win32.ActiveCfg = Release|Win32
 		{2BA73DAA-A61C-4E68-99A1-8D959DE5EB74}.Release Zanthic|Win32.ActiveCfg = Release|Win32
+		{2BA73DAA-A61C-4E68-99A1-8D959DE5EB74}.Release|Win32.ActiveCfg = Release|Win32
+		{2BA73DAA-A61C-4E68-99A1-8D959DE5EB74}.Release|Win32.Build.0 = Release|Win32
 		{6B048E62-0E01-401E-8EE9-3D4F15BC69F3}.Debug CAN232 and USBTIN|Win32.ActiveCfg = Debug|Win32
 		{6B048E62-0E01-401E-8EE9-3D4F15BC69F3}.Debug Castor|Win32.ActiveCfg = Debug|Win32
 		{6B048E62-0E01-401E-8EE9-3D4F15BC69F3}.Debug Castor|Win32.Build.0 = Debug|Win32
@@ -234,6 +262,8 @@ Global
 		{6B048E62-0E01-401E-8EE9-3D4F15BC69F3}.Debug PEAK|Win32.ActiveCfg = Debug|Win32
 		{6B048E62-0E01-401E-8EE9-3D4F15BC69F3}.Debug TinyCAN|Win32.ActiveCfg = Debug|Win32
 		{6B048E62-0E01-401E-8EE9-3D4F15BC69F3}.Debug Zanthic|Win32.ActiveCfg = Debug|Win32
+		{6B048E62-0E01-401E-8EE9-3D4F15BC69F3}.Debug|Win32.ActiveCfg = Debug|Win32
+		{6B048E62-0E01-401E-8EE9-3D4F15BC69F3}.Debug|Win32.Build.0 = Debug|Win32
 		{6B048E62-0E01-401E-8EE9-3D4F15BC69F3}.Release CAN232 and USBTIN|Win32.ActiveCfg = Release|Win32
 		{6B048E62-0E01-401E-8EE9-3D4F15BC69F3}.Release Castor|Win32.ActiveCfg = Release|Win32
 		{6B048E62-0E01-401E-8EE9-3D4F15BC69F3}.Release Castor|Win32.Build.0 = Release|Win32
@@ -244,6 +274,8 @@ Global
 		{6B048E62-0E01-401E-8EE9-3D4F15BC69F3}.Release PEAK|Win32.ActiveCfg = Release|Win32
 		{6B048E62-0E01-401E-8EE9-3D4F15BC69F3}.Release TinyCAN|Win32.ActiveCfg = Release|Win32
 		{6B048E62-0E01-401E-8EE9-3D4F15BC69F3}.Release Zanthic|Win32.ActiveCfg = Release|Win32
+		{6B048E62-0E01-401E-8EE9-3D4F15BC69F3}.Release|Win32.ActiveCfg = Release|Win32
+		{6B048E62-0E01-401E-8EE9-3D4F15BC69F3}.Release|Win32.Build.0 = Release|Win32
 		{B257F58E-9C1E-4A40-AC63-9621ED16147E}.Debug CAN232 and USBTIN|Win32.ActiveCfg = Debug|Win32
 		{B257F58E-9C1E-4A40-AC63-9621ED16147E}.Debug Castor|Win32.ActiveCfg = Debug|Win32
 		{B257F58E-9C1E-4A40-AC63-9621ED16147E}.Debug Embedded Intelligence|Win32.ActiveCfg = Debug|Win32
@@ -255,6 +287,8 @@ Global
 		{B257F58E-9C1E-4A40-AC63-9621ED16147E}.Debug PEAK|Win32.Build.0 = Debug|Win32
 		{B257F58E-9C1E-4A40-AC63-9621ED16147E}.Debug TinyCAN|Win32.ActiveCfg = Debug|Win32
 		{B257F58E-9C1E-4A40-AC63-9621ED16147E}.Debug Zanthic|Win32.ActiveCfg = Debug|Win32
+		{B257F58E-9C1E-4A40-AC63-9621ED16147E}.Debug|Win32.ActiveCfg = Debug|Win32
+		{B257F58E-9C1E-4A40-AC63-9621ED16147E}.Debug|Win32.Build.0 = Debug|Win32
 		{B257F58E-9C1E-4A40-AC63-9621ED16147E}.Release CAN232 and USBTIN|Win32.ActiveCfg = Release|Win32
 		{B257F58E-9C1E-4A40-AC63-9621ED16147E}.Release Castor|Win32.ActiveCfg = Release|Win32
 		{B257F58E-9C1E-4A40-AC63-9621ED16147E}.Release Embedded Intelligence|Win32.ActiveCfg = Release|Win32
@@ -265,6 +299,8 @@ Global
 		{B257F58E-9C1E-4A40-AC63-9621ED16147E}.Release PEAK|Win32.Build.0 = Release|Win32
 		{B257F58E-9C1E-4A40-AC63-9621ED16147E}.Release TinyCAN|Win32.ActiveCfg = Release|Win32
 		{B257F58E-9C1E-4A40-AC63-9621ED16147E}.Release Zanthic|Win32.ActiveCfg = Release|Win32
+		{B257F58E-9C1E-4A40-AC63-9621ED16147E}.Release|Win32.ActiveCfg = Release|Win32
+		{B257F58E-9C1E-4A40-AC63-9621ED16147E}.Release|Win32.Build.0 = Release|Win32
 		{FC5F32FD-5008-478B-9D83-A1B75752BCC0}.Debug CAN232 and USBTIN|Win32.ActiveCfg = Debug|Win32
 		{FC5F32FD-5008-478B-9D83-A1B75752BCC0}.Debug Castor|Win32.ActiveCfg = Debug|Win32
 		{FC5F32FD-5008-478B-9D83-A1B75752BCC0}.Debug Embedded Intelligence|Win32.ActiveCfg = Debug|Win32
@@ -276,6 +312,8 @@ Global
 		{FC5F32FD-5008-478B-9D83-A1B75752BCC0}.Debug TinyCAN|Win32.ActiveCfg = Debug|Win32
 		{FC5F32FD-5008-478B-9D83-A1B75752BCC0}.Debug TinyCAN|Win32.Build.0 = Debug|Win32
 		{FC5F32FD-5008-478B-9D83-A1B75752BCC0}.Debug Zanthic|Win32.ActiveCfg = Debug|Win32
+		{FC5F32FD-5008-478B-9D83-A1B75752BCC0}.Debug|Win32.ActiveCfg = Debug|Win32
+		{FC5F32FD-5008-478B-9D83-A1B75752BCC0}.Debug|Win32.Build.0 = Debug|Win32
 		{FC5F32FD-5008-478B-9D83-A1B75752BCC0}.Release CAN232 and USBTIN|Win32.ActiveCfg = Release|Win32
 		{FC5F32FD-5008-478B-9D83-A1B75752BCC0}.Release Castor|Win32.ActiveCfg = Release|Win32
 		{FC5F32FD-5008-478B-9D83-A1B75752BCC0}.Release Embedded Intelligence|Win32.ActiveCfg = Release|Win32
@@ -286,6 +324,8 @@ Global
 		{FC5F32FD-5008-478B-9D83-A1B75752BCC0}.Release TinyCAN|Win32.ActiveCfg = Release|Win32
 		{FC5F32FD-5008-478B-9D83-A1B75752BCC0}.Release TinyCAN|Win32.Build.0 = Release|Win32
 		{FC5F32FD-5008-478B-9D83-A1B75752BCC0}.Release Zanthic|Win32.ActiveCfg = Release|Win32
+		{FC5F32FD-5008-478B-9D83-A1B75752BCC0}.Release|Win32.ActiveCfg = Release|Win32
+		{FC5F32FD-5008-478B-9D83-A1B75752BCC0}.Release|Win32.Build.0 = Release|Win32
 		{E15E37A8-317C-4CF2-AC93-928465CC20B4}.Debug CAN232 and USBTIN|Win32.ActiveCfg = Debug|Win32
 		{E15E37A8-317C-4CF2-AC93-928465CC20B4}.Debug Castor|Win32.ActiveCfg = Debug|Win32
 		{E15E37A8-317C-4CF2-AC93-928465CC20B4}.Debug Embedded Intelligence|Win32.ActiveCfg = Debug|Win32
@@ -297,6 +337,8 @@ Global
 		{E15E37A8-317C-4CF2-AC93-928465CC20B4}.Debug TinyCAN|Win32.ActiveCfg = Debug|Win32
 		{E15E37A8-317C-4CF2-AC93-928465CC20B4}.Debug Zanthic|Win32.ActiveCfg = Debug|Win32
 		{E15E37A8-317C-4CF2-AC93-928465CC20B4}.Debug Zanthic|Win32.Build.0 = Debug|Win32
+		{E15E37A8-317C-4CF2-AC93-928465CC20B4}.Debug|Win32.ActiveCfg = Debug|Win32
+		{E15E37A8-317C-4CF2-AC93-928465CC20B4}.Debug|Win32.Build.0 = Debug|Win32
 		{E15E37A8-317C-4CF2-AC93-928465CC20B4}.Release CAN232 and USBTIN|Win32.ActiveCfg = Release|Win32
 		{E15E37A8-317C-4CF2-AC93-928465CC20B4}.Release Castor|Win32.ActiveCfg = Release|Win32
 		{E15E37A8-317C-4CF2-AC93-928465CC20B4}.Release Embedded Intelligence|Win32.ActiveCfg = Release|Win32
@@ -307,6 +349,8 @@ Global
 		{E15E37A8-317C-4CF2-AC93-928465CC20B4}.Release TinyCAN|Win32.ActiveCfg = Release|Win32
 		{E15E37A8-317C-4CF2-AC93-928465CC20B4}.Release Zanthic|Win32.ActiveCfg = Release|Win32
 		{E15E37A8-317C-4CF2-AC93-928465CC20B4}.Release Zanthic|Win32.Build.0 = Release|Win32
+		{E15E37A8-317C-4CF2-AC93-928465CC20B4}.Release|Win32.ActiveCfg = Release|Win32
+		{E15E37A8-317C-4CF2-AC93-928465CC20B4}.Release|Win32.Build.0 = Release|Win32
 		{FF417857-733A-49CD-84F8-8A7568897CDC}.Debug CAN232 and USBTIN|Win32.ActiveCfg = Debug|Win32
 		{FF417857-733A-49CD-84F8-8A7568897CDC}.Debug CAN232 and USBTIN|Win32.Build.0 = Debug|Win32
 		{FF417857-733A-49CD-84F8-8A7568897CDC}.Debug Castor|Win32.ActiveCfg = Debug|Win32
@@ -327,6 +371,8 @@ Global
 		{FF417857-733A-49CD-84F8-8A7568897CDC}.Debug TinyCAN|Win32.Build.0 = Debug|Win32
 		{FF417857-733A-49CD-84F8-8A7568897CDC}.Debug Zanthic|Win32.ActiveCfg = Debug|Win32
 		{FF417857-733A-49CD-84F8-8A7568897CDC}.Debug Zanthic|Win32.Build.0 = Debug|Win32
+		{FF417857-733A-49CD-84F8-8A7568897CDC}.Debug|Win32.ActiveCfg = Debug|Win32
+		{FF417857-733A-49CD-84F8-8A7568897CDC}.Debug|Win32.Build.0 = Debug|Win32
 		{FF417857-733A-49CD-84F8-8A7568897CDC}.Release CAN232 and USBTIN|Win32.ActiveCfg = Release|Win32
 		{FF417857-733A-49CD-84F8-8A7568897CDC}.Release CAN232 and USBTIN|Win32.Build.0 = Release|Win32
 		{FF417857-733A-49CD-84F8-8A7568897CDC}.Release Castor|Win32.ActiveCfg = Release|Win32
@@ -345,6 +391,8 @@ Global
 		{FF417857-733A-49CD-84F8-8A7568897CDC}.Release TinyCAN|Win32.Build.0 = Release|Win32
 		{FF417857-733A-49CD-84F8-8A7568897CDC}.Release Zanthic|Win32.ActiveCfg = Release|Win32
 		{FF417857-733A-49CD-84F8-8A7568897CDC}.Release Zanthic|Win32.Build.0 = Release|Win32
+		{FF417857-733A-49CD-84F8-8A7568897CDC}.Release|Win32.ActiveCfg = Release|Win32
+		{FF417857-733A-49CD-84F8-8A7568897CDC}.Release|Win32.Build.0 = Release|Win32
 		{9EDCD498-21A1-4960-AE0E-C2E445DDC395}.Debug CAN232 and USBTIN|Win32.ActiveCfg = Debug|Win32
 		{9EDCD498-21A1-4960-AE0E-C2E445DDC395}.Debug CAN232 and USBTIN|Win32.Build.0 = Debug|Win32
 		{9EDCD498-21A1-4960-AE0E-C2E445DDC395}.Debug Castor|Win32.ActiveCfg = Debug|Win32
@@ -365,6 +413,8 @@ Global
 		{9EDCD498-21A1-4960-AE0E-C2E445DDC395}.Debug TinyCAN|Win32.Build.0 = Debug|Win32
 		{9EDCD498-21A1-4960-AE0E-C2E445DDC395}.Debug Zanthic|Win32.ActiveCfg = Debug|Win32
 		{9EDCD498-21A1-4960-AE0E-C2E445DDC395}.Debug Zanthic|Win32.Build.0 = Debug|Win32
+		{9EDCD498-21A1-4960-AE0E-C2E445DDC395}.Debug|Win32.ActiveCfg = Debug|Win32
+		{9EDCD498-21A1-4960-AE0E-C2E445DDC395}.Debug|Win32.Build.0 = Debug|Win32
 		{9EDCD498-21A1-4960-AE0E-C2E445DDC395}.Release CAN232 and USBTIN|Win32.ActiveCfg = Release|Win32
 		{9EDCD498-21A1-4960-AE0E-C2E445DDC395}.Release CAN232 and USBTIN|Win32.Build.0 = Release|Win32
 		{9EDCD498-21A1-4960-AE0E-C2E445DDC395}.Release Castor|Win32.ActiveCfg = Release|Win32
@@ -383,6 +433,8 @@ Global
 		{9EDCD498-21A1-4960-AE0E-C2E445DDC395}.Release TinyCAN|Win32.Build.0 = Release|Win32
 		{9EDCD498-21A1-4960-AE0E-C2E445DDC395}.Release Zanthic|Win32.ActiveCfg = Release|Win32
 		{9EDCD498-21A1-4960-AE0E-C2E445DDC395}.Release Zanthic|Win32.Build.0 = Release|Win32
+		{9EDCD498-21A1-4960-AE0E-C2E445DDC395}.Release|Win32.ActiveCfg = Release|Win32
+		{9EDCD498-21A1-4960-AE0E-C2E445DDC395}.Release|Win32.Build.0 = Release|Win32
 		{54DDACC0-E19B-41D4-8235-6DA310F4D670}.Debug CAN232 and USBTIN|Win32.ActiveCfg = Debug|Win32
 		{54DDACC0-E19B-41D4-8235-6DA310F4D670}.Debug CAN232 and USBTIN|Win32.Build.0 = Debug|Win32
 		{54DDACC0-E19B-41D4-8235-6DA310F4D670}.Debug Castor|Win32.ActiveCfg = Debug|Win32
@@ -403,6 +455,8 @@ Global
 		{54DDACC0-E19B-41D4-8235-6DA310F4D670}.Debug TinyCAN|Win32.Build.0 = Debug|Win32
 		{54DDACC0-E19B-41D4-8235-6DA310F4D670}.Debug Zanthic|Win32.ActiveCfg = Debug|Win32
 		{54DDACC0-E19B-41D4-8235-6DA310F4D670}.Debug Zanthic|Win32.Build.0 = Debug|Win32
+		{54DDACC0-E19B-41D4-8235-6DA310F4D670}.Debug|Win32.ActiveCfg = Debug|Win32
+		{54DDACC0-E19B-41D4-8235-6DA310F4D670}.Debug|Win32.Build.0 = Debug|Win32
 		{54DDACC0-E19B-41D4-8235-6DA310F4D670}.Release CAN232 and USBTIN|Win32.ActiveCfg = Release|Win32
 		{54DDACC0-E19B-41D4-8235-6DA310F4D670}.Release CAN232 and USBTIN|Win32.Build.0 = Release|Win32
 		{54DDACC0-E19B-41D4-8235-6DA310F4D670}.Release Castor|Win32.ActiveCfg = Release|Win32
@@ -421,6 +475,8 @@ Global
 		{54DDACC0-E19B-41D4-8235-6DA310F4D670}.Release TinyCAN|Win32.Build.0 = Release|Win32
 		{54DDACC0-E19B-41D4-8235-6DA310F4D670}.Release Zanthic|Win32.ActiveCfg = Release|Win32
 		{54DDACC0-E19B-41D4-8235-6DA310F4D670}.Release Zanthic|Win32.Build.0 = Release|Win32
+		{54DDACC0-E19B-41D4-8235-6DA310F4D670}.Release|Win32.ActiveCfg = Release|Win32
+		{54DDACC0-E19B-41D4-8235-6DA310F4D670}.Release|Win32.Build.0 = Release|Win32
 		{BC684197-43CB-4B3D-B7BF-67D8FB6C2CA7}.Debug CAN232 and USBTIN|Win32.ActiveCfg = Debug|Win32
 		{BC684197-43CB-4B3D-B7BF-67D8FB6C2CA7}.Debug Castor|Win32.ActiveCfg = Debug|Win32
 		{BC684197-43CB-4B3D-B7BF-67D8FB6C2CA7}.Debug Embedded Intelligence|Win32.ActiveCfg = Debug|Win32
@@ -432,6 +488,8 @@ Global
 		{BC684197-43CB-4B3D-B7BF-67D8FB6C2CA7}.Debug PEAK|Win32.ActiveCfg = Debug|Win32
 		{BC684197-43CB-4B3D-B7BF-67D8FB6C2CA7}.Debug TinyCAN|Win32.ActiveCfg = Debug|Win32
 		{BC684197-43CB-4B3D-B7BF-67D8FB6C2CA7}.Debug Zanthic|Win32.ActiveCfg = Debug|Win32
+		{BC684197-43CB-4B3D-B7BF-67D8FB6C2CA7}.Debug|Win32.ActiveCfg = Debug|Win32
+		{BC684197-43CB-4B3D-B7BF-67D8FB6C2CA7}.Debug|Win32.Build.0 = Debug|Win32
 		{BC684197-43CB-4B3D-B7BF-67D8FB6C2CA7}.Release CAN232 and USBTIN|Win32.ActiveCfg = Release|Win32
 		{BC684197-43CB-4B3D-B7BF-67D8FB6C2CA7}.Release Castor|Win32.ActiveCfg = Release|Win32
 		{BC684197-43CB-4B3D-B7BF-67D8FB6C2CA7}.Release Embedded Intelligence|Win32.ActiveCfg = Release|Win32
@@ -441,6 +499,8 @@ Global
 		{BC684197-43CB-4B3D-B7BF-67D8FB6C2CA7}.Release PEAK|Win32.ActiveCfg = Release|Win32
 		{BC684197-43CB-4B3D-B7BF-67D8FB6C2CA7}.Release TinyCAN|Win32.ActiveCfg = Release|Win32
 		{BC684197-43CB-4B3D-B7BF-67D8FB6C2CA7}.Release Zanthic|Win32.ActiveCfg = Release|Win32
+		{BC684197-43CB-4B3D-B7BF-67D8FB6C2CA7}.Release|Win32.ActiveCfg = Release|Win32
+		{BC684197-43CB-4B3D-B7BF-67D8FB6C2CA7}.Release|Win32.Build.0 = Release|Win32
 		{487AE379-0BF5-4E2B-9272-59847D48735F}.Debug CAN232 and USBTIN|Win32.ActiveCfg = Debug|Win32
 		{487AE379-0BF5-4E2B-9272-59847D48735F}.Debug Castor|Win32.ActiveCfg = Debug|Win32
 		{487AE379-0BF5-4E2B-9272-59847D48735F}.Debug Embedded Intelligence|Win32.ActiveCfg = Debug|Win32
@@ -452,6 +512,8 @@ Global
 		{487AE379-0BF5-4E2B-9272-59847D48735F}.Debug PEAK|Win32.ActiveCfg = Debug|Win32
 		{487AE379-0BF5-4E2B-9272-59847D48735F}.Debug TinyCAN|Win32.ActiveCfg = Debug|Win32
 		{487AE379-0BF5-4E2B-9272-59847D48735F}.Debug Zanthic|Win32.ActiveCfg = Debug|Win32
+		{487AE379-0BF5-4E2B-9272-59847D48735F}.Debug|Win32.ActiveCfg = Debug|Win32
+		{487AE379-0BF5-4E2B-9272-59847D48735F}.Debug|Win32.Build.0 = Debug|Win32
 		{487AE379-0BF5-4E2B-9272-59847D48735F}.Release CAN232 and USBTIN|Win32.ActiveCfg = Release|Win32
 		{487AE379-0BF5-4E2B-9272-59847D48735F}.Release Castor|Win32.ActiveCfg = Release|Win32
 		{487AE379-0BF5-4E2B-9272-59847D48735F}.Release Embedded Intelligence|Win32.ActiveCfg = Release|Win32
@@ -462,8 +524,55 @@ Global
 		{487AE379-0BF5-4E2B-9272-59847D48735F}.Release PEAK|Win32.ActiveCfg = Release|Win32
 		{487AE379-0BF5-4E2B-9272-59847D48735F}.Release TinyCAN|Win32.ActiveCfg = Release|Win32
 		{487AE379-0BF5-4E2B-9272-59847D48735F}.Release Zanthic|Win32.ActiveCfg = Release|Win32
+		{487AE379-0BF5-4E2B-9272-59847D48735F}.Release|Win32.ActiveCfg = Release|Win32
+		{487AE379-0BF5-4E2B-9272-59847D48735F}.Release|Win32.Build.0 = Release|Win32
+		{2D6EA77A-FC07-470A-B407-00B98C8936F1}.Debug CAN232 and USBTIN|Win32.ActiveCfg = Debug|Win32
+		{2D6EA77A-FC07-470A-B407-00B98C8936F1}.Debug CAN232 and USBTIN|Win32.Build.0 = Debug|Win32
+		{2D6EA77A-FC07-470A-B407-00B98C8936F1}.Debug Castor|Win32.ActiveCfg = Debug|Win32
+		{2D6EA77A-FC07-470A-B407-00B98C8936F1}.Debug Castor|Win32.Build.0 = Debug|Win32
+		{2D6EA77A-FC07-470A-B407-00B98C8936F1}.Debug Embedded Intelligence|Win32.ActiveCfg = Debug|Win32
+		{2D6EA77A-FC07-470A-B407-00B98C8936F1}.Debug Embedded Intelligence|Win32.Build.0 = Debug|Win32
+		{2D6EA77A-FC07-470A-B407-00B98C8936F1}.Debug EMS|Win32.ActiveCfg = Debug|Win32
+		{2D6EA77A-FC07-470A-B407-00B98C8936F1}.Debug EMS|Win32.Build.0 = Debug|Win32
+		{2D6EA77A-FC07-470A-B407-00B98C8936F1}.Debug Ixxat|Win32.ActiveCfg = Debug|Win32
+		{2D6EA77A-FC07-470A-B407-00B98C8936F1}.Debug Ixxat|Win32.Build.0 = Debug|Win32
+		{2D6EA77A-FC07-470A-B407-00B98C8936F1}.Debug Kvaser|Win32.ActiveCfg = Debug|Win32
+		{2D6EA77A-FC07-470A-B407-00B98C8936F1}.Debug Kvaser|Win32.Build.0 = Debug|Win32
+		{2D6EA77A-FC07-470A-B407-00B98C8936F1}.Debug Lawicel USB|Win32.ActiveCfg = Debug|Win32
+		{2D6EA77A-FC07-470A-B407-00B98C8936F1}.Debug Lawicel USB|Win32.Build.0 = Debug|Win32
+		{2D6EA77A-FC07-470A-B407-00B98C8936F1}.Debug PEAK|Win32.ActiveCfg = Debug|Win32
+		{2D6EA77A-FC07-470A-B407-00B98C8936F1}.Debug PEAK|Win32.Build.0 = Debug|Win32
+		{2D6EA77A-FC07-470A-B407-00B98C8936F1}.Debug TinyCAN|Win32.ActiveCfg = Debug|Win32
+		{2D6EA77A-FC07-470A-B407-00B98C8936F1}.Debug TinyCAN|Win32.Build.0 = Debug|Win32
+		{2D6EA77A-FC07-470A-B407-00B98C8936F1}.Debug Zanthic|Win32.ActiveCfg = Debug|Win32
+		{2D6EA77A-FC07-470A-B407-00B98C8936F1}.Debug Zanthic|Win32.Build.0 = Debug|Win32
+		{2D6EA77A-FC07-470A-B407-00B98C8936F1}.Debug|Win32.ActiveCfg = Debug|Win32
+		{2D6EA77A-FC07-470A-B407-00B98C8936F1}.Debug|Win32.Build.0 = Debug|Win32
+		{2D6EA77A-FC07-470A-B407-00B98C8936F1}.Release CAN232 and USBTIN|Win32.ActiveCfg = Release|Win32
+		{2D6EA77A-FC07-470A-B407-00B98C8936F1}.Release CAN232 and USBTIN|Win32.Build.0 = Release|Win32
+		{2D6EA77A-FC07-470A-B407-00B98C8936F1}.Release Castor|Win32.ActiveCfg = Release|Win32
+		{2D6EA77A-FC07-470A-B407-00B98C8936F1}.Release Castor|Win32.Build.0 = Release|Win32
+		{2D6EA77A-FC07-470A-B407-00B98C8936F1}.Release Embedded Intelligence|Win32.ActiveCfg = Release|Win32
+		{2D6EA77A-FC07-470A-B407-00B98C8936F1}.Release Embedded Intelligence|Win32.Build.0 = Release|Win32
+		{2D6EA77A-FC07-470A-B407-00B98C8936F1}.Release EMS|Win32.ActiveCfg = Release|Win32
+		{2D6EA77A-FC07-470A-B407-00B98C8936F1}.Release EMS|Win32.Build.0 = Release|Win32
+		{2D6EA77A-FC07-470A-B407-00B98C8936F1}.Release Kvaser|Win32.ActiveCfg = Release|Win32
+		{2D6EA77A-FC07-470A-B407-00B98C8936F1}.Release Kvaser|Win32.Build.0 = Release|Win32
+		{2D6EA77A-FC07-470A-B407-00B98C8936F1}.Release Lawicel USB|Win32.ActiveCfg = Release|Win32
+		{2D6EA77A-FC07-470A-B407-00B98C8936F1}.Release Lawicel USB|Win32.Build.0 = Release|Win32
+		{2D6EA77A-FC07-470A-B407-00B98C8936F1}.Release PEAK|Win32.ActiveCfg = Release|Win32
+		{2D6EA77A-FC07-470A-B407-00B98C8936F1}.Release PEAK|Win32.Build.0 = Release|Win32
+		{2D6EA77A-FC07-470A-B407-00B98C8936F1}.Release TinyCAN|Win32.ActiveCfg = Release|Win32
+		{2D6EA77A-FC07-470A-B407-00B98C8936F1}.Release TinyCAN|Win32.Build.0 = Release|Win32
+		{2D6EA77A-FC07-470A-B407-00B98C8936F1}.Release Zanthic|Win32.ActiveCfg = Release|Win32
+		{2D6EA77A-FC07-470A-B407-00B98C8936F1}.Release Zanthic|Win32.Build.0 = Release|Win32
+		{2D6EA77A-FC07-470A-B407-00B98C8936F1}.Release|Win32.ActiveCfg = Release|Win32
+		{2D6EA77A-FC07-470A-B407-00B98C8936F1}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8AA34F16-D38F-4F46-9E66-AAB6CE3514BC}
 	EndGlobalSection
 EndGlobal
