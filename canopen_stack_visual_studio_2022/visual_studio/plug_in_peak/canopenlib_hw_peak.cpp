@@ -17,7 +17,7 @@
 
     *******************************************************************
     *    CANopen API (C++/C#) distributed by Datalink Enginnering.    *
-    *             Copyright (C) 2009-2013 Ulrik Hagström.             *
+    *             Copyright (C) 2009-2013 Ulrik HagstrÃ¶m.             *
     *******************************************************************
 */
 // canlib32.cpp : Defines the entry point for the DLL application.
@@ -233,6 +233,10 @@ CANOPENLIB_HW_API   canOpenStatus    __stdcall canPortBitrateSet( canPortHandle 
       break;
     case 500000:
       can_port_data_devices[handle].bitrate = PCAN_BAUD_500K;
+      canopen_res = CANOPEN_OK;
+      break;
+    case 800000:
+      can_port_data_devices[handle].bitrate = PCAN_BAUD_800K;
       canopen_res = CANOPEN_OK;
       break;
     case 1000000:
